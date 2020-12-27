@@ -13,8 +13,8 @@ $temp_paths = require_once APP_PATH . 'config'.DS.'temp_config.php';
 
 
 // session;
-$session = new MySession();
-$session->start();
+$mysession = new MySession();
+$mysession->start();
 
 // session
 
@@ -26,9 +26,8 @@ $language = new Language();
 $template = new Template($temp_paths);
 
 
-$controller = new FrontController($template , $language , $session);
+$controller = new FrontController($template , $language , $mysession);
 $controller->dispatch();
-
 
 
 

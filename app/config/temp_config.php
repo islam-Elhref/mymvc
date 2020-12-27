@@ -12,6 +12,7 @@ return [
     'header_resources' =>[
         'bootstrap' => '/css/bootstrap.css',
         'foawsome' => '/css/all.css',
+        'googleIcon' => 'https://fonts.googleapis.com/icon?family=Material+Icons',
         'datatables' => '/css/datatables.min.css',
         'confirm' => '/css/jquery-confirm.min.css',
         'main_ar' => '/css/main_ar.css',

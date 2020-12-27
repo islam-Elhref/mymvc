@@ -57,19 +57,17 @@ class AbstractController
 
     public function view()
     {
-        if ($this->_action == FrontController::NOT_FOUND_ACTION) {
+        $file_view = VIEWS_PATH . $this->_controller . DS . $this->_action . '.view.php';
+
+        if ($this->_action == FrontController::NOT_FOUND_ACTION || !file_exists($file_view) ) {
             $file_view = VIEWS_PATH . 'notfound' . DS . 'notfound.view.php';
-        } else {
-            $file_view = VIEWS_PATH . $this->_controller . DS . $this->_action . '.view.php';
-            if (!file_exists($file_view)) {
-                require_once VIEWS_PATH . 'notfound' . DS . 'notfound.view.php';
-            }
         }
+
         $this->_language->load('template','default');
 
         $this->_data = array_merge($this->_data, $this->_language->getDictionary());
 
-        $this->_data['session'] = $this->_session;
+        $this->_data['session'] = $_SESSION;
 
         $this->_template->setData($this->_data);
         $this->_template->render($file_view);

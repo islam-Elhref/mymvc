@@ -10,7 +10,7 @@
                 <a class="dropdown-item" href="#"><?= isset($Text_change_pass) ? $Text_change_pass : '' ?></a>
                 <a class="dropdown-item" href="#"> <?= isset($Text_settings) ? $Text_settings : '' ?></a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#"> <?= isset($Text_logout) ? $Text_logout : '' ?></a>
+                <a class="text-light dropdown-item-text fa fa-sign-out-alt" href="#"> <?= isset($Text_logout) ? $Text_logout : '' ?></a>
             </div>
         </div>
         <div class="notification">

@@ -8715,7 +8715,7 @@ h1 span {
     color: #fff;
     position: fixed;
     width: 100%;
-    padding: 20px;
+    padding: 17px 12px;
     box-sizing: border-box;
     z-index: 1;
 }
@@ -8761,7 +8761,7 @@ h1 span {
 
 .user_info .btn,.navbar_btn{
     transition-duration: 0.5s;
-    transition-property: all;
+    transition-property: transform , color;
 }
 .user_info .btn:hover,.navbar_btn:hover{
     color: #1979a9;
@@ -8791,9 +8791,9 @@ h1 span {
     position: fixed;
     right: -250px;
     overflow: hidden;
-    margin-top: 70px;
+    margin-top: 62px;
     width: 300px;
-    height: calc(100% - 8%);
+    height: calc(100% - 7%);
     padding: 0;
     padding-top: 50px;
     color: #fff;
@@ -8889,16 +8889,20 @@ h1 span {
 }
 
 .navbar.open .links a i {
-    font-size: inherit;
-    padding-left: 5px;
-    padding-right: 5px;
+    font-size: 1.2em !important;
+    width: 28px;
+    height: 26px;
+    display: block;
+    float: right;
+    padding-top: 4px;
+    margin-left: 5px;
 }
 
 /* navbar*/
 
 
 .view {
-    margin-top: 71px;
+    margin-top: 62px;
     margin-right: 50px;
     padding: 30px 10px 0;
     transition-duration: 0.5s;
@@ -8906,7 +8910,9 @@ h1 span {
 }
 
 .view .title {
-    text-align: center;
+    text-align: right;
+    font-family: 'Cairo', sans-serif;
+    font-size: 2em;
 }
 
 .view.navopen {

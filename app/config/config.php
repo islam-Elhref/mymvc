@@ -19,7 +19,7 @@ defined('DATABASE_PORT_NUMBER')           ? null : define('DATABASE_PORT_NUMBER'
 defined('DATABASE_CONN_DRIVER')           ? null : define('DATABASE_CONN_DRIVER' , '1');
 
 
-defined('defaultLanguage')                ? null : define('defaultLanguage' , 'en');
+defined('defaultLanguage')                ? null : define('defaultLanguage' , 'ar');
 
 // session config
 

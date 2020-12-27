@@ -94,3 +94,22 @@ $(document).ready(function () {
 
 
 $('.dropdown-toggle').dropdown()
+
+$(function () {
+    $('.links a').mouseenter(function () {
+        if (!$('.navbar').hasClass('open')){
+            $('[data-toggle="tooltip"]').tooltip('enable')
+        }else{
+            $('[data-toggle="tooltip"]').tooltip('disable')
+        }
+    })
+
+})
+
+
+
+
+
+
+
+
