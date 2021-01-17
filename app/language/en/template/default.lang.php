@@ -14,6 +14,9 @@ $_['Text_home'] = 'General Stats.' ;
 $_['Text_store'] = 'Store' ;
 
 $_['Text_users'] = 'Users' ;
+$_['Text_users_list'] = 'Users List' ;
+$_['text_users_group'] = 'Users Groups';
+$_['text_users_privilege'] = 'Privileges';
 $_['Text_clients'] = 'Clients' ;
 $_['Text_suppliers'] = 'Suppliers' ;
 

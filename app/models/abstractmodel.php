@@ -5,19 +5,23 @@ namespace MYMVC\MODELS;
 
 use MYMVC\LIB\Database\DatabaseHandler;
 use \pdo;
-use PDOException;
 use \PDOStatement;
 
 class AbstractModel
 {
 
-    protected const DATA_TYPE_STR = pdo::PARAM_STR;
-    protected const DATA_TYPE_int = pdo::PARAM_INT;
-    protected const DATA_TYPE_bool = pdo::PARAM_BOOL;
-    protected const DATA_TYPE_float = 55 ;
+    const DATA_TYPE_STR = pdo::PARAM_STR;
+    const DATA_TYPE_int = pdo::PARAM_INT;
+    const DATA_TYPE_bool = pdo::PARAM_BOOL;
+    const DATA_TYPE_float = 55 ;
 
 
-
+    /**
+     * يتم استكمال الاستعلام عن طريق اخذ الاسكيما الخاصه بالجدول ثم تجميعهم في استعلام واحد كل
+     * name =:name , age=:age
+     * ثم عمل ترم لحذف الفاصله في اخر الاستعلام
+     * @return string
+     */
     private static function sqlParam(){
         $sqlParam = '';
         foreach (static::$table_schema as  $name => $type ){
@@ -26,6 +30,13 @@ class AbstractModel
         return trim($sqlParam , ', ');
     }
 
+    /**
+     * ياخذ الاستعلام المكون عن طريق سكول بارام الداله السابقه ثم عمل لوب للاسكيما الخاصه بالجدول
+     * نحصل علي القيمه حيث ان في كل موديل يجب ان يتم تعريف متغير لكل عنصر في الاسكيما الخاصه بالجدول
+     * يتم استخدام باند بارام لكل عنصر في الجدول لالحاقه ولكن لالحاقه بالقيمه الخاصه به يجب ان يتواجد الاستعلام الاساسي
+     *
+     * @param PDOStatement $stmt
+     */
     private function bindParams(PDOStatement $stmt){
         foreach (static::$table_schema as $name => $type){
             $value = $this->$name;

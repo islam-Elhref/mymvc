@@ -16,14 +16,14 @@ if (isset($_SESSION['message'])) {
 ?>
 <table id="mytable" class="table table-striped table-bordered" style="width:100%">
     <thead>
-    <tr>
-        <th><?= isset($Text_id) ? $Text_id : '' ?></th>
-        <th><?= isset($Text_name) ? $Text_name : '' ?></th>
-        <th><?= isset($Text_age) ? $Text_age : '' ?></th>
-        <th><?= isset($Text_address) ? $Text_address : '' ?></th>
-        <th><?= isset($Text_salary) ? $Text_salary : '' ?></th>
-        <th><?= isset($Text_control) ? $Text_control : '' ?></th>
-    </tr>
+        <tr>
+            <th><?= isset($Text_id) ? $Text_id : '' ?></th>
+            <th><?= isset($Text_name) ? $Text_name : '' ?></th>
+            <th><?= isset($Text_age) ? $Text_age : '' ?></th>
+            <th><?= isset($Text_address) ? $Text_address : '' ?></th>
+            <th><?= isset($Text_salary) ? $Text_salary : '' ?></th>
+            <th><?= isset($Text_control) ? $Text_control : '' ?></th>
+        </tr>
     </thead>
 
     <tbody style="vertical-align: middle">

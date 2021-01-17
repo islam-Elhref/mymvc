@@ -15,6 +15,9 @@ $_['Text_home'] = 'الأحصائيات العامه' ;
 $_['Text_store'] = 'المخزن' ;
 
 $_['Text_users'] = 'المستخدمين' ;
+$_['Text_users_list'] = 'قائمة المستخدمين' ;
+$_['text_users_group'] = 'مجموعات المستخدمين';
+$_['text_users_privilege'] = 'الصلاحيات';
 $_['Text_clients'] = 'العملاء' ;
 $_['Text_suppliers'] = 'الموردين' ;
 

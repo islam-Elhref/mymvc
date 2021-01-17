@@ -8,6 +8,34 @@ class Template
     private $template;
     private $data;
 
+    public function GetMessage(){
+        if (isset($_SESSION['message'])) {
+            if (!isset($_SESSION['error'])) {
+                ?>
+
+                <div class="alert alert-success" id="message"><?= $_SESSION['message'] ?></div>
+
+                <?php
+            } else { ?>
+                <div class="alert alert-danger" id="message"><?= $_SESSION['message'] ?></div>
+                <?php
+            }
+            unset($_SESSION['message'], $_SESSION['error']);
+        }
+    }
+
+    public function checkurl($url){
+        $parce_url = trim(parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH ) , '/');
+        $parce_url = explode('/' , $parce_url);
+        $controller = '/'.$parce_url[0];
+        if ($controller === $url){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
 
     public function setData($data)
     {
@@ -55,7 +83,7 @@ class Template
         $mainLang = 'main_' . $_SESSION['lang'];
         foreach ($this->template['header_resources'] as $key => $path) {
             if ($key == "main_ar" || $key == 'main_en') {
-                if ($mainLang == $key ){
+                if ($mainLang == $key) {
                     $paths .= '<link rel="stylesheet" href="' . $path . '">';
                 }
             } else {
@@ -68,8 +96,17 @@ class Template
     private function footer_resources()
     {
         $script = '';
+        $mainLang = 'js_' . $_SESSION['lang'];
         foreach ($this->template['footer_resources'] as $key => $path) {
-            $script .= "<script src='$path'></script>";
+
+            if ($key == "js_ar" || $key == 'js_en') {
+                if ($mainLang == $key) {
+                    $script .= "<script src='$path'></script>";
+                }
+            } else {
+                $script .= "<script src='$path'></script>";
+            }
+
         }
         echo $script;
     }

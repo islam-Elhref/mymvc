@@ -1,8 +1,3 @@
-$('#mytable').dataTable({
-    responsive: true
-})
-
-
 
 $('#open_nav').click(function () {
     var nav = $('.navbar');
@@ -98,13 +93,27 @@ $('.dropdown-toggle').dropdown()
 $(function () {
     $('.links a').mouseenter(function () {
         if (!$('.navbar').hasClass('open')){
-            $('[data-toggle="tooltip"]').tooltip('enable')
+            $('[data-toggletool="tooltip"]').tooltip('enable')
         }else{
-            $('[data-toggle="tooltip"]').tooltip('disable')
+            $('[data-toggletool="tooltip"]').tooltip('disable')
+        }
+    })
+
+
+    $('.submenu').children().each(function () {
+        if ($(this).hasClass('subactive') ){
+            $(this).closest('.parent_link').addClass('active');
         }
     })
 
 })
+
+$('.links').children('li').click(function () {
+    $(this).find('.submenu').slideToggle();
+    $(this).siblings().find('.submenu').slideUp();
+})
+
+
 
 
 

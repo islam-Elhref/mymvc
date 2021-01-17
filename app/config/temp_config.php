@@ -26,6 +26,8 @@ return [
         'datatables' => '/js/en/datatables_en.min.js',
         'bootstrap4' => '/js/vendor/dataTables.bootstrap4.min.js',
         'confirm' => '/js/vendor/jquery-confirm.min.js',
+        'js_ar' => '/js/js_ar.js',
+        'js_en' => '/js/js_en.js',
         'main' => '/js/main.js',
 
     ]
