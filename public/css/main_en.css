@@ -65,6 +65,10 @@ body {
     background-color: #fff
 }
 
+.jconfirm .jconfirm-box div.jconfirm-title-c .jconfirm-title {
+    line-height: 1.2;
+}
+
 [tabindex="-1"]:focus:not(:focus-visible) {
     outline: 0 !important
 }
@@ -267,23 +271,21 @@ textarea {
     resize: vertical
 }
 
-fieldset {
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-    border: 0
+
+.tooltip{
+    left: 298px !important;
+    width: max-content !important;
 }
 
-legend {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    padding: 0;
-    margin-bottom: .5rem;
-    font-size: 1.5rem;
-    line-height: inherit;
-    color: inherit;
-    white-space: normal
+.bs-tooltip-left .arrow, .bs-tooltip-auto[x-placement^="left"] .arrow{
+    right: unset;
+    left: 0;
+}
+
+.bs-tooltip-left .arrow::before, .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    left: 0 !important;
+    border-width: .4rem .4rem .4rem 0 !important;
+    border-right-color: #000 !important;
 }
 
 progress {
@@ -947,13 +949,18 @@ textarea.form-control {
 .form-check {
     position: relative;
     display: block;
-    padding-left: 1.25rem
+    padding-left: 0;
+    padding-right: 1.25rem ;
 }
 
 .form-check-input {
     position: absolute;
     margin-top: .3rem;
     margin-left: -1.25rem
+}
+
+.checkbtn .form-check:hover input{
+    box-shadow: inset 0px 0px 3px #000;
 }
 
 .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
@@ -8787,17 +8794,19 @@ h1 span {
     position: fixed;
     left: -250px;
     width: 300px;
+    overflow: auto;
     height: 100%;
     padding: 0;
     color: #fff;
     transition-duration: 0.5s;
     transition-property: left;
+    scrollbar-width: none;
 }
 
 
 .navbar .navbar-info {
     width: 100%;
-    height: 34%;
+    min-height: 30%;
     padding-top: 112px;
     display: flex;
     flex-direction: column;
@@ -8821,14 +8830,11 @@ h1 span {
 
 .navbar .links {
     align-self: flex-start;
-    overflow: auto;
-    height: 66%;
     width: 100%;
     box-sizing: border-box;
-    scrollbar-width: none;
 }
 
-.navbar .links::-webkit-scrollbar{
+.navbar::-webkit-scrollbar{
     display: none;
 }
 
@@ -9008,12 +9014,9 @@ h1 span {
     margin-left: 300px;
 }
 
-
 .text_error{
     font-size: 80px;
 }
-
-
 /*table */
 
 .btn_add{
@@ -9027,6 +9030,10 @@ h1 span {
 
 .table th, .table td {
     vertical-align: middle;
+}
+
+.table th:last-child, .table td:last-child {
+    width: 200px;
 }
 
 .table-striped tbody tr {
@@ -9095,8 +9102,115 @@ h1 span {
     border-color: var(--light);
 }
 
+.was-validated .form-control:valid, .form-control.is-valid {
+    padding-left: calc(1.5em + .75rem);
+    background-position: left calc(.375em + .1875rem) center;
+}
+
+button[ type = submit ]{
+    float: right!important;
+}
 
 /* form and input  */
+
+/*field set*/
+
+fieldset{
+    position: relative;
+    margin-top: 20px;
+    padding: 30px 20px 15px;
+    border: 1px solid #ced4da;
+}
+
+legend{
+    display: inline-block;
+    width: unset;
+    position: absolute;
+    top: -22px;
+    left: 22px;
+    background: #1979a9;
+    padding: 2px 10px;
+    color: #f1f1f1;
+    border: 1px solid #6c6c6c;
+}
+
+
+.form-group {
+    position: relative;
+    margin: 35px 0 10px;
+}
+
+
+/*field set*/
+
+
+/* checkbtn */
+
+.checkbtn{
+    overflow: hidden;
+    line-height: 1.4;
+}
+.checkbtn .form-check{
+    float: left;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.checkbtn .form-check-label{
+    width: 100%;
+    text-align: left;
+}
+
+.checkbtn .form-check:hover input{
+    box-shadow: inset 0px 0px 3px #000;
+}
+
+.form-check-input {
+    width: 1em;
+    height: 1em;
+    margin-top: .25em;
+    outline: none;
+    vertical-align: top;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid rgba(0,0,0,.25);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    transition: background-color .15s ease-in-out,background-position .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:checked[type=checkbox] {
+    background-image: url("/img/checkmark-64.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.form-check-input[type=checkbox] {
+    border-radius: .25em;
+}
+
+
+.checkbtn .form-check .form-check-input{
+    margin-top: 0.29rem;
+    margin-left: 0;
+    margin-right: 6px;
+    padding: 0;
+    position: inherit !important;
+}
+
+/* checkbtn */
+
+
 
 
 

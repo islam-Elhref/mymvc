@@ -6,6 +6,7 @@ $_['Text_header'] = 'مجموعات المستخدمين';
 $_['Text_edit'] = 'تعديل';
 $_['Text_delete'] = 'حذف';
 $_['text_add_new_user'] = 'اضافة مجموعة جديد' ;
+$_['text_delete_title'] = 'هل تود حذف مجموعة المستخدمين';
 
 
 $_['text_table_username'] = 'اسم المجموعة';

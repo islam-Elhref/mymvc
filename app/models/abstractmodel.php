@@ -3,17 +3,20 @@
 namespace MYMVC\MODELS;
 
 
+use Exception;
 use MYMVC\LIB\Database\DatabaseHandler;
 use \pdo;
+use PDOException;
 use \PDOStatement;
 
 class AbstractModel
 {
+    protected $message = [];
 
     const DATA_TYPE_STR = pdo::PARAM_STR;
     const DATA_TYPE_int = pdo::PARAM_INT;
     const DATA_TYPE_bool = pdo::PARAM_BOOL;
-    const DATA_TYPE_float = 55 ;
+    const DATA_TYPE_float = 55;
 
 
     /**
@@ -22,12 +25,13 @@ class AbstractModel
      * ثم عمل ترم لحذف الفاصله في اخر الاستعلام
      * @return string
      */
-    private static function sqlParam(){
+    private static function sqlParam()
+    {
         $sqlParam = '';
-        foreach (static::$table_schema as  $name => $type ){
+        foreach (static::$table_schema as $name => $type) {
             $sqlParam .= "{$name} = :{$name} , ";
         }
-        return trim($sqlParam , ', ');
+        return trim($sqlParam, ', ');
     }
 
     /**
@@ -37,25 +41,32 @@ class AbstractModel
      *
      * @param PDOStatement $stmt
      */
-    private function bindParams(PDOStatement $stmt){
-        foreach (static::$table_schema as $name => $type){
+    private function bindParams(PDOStatement $stmt)
+    {
+        foreach (static::$table_schema as $name => $type) {
             $value = $this->$name;
 
-            if ($type == 55){
-                $float_value = filter_var($value , FILTER_SANITIZE_NUMBER_FLOAT , FILTER_FLAG_ALLOW_FRACTION);
-                $stmt->bindValue(":{$name}" , $float_value );
-            }else{
-                $stmt->bindValue(":{$name}" , $value , $type );
+            if ($type == 55) {
+                $float_value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                $stmt->bindValue(":{$name}", $float_value);
+            } else {
+                $stmt->bindValue(":{$name}", $value, $type);
             }
 
         }
 
     }
 
-    public static function getAll()
+    public static function getAll($key = '', $type = 'ASC')
     {
+        if ($key == '') {
+            $key = static::$primaryKey;
+        }
+        if ($type !== 'ASC' && $type !== 'DESC') {
+            $type = 'ASC';
+        }
 
-        $sql = 'SELECT * FROM ' . static::$tableName;
+        $sql = 'SELECT * FROM ' . static::$tableName . ' ORDER BY `' . $key . '`' . $type;
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $stmt->execute();
         if (method_exists(get_called_class(), '__construct')) {
@@ -66,8 +77,9 @@ class AbstractModel
 
         if (is_array($result) && !empty($result)) {
             return $result;
+        }else{
+            return false;
         }
-
     }
 
     public static function getByPK($PK)
@@ -88,13 +100,16 @@ class AbstractModel
             $result = $stmt->fetch();
             if (is_a($result, get_called_class()) && !empty($result)) {
                 return $result;
+            }else{
+                return false;
             }
 
         }
     }
 
-    private function update(){
-        $sql = 'update '.static::$tableName . ' SET ' . self::sqlParam() . ' where ' . static::$primaryKey . '=:'.static::$primaryKey;
+    private function update()
+    {
+        $sql = 'update ' . static::$tableName . ' SET ' . self::sqlParam() . ' where ' . static::$primaryKey . '=:' . static::$primaryKey;
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $this->bindParams($stmt);
         $stmt->bindValue(":" . static::$primaryKey, $this->{static::$primaryKey});
@@ -104,26 +119,89 @@ class AbstractModel
     private function create()
     {
 
-        $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam() ;
+        $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam();
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $this->bindParams($stmt);
-        return $stmt->execute();
-
+        if($stmt->execute()) {
+            $this->{static::$primaryKey} = DatabaseHandler::factory()->lastInsertId();
+            return true;
+        }
+        return false;
     }
 
-    public function save(){
-        if ($this->{static::$primaryKey} == null){
+    public function save()
+    {
+        if ($this->{static::$primaryKey} == null) {
             $this->create();
-        }else{
+        } else {
             $this->update();
         }
     }
 
-    public function delete(){
-        $sql = 'DELETE FROM ' . static::$tableName . ' WHERE ' . static::$primaryKey .'=:'.static::$primaryKey;
+    public static function getWhere(array $array)
+    {
+        $whereCond = [];
+
+        $column = array_keys($array);
+        $value = array_values($array);
+
+        for ($i = 0  , $ii = count($column) ; $i < $ii ; $i++  ){
+            $whereCond[] = $column[$i] . '=' . $value[$i] ;
+        }
+        $whereCond =  implode(' And ' , $whereCond);
+
+        $sql = 'SELECT * FROM ' . static::$tableName . ' where ' . $whereCond  ;
+        $stmt = DatabaseHandler::factory()->prepare($sql);
+        $stmt->execute();
+        if (method_exists(get_called_class(), '__construct')) {
+            $result = $stmt->fetchAll(pdo::FETCH_CLASS | pdo::FETCH_PROPS_LATE, get_called_class(), static::$table_schema);
+        } else {
+            $result = $stmt->fetchAll(pdo::FETCH_CLASS, get_called_class());
+        }
+
+        if (is_a($result[0], get_called_class()) && !empty($result)) {
+            return new \ArrayIterator($result);
+        }else{
+            return false;
+        }
+    }
+
+    public function delete()
+    {
+        $sql = 'DELETE FROM ' . static::$tableName . ' WHERE ' . static::$primaryKey . '=:' . static::$primaryKey;
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $stmt->bindValue(":" . static::$primaryKey, $this->{static::$primaryKey});
-        $stmt->execute();
+
+       return $stmt->execute();
+    }
+
+    public function check_input_empty()
+    {
+        foreach ($this as $key => $value) {
+            if ($key == static::$primaryKey) {
+                continue;
+            } else {
+                if ($value == '') {
+                    $lang = $_SESSION['lang'];
+
+                    if ($lang === 'ar') {
+                        $this->message[]= $key . ' لا يجب ان يكون فارغ' . '<br>';
+                    } else {
+                        $this->message[]= $key . ' must be not empty ' . '<br>';
+                    }
+                    $_SESSION['error'] = 'error';
+
+                }
+            }
+        }
+
+        if (!empty($this->message)) {
+            $_SESSION['message'] = $this->message;
+            $_SESSION['error'] = 'error';
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

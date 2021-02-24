@@ -15,17 +15,15 @@ class EmployeeController extends AbstractController
 
     private $called_class = 'MYMVC\MODELS\EmployeeModel';
 
-    public function defaultAction()
-    {
+    public function defaultAction(){
         $this->_language->load('Employee','default');
-
         $this->_data['employees'] = EmployeeModel::getAll();
         $this->view();
     }
 
-    public function editAction()
-    {
+    public function editAction(){
         $this->_language->load('Employee','edit');
+
         if (isset($this->_params[0])) {
             $id = abs($this->filterInt($this->_params[0]));
             $emp = EmployeeModel::getByPK($id);
@@ -52,9 +50,8 @@ class EmployeeController extends AbstractController
         }
     }
 
-    public function addAction()
-    {
-        $this->_language->load('Employee','add');
+    public function addAction(){
+
         if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             $newEmp = new EmployeeModel($_POST['name'], $_POST['age'], $_POST['address'], $_POST['salary'], $_POST['tax']);
             try {
@@ -66,6 +63,8 @@ class EmployeeController extends AbstractController
             }
             $this->redirect('/employee');
         }
+
+        $this->_language->load('Employee','add');
         $this->view();
     }
 

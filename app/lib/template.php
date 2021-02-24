@@ -8,32 +8,51 @@ class Template
     private $template;
     private $data;
 
-    public function GetMessage(){
+
+    public function in_old($array , $value ){
+        if (in_array($value , $array)){
+            echo 'checked';
+        }else{
+            echo '';
+        }
+    }
+
+    public function GetMessage()
+    {
         if (isset($_SESSION['message'])) {
             if (!isset($_SESSION['error'])) {
                 ?>
 
-                <div class="alert alert-success" id="message"><?= $_SESSION['message'] ?></div>
+                <div class="alert alert-success message" id="message"><?= $_SESSION['message'] ?></div>
 
                 <?php
-            } else { ?>
-                <div class="alert alert-danger" id="message"><?= $_SESSION['message'] ?></div>
-                <?php
+            } else {
+                if (is_array($_SESSION['message'])) {
+                    foreach ($_SESSION['message'] as $message) {
+                        ?>
+                            <div class="alert alert-danger message" id="message"><?= $message ?></div>
+                        <?php
+                    }
+                } else {
+                    ?>
+                        <div class="alert alert-danger message" id="message"><?= $_SESSION['message'] ?></div>
+                    <?php
+                }
             }
-            unset($_SESSION['message'], $_SESSION['error']);
+            unset($_SESSION['message'] , $_SESSION['error']);
         }
     }
 
-    public function checkurl($url){
-        $parce_url = trim(parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH ) , '/');
-        $parce_url = explode('/' , $parce_url);
-        $controller = '/'.$parce_url[0];
-        if ($controller === $url){
+    public function checkurl($url)
+    {
+        $parce_url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        $parce_url = explode('/', $parce_url);
+        $controller = '/' . $parce_url[0];
+        if ($controller === $url) {
             return true;
-        }else{
+        } else {
             return false;
         }
-
 
     }
 

@@ -32,13 +32,22 @@ class UsersGroupsModel extends AbstractModel
 
     public function setGroupId($group_id)
     {
-        $this->group_id = $this->filterInt($group_id);
+        $this->group_id = abs($this->filterInt($group_id));
     }
 
     public function getGroupName()
     {
         return $this->group_name;
     }
+
+    /**
+     * @param mixed $group_name
+     */
+    public function setGroupName($group_name)
+    {
+        $this->group_name = $this->filterString($group_name);
+    }
+
 
 
 

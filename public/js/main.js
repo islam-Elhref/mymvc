@@ -1,3 +1,29 @@
+// validation
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict';
+    window.addEventListener('load', function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+                if(!$("input[type=checkbox]:checked").length){
+                    $("input[type=checkbox]").prop('required','required')
+                }else{
+                    $("input[type=checkbox]:invalid").prop('required','')
+                }
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
+
 
 $('#open_nav').click(function () {
     var nav = $('.navbar');
@@ -34,34 +60,41 @@ $(document).ready(function () {
 })
 
 setTimeout(function () {
-    $('#message').fadeOut('slow', function () {
-        $("#message").remove();
+    $('.message').each(function () {
+        $(this).fadeOut('slow', function () {
+            $(this).remove();
+        })
     })
 }, 5000)
 
 //confirm
-
 $('.delete').click(function (event) {
-    var href =$(this).attr('href')
+    var name = $(this).parents('tr').find('td.use_title').text()
+    var msg = $(this).attr('title')
+    var href = $(this).attr('href')
+    var textDelete = $(this).text().trim();
+    var textCancel = textDelete=='Delete' ? 'Cancel' : 'إلغاء' ;
     event.preventDefault();
     $.confirm({
-        title: 'Sure You Want To Delete user?',
+        title: msg + ' ' + name + ' ?',
         content: 'This dialog will automatically trigger \'cancel\' in 8 seconds if you don\'t respond.',
-        autoClose: 'cancelAction|8000',
+        autoClose: 'cancel|8000',
         buttons: {
             deleteUser: {
-                text: 'delete user',
+                text: textDelete,
                 action: function () {
                     window.location.href = href;
                 }
             },
-            cancelAction: function () {
+            cancel: {
+                text: textCancel,
+                action: function () {
 
+                }
             }
         }
     })
 })
-
 
 //confirm
 
@@ -71,18 +104,18 @@ $(document).ready(function () {
         var arabic = /[\u0600-\u06FF]/;
         var title = $(this).text();
 
-        $num = Math.ceil(title.length / 3) + 1 ;
+        $num = Math.ceil(title.length / 3) + 1;
 
-        if(arabic.test(title) == true){
-            var firstTitle =title.substr(0 , $num);
-            var lastTitle =title.substring($num );
+        if (arabic.test(title) == true) {
+            var firstTitle = title.substr(0, $num);
+            var lastTitle = title.substring($num);
 
-        }else{
-            var firstTitle =title.substring(0 , $num);
-            var lastTitle =title.substring($num );
+        } else {
+            var firstTitle = title.substring(0, $num);
+            var lastTitle = title.substring($num);
         }
 
-        $(this).html("<span class='text-capitalize'>"+firstTitle+"</span>"+lastTitle);
+        $(this).html("<span class='text-capitalize'>" + firstTitle + "</span>" + lastTitle);
 
     })
 })
@@ -90,18 +123,20 @@ $(document).ready(function () {
 
 $('.dropdown-toggle').dropdown()
 
+$('[data-toggletool="tooltip"]').tooltip()
+
 $(function () {
-    $('.links a').mouseenter(function () {
-        if (!$('.navbar').hasClass('open')){
+    $('.links a').hover(function () {
+        if (!$('.navbar').hasClass('open')) {
             $('[data-toggletool="tooltip"]').tooltip('enable')
-        }else{
+        } else {
             $('[data-toggletool="tooltip"]').tooltip('disable')
         }
     })
 
 
     $('.submenu').children().each(function () {
-        if ($(this).hasClass('subactive') ){
+        if ($(this).hasClass('subactive')) {
             $(this).closest('.parent_link').addClass('active');
         }
     })

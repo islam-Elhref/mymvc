@@ -18,18 +18,18 @@ $this->GetMessage();
         foreach ($usersgroups as $usergroup) {
             ?>
             <tr>
-                <td><?= $usergroup->getGroupName() ?></td>
+                <td class="use_title"><?= $usergroup->getGroupName() ?></td>
                 <!-- control edit and delete  -->
                 <td style="text-align: center">
                     <a class="btn btn-outline-light btn-sm" href="\usersgroups\edit\<?= $usergroup->getGroupId() ?>"> <i
                                 class="fa fa-user-edit"></i> <?= isset($Text_edit) ? $Text_edit : '' ?>
                     </a>
                     &nbsp;
-                    <a class="btn btn-outline-danger btn-sm delete"
+                    <a class="btn btn-outline-danger btn-sm delete"  title="<?= isset($text_delete_title) ? $text_delete_title : '' ?>"
                        href="\usersgroups\delete\<?= $usergroup->getGroupId() ?>">
                         <i class="fa fa-user-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?>
                     </a>
-                </td>
+                </td> <!-- edit and delete confirm -->
             </tr>
             <?php
         }
