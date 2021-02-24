@@ -77,8 +77,9 @@ class AbstractModel
 
         if (is_array($result) && !empty($result)) {
             return $result;
+        }else{
+            return false;
         }
-
     }
 
     public static function getByPK($PK)
@@ -121,7 +122,11 @@ class AbstractModel
         $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam();
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $this->bindParams($stmt);
-        $stmt->execute();
+        if($stmt->execute()) {
+            $this->{static::$primaryKey} = DatabaseHandler::factory()->lastInsertId();
+            return true;
+        }
+        return false;
     }
 
     public function save()
@@ -133,12 +138,41 @@ class AbstractModel
         }
     }
 
+    public static function getWhere(array $array)
+    {
+        $whereCond = [];
+
+        $column = array_keys($array);
+        $value = array_values($array);
+
+        for ($i = 0  , $ii = count($column) ; $i < $ii ; $i++  ){
+            $whereCond[] = $column[$i] . '=' . $value[$i] ;
+        }
+        $whereCond =  implode(' And ' , $whereCond);
+
+        $sql = 'SELECT * FROM ' . static::$tableName . ' where ' . $whereCond  ;
+        $stmt = DatabaseHandler::factory()->prepare($sql);
+        $stmt->execute();
+        if (method_exists(get_called_class(), '__construct')) {
+            $result = $stmt->fetchAll(pdo::FETCH_CLASS | pdo::FETCH_PROPS_LATE, get_called_class(), static::$table_schema);
+        } else {
+            $result = $stmt->fetchAll(pdo::FETCH_CLASS, get_called_class());
+        }
+
+        if (is_a($result[0], get_called_class()) && !empty($result)) {
+            return new \ArrayIterator($result);
+        }else{
+            return false;
+        }
+    }
+
     public function delete()
     {
         $sql = 'DELETE FROM ' . static::$tableName . ' WHERE ' . static::$primaryKey . '=:' . static::$primaryKey;
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $stmt->bindValue(":" . static::$primaryKey, $this->{static::$primaryKey});
-        $stmt->execute();
+
+       return $stmt->execute();
     }
 
     public function check_input_empty()

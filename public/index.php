@@ -1,7 +1,6 @@
 <?php
 namespace MYMVC;
 
-
 use MYMVC\LIB\FrontController;
 use MYMVC\LIB\Language;
 use MYMVC\LIB\MySession;

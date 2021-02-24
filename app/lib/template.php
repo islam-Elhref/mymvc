@@ -8,6 +8,15 @@ class Template
     private $template;
     private $data;
 
+
+    public function in_old($array , $value ){
+        if (in_array($value , $array)){
+            echo 'checked';
+        }else{
+            echo '';
+        }
+    }
+
     public function GetMessage()
     {
         if (isset($_SESSION['message'])) {
@@ -44,7 +53,6 @@ class Template
         } else {
             return false;
         }
-
 
     }
 

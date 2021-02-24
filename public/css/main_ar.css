@@ -9135,7 +9135,7 @@ legend{
 
 .form-group {
     position: relative;
-    margin: 35px 0;
+    margin: 35px 0 10px;
 }
 
 /*fieldset and legend*/
@@ -9144,6 +9144,7 @@ legend{
 
 .checkbtn{
     overflow: hidden;
+    line-height: 1.4;
 }
 .checkbtn .form-check{
     float: right;
@@ -9154,6 +9155,10 @@ legend{
 .checkbtn .form-check-label{
     width: 100%;
     text-align: right;
+}
+
+.checkbtn .form-check:hover input{
+    box-shadow: inset 0px 0px 3px #000;
 }
 
 .form-check-input {
@@ -9191,8 +9196,8 @@ legend{
 }
 
 .checkbtn .form-check .form-check-input{
-    margin-top: 0.4rem;
-    margin: 6px;
+    margin-top: 0.29rem;
+    margin-left: 6px;
     padding: 0;
     position: inherit !important;
 }

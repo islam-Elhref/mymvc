@@ -8,6 +8,11 @@
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function (form) {
             form.addEventListener('submit', function (event) {
+                if(!$("input[type=checkbox]:checked").length){
+                    $("input[type=checkbox]").prop('required','required')
+                }else{
+                    $("input[type=checkbox]:invalid").prop('required','')
+                }
                 if (form.checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -63,30 +68,33 @@ setTimeout(function () {
 }, 5000)
 
 //confirm
-
 $('.delete').click(function (event) {
     var name = $(this).parents('tr').find('td.use_title').text()
     var msg = $(this).attr('title')
     var href = $(this).attr('href')
+    var textDelete = $(this).text().trim();
+    var textCancel = textDelete=='Delete' ? 'Cancel' : 'إلغاء' ;
     event.preventDefault();
     $.confirm({
         title: msg + ' ' + name + ' ?',
         content: 'This dialog will automatically trigger \'cancel\' in 8 seconds if you don\'t respond.',
-        autoClose: 'cancelAction|8000',
+        autoClose: 'cancel|8000',
         buttons: {
             deleteUser: {
-                text: 'delete',
+                text: textDelete,
                 action: function () {
                     window.location.href = href;
                 }
             },
-            cancelAction: function () {
+            cancel: {
+                text: textCancel,
+                action: function () {
 
+                }
             }
         }
     })
 })
-
 
 //confirm
 

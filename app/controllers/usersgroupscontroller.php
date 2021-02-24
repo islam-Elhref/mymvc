@@ -6,6 +6,8 @@ namespace MYMVC\CONTROLLERS;
 
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
+use MYMVC\MODELS\privilegecontrolmodel;
+use MYMVC\MODELS\privilegesmodel;
 use MYMVC\MODELS\UsersGroupsModel;
 use PDOException;
 
@@ -30,20 +32,46 @@ class UsersGroupsController extends AbstractController
         if (isset($this->_params[0])) {
             $usersGroupId = abs($this->filterInt($this->_params[0]));
             $usersGroup = UsersGroupsModel::getByPK($usersGroupId);
-            if ($usersGroup != false && !empty($usersGroup) && is_a($usersGroup, $this->called_class)) {
+            if ($usersGroup != false) {
+
+                // this for get privilege_id old to do check if this privilege_id is exist before ;
+                $user_groups_privileges = privilegecontrolmodel::getWhere(['group_id' => $usersGroupId]);
+                $array_privilege_id = [];
+                if ($user_groups_privileges !== false) {
+                    foreach ($user_groups_privileges as $groups_privilege) {
+                        $array_privilege_id[] = $groups_privilege->getPrivilegeId();
+                    }
+                }
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-                    $groupnameBefore =$usersGroup->getGroupName();
+                    $groupnameBefore = $usersGroup->getGroupName();
                     $groupnameAfter = $_POST['name'];
-                    $GroupAfterEdit = new UsersGroupsModel($groupnameAfter);
-                    $GroupAfterEdit->setGroupId($usersGroupId);
+                    $usersGroup->setGroupName($groupnameAfter);
 
-                    if ($GroupAfterEdit->check_input_empty() === true){
+                    if ($usersGroup->check_input_empty() === true) {
                         try {
-                            $GroupAfterEdit->save();
-                            $this->write_msg(" تم تعديل مجموعة مستخدمين من $groupnameBefore الي $groupnameAfter "
-                                ,       "users Group has been Edit from $groupnameBefore to $groupnameAfter " );
-                        }catch (PDOException $e){
+                            if (isset($_POST['privilege']) && !empty($_POST['privilege'])) {
+                                $privilegeIdToBeDeleted = array_diff($array_privilege_id , $_POST['privilege'] );
+                                $privilegeIdToBecreated = array_diff($_POST['privilege'] , $array_privilege_id );
+                                $usersGroup->save();
+
+                                foreach ($privilegeIdToBeDeleted as $privilegeId) {
+                                        $UnWantedPrivilege = privilegecontrolmodel::getWhere(['group_id' => $usersGroup->getGroupId() , 'privilege_id' => $privilegeId ]);
+                                        $UnWantedPrivilege->current()->delete();
+                                }
+
+                                foreach ($privilegeIdToBecreated as $privilegeid) {
+                                        $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
+                                        $privilegecontrol->save();
+                                }
+
+                                $this->write_msg(" تم تعديل مجموعة مستخدمين من $groupnameBefore الي $groupnameAfter "
+                                    , "users Group has been Edit from $groupnameBefore to $groupnameAfter ");
+                            } else {
+                                throw new PDOException('there\'s no privilege');
+                            }
+
+                        } catch (PDOException $e) {
                             $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .');
                             $_SESSION['error'] = 'error';
                         }
@@ -51,38 +79,53 @@ class UsersGroupsController extends AbstractController
                     $this->redirect('/usersgroups');
                 }
 
+
+                // write variable in $this->_data[''] and language ;
                 $this->_language->load('usersgroups', 'edit');
+                $this->_data['privileges'] = privilegesmodel::getAll();
+                $this->_data['privileges_old'] = $array_privilege_id;
                 $this->_data['usergroup'] = $usersGroup;
                 $this->view();
+
             } else {
                 $this->redirect('/usersgroups');
-            }
+            } // if usersgroup is empty == false
         } else {
             $this->redirect('/usersgroups');
-        }
+        } // if usergroup id  not found as $this->_params[0]
 
     }
 
     public function addAction()
     {
-        $this->_language->load('usersgroups', 'add');
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $new_users_group = new UsersGroupsModel($_POST['name']);
 
             if ($new_users_group->check_input_empty() === true) {
                 try {
-                    $new_users_group->save();
-                    $this->write_msg('تم حفظ المجموعة بنجاح', 'A New users group has been successfully added');
+                    if (isset($_POST['privilege']) && !empty($_POST['privilege'])) {
+                        $new_users_group->save();
+                        foreach ($_POST['privilege'] as $privilegeid) {
+                            $privilegecontrol = new privilegecontrolmodel($new_users_group->getGroupId(), $privilegeid);
+                            $privilegecontrol->save();
+                        }
+                        $this->write_msg("تم اضافة مجموعة المستخدمين " . $new_users_group->getGroupName()
+                            , "New user group has been added " . $new_users_group->getGroupName());
+                    } else {
+                        throw new PDOException('there\'s no privilege');
+                    }
 
                 } catch (PDOException $e) {
-                    $this->write_msg('. اسم مجموعة المستخدمين موجود مسبقا ؟ لم يتم الحفظ', 'users group name is exist ? Not saved .');
-
+                    $this->write_msg('. هناك خطأ ؟ لم يتم الحفظ', 'there\'s an error ? Not saved .');
                     $_SESSION['error'] = 'error';
                 }
             }
             $this->redirect('/usersgroups');
         }
 
+        $this->_language->load('usersgroups', 'add');
+        $this->_data['privileges'] = privilegesmodel::getAll();
         $this->view();
     }
 
@@ -98,11 +141,13 @@ class UsersGroupsController extends AbstractController
 
             $usersGroupId = abs($this->filterInt($this->_params[0]));
             $usersGroup = UsersGroupsModel::getByPK($usersGroupId);
-            if (!empty($usersGroup) && is_a($usersGroup, $this->called_class)) {
+
+            if ($usersGroup !== false) {
                 try {
                     $usersGroupName = $usersGroup->getGroupName();
-                    $usersGroup->delete();
-                    $this->write_msg("تم حذف مجموعة المستخدمين $usersGroupName بنجاح", "A Users Group $usersGroupName has been successfully deleted");
+                    if ($usersGroup->delete()) {
+                        $this->write_msg("تم حذف مجموعة المستخدمين $usersGroupName بنجاح", "A Users Group $usersGroupName has been successfully deleted");
+                    }
                 } catch (PDOException $e) {
                     $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .');
                     $_SESSION['error'] = 'error';
@@ -116,7 +161,6 @@ class UsersGroupsController extends AbstractController
             $this->redirect('/usersgroups');
         }
     }
-
 
 
 }

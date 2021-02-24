@@ -29,7 +29,7 @@ $this->GetMessage();
                        href="\usersgroups\delete\<?= $usergroup->getGroupId() ?>">
                         <i class="fa fa-user-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?>
                     </a>
-                </td>
+                </td> <!-- edit and delete confirm -->
             </tr>
             <?php
         }

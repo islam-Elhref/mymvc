@@ -21,6 +21,7 @@ class PrivilegesController extends AbstractController
         $this->view();
     }
 
+
     public function editAction()
     {
         if (isset($this->_params[0])) {

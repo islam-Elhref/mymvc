@@ -25,7 +25,7 @@ class PdoDatabaseHandler extends DatabaseHandler
     {
         try {
             self::$_handler = new PDO(
-                'mysql:hostname=' . DATABASE_HOST_NAME . ';dbname=' . DATABASE_DB_NAME,
+                'mysql:host=' . DATABASE_HOST_NAME . ';dbname=' . DATABASE_DB_NAME,
                 DATABASE_USER_NAME, DATABASE_PASSWORD, array(
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'

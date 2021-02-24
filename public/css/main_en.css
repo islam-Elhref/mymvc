@@ -949,13 +949,18 @@ textarea.form-control {
 .form-check {
     position: relative;
     display: block;
-    padding-left: 1.25rem
+    padding-left: 0;
+    padding-right: 1.25rem ;
 }
 
 .form-check-input {
     position: absolute;
     margin-top: .3rem;
     margin-left: -1.25rem
+}
+
+.checkbtn .form-check:hover input{
+    box-shadow: inset 0px 0px 3px #000;
 }
 
 .form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
@@ -9132,10 +9137,79 @@ legend{
 
 .form-group {
     position: relative;
-    margin: 35px 0;
+    margin: 35px 0 10px;
 }
 
+
 /*field set*/
+
+
+/* checkbtn */
+
+.checkbtn{
+    overflow: hidden;
+    line-height: 1.4;
+}
+.checkbtn .form-check{
+    float: left;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.checkbtn .form-check-label{
+    width: 100%;
+    text-align: left;
+}
+
+.checkbtn .form-check:hover input{
+    box-shadow: inset 0px 0px 3px #000;
+}
+
+.form-check-input {
+    width: 1em;
+    height: 1em;
+    margin-top: .25em;
+    outline: none;
+    vertical-align: top;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid rgba(0,0,0,.25);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+    transition: background-color .15s ease-in-out,background-position .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:checked[type=checkbox] {
+    background-image: url("/img/checkmark-64.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.form-check-input[type=checkbox] {
+    border-radius: .25em;
+}
+
+
+.checkbtn .form-check .form-check-input{
+    margin-top: 0.29rem;
+    margin-left: 0;
+    margin-right: 6px;
+    padding: 0;
+    position: inherit !important;
+}
+
+/* checkbtn */
+
 
 
 

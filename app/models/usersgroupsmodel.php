@@ -40,6 +40,14 @@ class UsersGroupsModel extends AbstractModel
         return $this->group_name;
     }
 
+    /**
+     * @param mixed $group_name
+     */
+    public function setGroupName($group_name)
+    {
+        $this->group_name = $this->filterString($group_name);
+    }
+
 
 
 
