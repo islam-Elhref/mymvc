@@ -78,6 +78,13 @@ class MySession extends SessionHandler
         return isset($_SESSION[$name]) ? true : false;
     }
 
+    public function __unset($name)
+    {
+        if (isset($name)) {
+            unset($_SESSION[$name]);
+        }
+    }
+
     public function kill()
     {
         session_unset();

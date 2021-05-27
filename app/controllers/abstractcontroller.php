@@ -12,9 +12,9 @@ class AbstractController
     private $_action;
     protected $_params;
     protected $_template;
-    protected $_language;
-    protected $_session;
+    protected $registry;
     protected $_data = [];
+
 
     public function notfoundAction()
     {
@@ -42,17 +42,15 @@ class AbstractController
         $this->_template = $template;
     }
 
-    public function setLanguage($language)
+    public function setRegistry($registry)
     {
-        $this->_language = $language;
+        $this->registry = $registry;
     }
 
-
-    public function setSession($session)
+    public function __get($opject)
     {
-        $this->_session = $session;
+           return $this->registry->$opject;
     }
-
 
 
     public function view()
@@ -67,9 +65,9 @@ class AbstractController
 
         $this->_data = array_merge($this->_data, $this->_language->getDictionary());
 
-        $this->_data['session'] = $_SESSION;
-
         $this->_template->setData($this->_data);
+        $this->_template->setRegistry($this->registry);
+
         $this->_template->render($file_view);
 
     }

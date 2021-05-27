@@ -159,7 +159,7 @@ class AbstractModel
             $result = $stmt->fetchAll(pdo::FETCH_CLASS, get_called_class());
         }
 
-        if (is_a($result[0], get_called_class()) && !empty($result)) {
+        if (!empty($result) && is_a($result[0], get_called_class()) ) {
             return new \ArrayIterator($result);
         }else{
             return false;

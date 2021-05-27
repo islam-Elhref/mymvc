@@ -8842,7 +8842,8 @@ h1 span {
     color: #b8c7ce;
     display: block;
     text-decoration: none;
-    padding: 10px;
+    font-weight: bold;
+    padding: 7px;
     transition: all 0.3s ease-in-out;
     border-bottom: solid 1px #273339;
     box-sizing: border-box;

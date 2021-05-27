@@ -4,6 +4,7 @@ namespace MYMVC\CONTROLLERS;
 
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
+use MYMVC\LIB\Messenger;
 use MYMVC\MODELS\privilegesmodel;
 use PDOException;
 
@@ -11,8 +12,8 @@ class PrivilegesController extends AbstractController
 {
     use filter;
     use Helper;
-
     private $called_class = 'MYMVC\MODELS\privilegesmodel';
+
 
     public function defaultAction()
     {
@@ -24,6 +25,9 @@ class PrivilegesController extends AbstractController
 
     public function editAction()
     {
+        $this->_language->load('privileges' , 'msgs');
+        $msgs = $this->_language->getDictionary();
+
         if (isset($this->_params[0])) {
             $privilege_id = abs($this->filterInt($this->_params[0])); // param id privilege
             $privilege = privilegesmodel::getByPK($privilege_id); // object from privilege model
@@ -35,13 +39,12 @@ class PrivilegesController extends AbstractController
 
                     if ($privilege_edit->check_input_empty() === true) {
                         try {
+                           $privilegeName =  $privilege_edit->getPrivilegeName();
                             $privilege_edit->save();
-                            $this->write_msg('تم تعديل الصلاحيه بنجاح', 'A Privilege has been successfully Edit');
-
+                            $msg_success = str_replace('name', $privilegeName, $msgs['msg_success_edit']);
+                            $this->_msg->addMsg($msg_success , Messenger::Msg_success);
                         } catch (PDOException $e) {
-                            $this->write_msg('. اسم الصلاحيه او الرابط موجود مسبقا ؟ لم يتم الحفظ', 'privilege name or privilege url is exist ? Not saved .');
-
-                            $_SESSION['error'] = 'error';
+                            $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_success);
                         }
                     }
                     $this->redirect('/privileges');
@@ -60,6 +63,8 @@ class PrivilegesController extends AbstractController
     public function addAction()
     {
         $this->_language->load('privileges', 'add');
+        $this->_language->load('privileges', 'msgs');
+        $msgs = $this->_language->getDictionary();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $new_privilege = new privilegesmodel($_POST['name'], $_POST['url']);
@@ -67,12 +72,11 @@ class PrivilegesController extends AbstractController
             if ($new_privilege->check_input_empty() === true) {
                 try {
                     $new_privilege->save();
-                    $this->write_msg('تم حفظ الصلاحيه بنجاح', 'A New Privilege has been successfully added');
-
+                    $privilegeName = $new_privilege->getPrivilegeName();
+                    $msg_success = str_replace('name', $privilegeName, $msgs['msg_success_add']);
+                    $this->_msg->addMsg($msg_success , Messenger::Msg_success);
                 } catch (PDOException $e) {
-                    $this->write_msg('. اسم الصلاحيه او الرابط موجود مسبقا ؟ لم يتم الحفظ', 'privilege name or privilege url is exist ? Not saved .');
-
-                    $_SESSION['error'] = 'error';
+                    $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
                 }
             }
             $this->redirect('/privileges');
@@ -97,11 +101,12 @@ class PrivilegesController extends AbstractController
 
                 try {
                     $privilege->delete();
-                    $this->write_msg('تم حذف الصلاحيه بنجاح', 'A Privilege has been successfully deleted');
+                    $privilegeName = $privilege->getPrivilegeName();
+                    $this->write_msg("تم حذف الصلاحيه <b>$privilegeName</b> بنجاح", "A Privilege <b>$privilegeName</b> has been successfully deleted" , Messenger::Msg_success);
 
                 } catch (PDOException $e) {
-                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .');
-                    $_SESSION['error'] = 'error';
+                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .',Messenger::Msg_error);
+
                 }
                 $this->redirect('/privileges');
 

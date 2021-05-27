@@ -59,7 +59,17 @@ class privilegecontrolmodel extends AbstractModel
     }
 
 
+public static function getByGroup(UsersGroupsModel $group){
+    $user_groups_privileges = privilegecontrolmodel::getWhere(['group_id' => $group->getGroupId()]);
+    $array_privilege_id = [];
+    if ($user_groups_privileges !== false) {
+        foreach ($user_groups_privileges as $groups_privilege) {
+            $array_privilege_id[] = $groups_privilege->getPrivilegeId();
+        }
+        return $array_privilege_id;
+    }
 
+}
 
 
 }

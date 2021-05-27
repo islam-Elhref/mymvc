@@ -3,7 +3,9 @@ namespace MYMVC;
 
 use MYMVC\LIB\FrontController;
 use MYMVC\LIB\Language;
+use MYMVC\LIB\Messenger;
 use MYMVC\LIB\MySession;
+use MYMVC\LIB\Registry;
 use MYMVC\LIB\Template;
 
 require_once '..'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php';
@@ -15,17 +17,22 @@ $temp_paths = require_once APP_PATH . 'config'.DS.'temp_config.php';
 $mysession = new MySession();
 $mysession->start();
 
-// session
-
-if (!isset($_SESSION['lang'])){
-    $_SESSION['lang'] = defaultLanguage;
+if (!isset($mysession->lang)){
+    $mysession->lang = defaultLanguage;
 }
 
 $language = new Language();
 $template = new Template($temp_paths);
+$messenger = Messenger::getInstance($mysession);
 
 
-$controller = new FrontController($template , $language , $mysession);
+$registry = Registry::getInstance();
+$registry->_language = $language ;
+$registry->_sessions  = $mysession;
+$registry->_msg = $messenger;
+
+
+$controller = new FrontController($template , $registry);
 $controller->dispatch();
 
 

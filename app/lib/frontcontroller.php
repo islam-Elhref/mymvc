@@ -10,15 +10,13 @@ class FrontController
     private $_controller;
     private $_action;
     private $template;
-    private $language;
-    private $session;
+    private $registry ;
     private $_params = [];
 
-    public function __construct(Template $template , Language $language , MySession $session)
+    public function __construct(Template $template , Registry $registry)
     {
-        $this->language = $language;
+        $this->registry = $registry;
         $this->template = $template;
-        $this->session = $session;
         $this->parse_url();
     }
 
@@ -53,8 +51,7 @@ class FrontController
         $controller->setAction($this->_action);
         $controller->setparams($this->_params);
         $controller->setTemplate($this->template);
-        $controller->setlanguage($this->language);
-        $controller->setSession($this->session);
+        $controller->setRegistry($this->registry);
 
         $controller->$actionName();
     }

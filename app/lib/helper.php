@@ -14,13 +14,13 @@ trait Helper
         exit();
     }
 
-    public function write_msg(string $ar_msg , string $en_msg)
+    public function write_msg(string $ar_msg , string $en_msg , $type)
     {
         $lang = $_SESSION['lang'];
         if ($lang === 'ar') {
-            $_SESSION['message'] = $ar_msg ;
+            $this->_msg->addMsg($ar_msg , $type);
         } else {
-            $_SESSION['message'] = $en_msg;
+            $this->_msg->addMsg($en_msg , $type);
         }
     }
 

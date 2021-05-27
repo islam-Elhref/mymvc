@@ -1,8 +1,3 @@
-<h1 class="font-weight-bolder title"> <?= isset($Text_header) ? "$Text_header" : '' ?> </h1>
-
-<?php
-$this->GetMessage();
-?>
 
 <table id="mytable" class="table table-striped table-bordered" style="width:100%">
 

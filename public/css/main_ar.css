@@ -8854,7 +8854,8 @@ h1 span {
 .navbar .links a {
     color: #b8c7ce;
     display: block;
-    padding: 10px;
+    font-weight: bold;
+    padding: 7px;
     text-decoration: none;
     transition: all 0.3s ease-in-out;
     border-bottom: solid 1px #273339;

@@ -1,21 +1,3 @@
-<h1 class="font-weight-bolder title"> <?= isset($Text_header) ? "$Text_header" : '' ?> </h1>
-
-
-<?php
-if (isset($_SESSION['message'])) {
-    if (!isset($_SESSION['error'])) {
-        ?>
-
-        <div class="alert alert-success" id="message"><?= $_SESSION['message'] ?></div>
-
-        <?php
-    } else { ?>
-        <div class="alert alert-danger" id="message"><?= $_SESSION['message'] ?></div>
-        <?php
-    }
-    unset($_SESSION['message'], $_SESSION['error']);
-}
-?>
 
 <table id="mytable" class="table table-striped table-bordered" style="width:100%">
 

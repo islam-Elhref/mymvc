@@ -1,11 +1,9 @@
 <?php
-
-
 namespace MYMVC\CONTROLLERS;
-
 
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
+use MYMVC\LIB\Messenger;
 use MYMVC\MODELS\privilegecontrolmodel;
 use MYMVC\MODELS\privilegesmodel;
 use MYMVC\MODELS\UsersGroupsModel;
@@ -35,13 +33,8 @@ class UsersGroupsController extends AbstractController
             if ($usersGroup != false) {
 
                 // this for get privilege_id old to do check if this privilege_id is exist before ;
-                $user_groups_privileges = privilegecontrolmodel::getWhere(['group_id' => $usersGroupId]);
-                $array_privilege_id = [];
-                if ($user_groups_privileges !== false) {
-                    foreach ($user_groups_privileges as $groups_privilege) {
-                        $array_privilege_id[] = $groups_privilege->getPrivilegeId();
-                    }
-                }
+                $array_privilege_id = privilegecontrolmodel::getByGroup($usersGroup);
+
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
                     $groupnameBefore = $usersGroup->getGroupName();
@@ -51,29 +44,28 @@ class UsersGroupsController extends AbstractController
                     if ($usersGroup->check_input_empty() === true) {
                         try {
                             if (isset($_POST['privilege']) && !empty($_POST['privilege'])) {
-                                $privilegeIdToBeDeleted = array_diff($array_privilege_id , $_POST['privilege'] );
-                                $privilegeIdToBecreated = array_diff($_POST['privilege'] , $array_privilege_id );
+                                $privilegeIdToBeDeleted = array_diff($array_privilege_id, $_POST['privilege']);
+                                $privilegeIdToBecreated = array_diff($_POST['privilege'], $array_privilege_id);
                                 $usersGroup->save();
 
                                 foreach ($privilegeIdToBeDeleted as $privilegeId) {
-                                        $UnWantedPrivilege = privilegecontrolmodel::getWhere(['group_id' => $usersGroup->getGroupId() , 'privilege_id' => $privilegeId ]);
-                                        $UnWantedPrivilege->current()->delete();
+                                    $UnWantedPrivilege = privilegecontrolmodel::getWhere(['group_id' => $usersGroup->getGroupId(), 'privilege_id' => $privilegeId]);
+                                    $UnWantedPrivilege->current()->delete();
                                 }
 
                                 foreach ($privilegeIdToBecreated as $privilegeid) {
-                                        $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
-                                        $privilegecontrol->save();
+                                    $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
+                                    $privilegecontrol->save();
                                 }
 
-                                $this->write_msg(" تم تعديل مجموعة مستخدمين من $groupnameBefore الي $groupnameAfter "
-                                    , "users Group has been Edit from $groupnameBefore to $groupnameAfter ");
+                                $this->write_msg(" تم تعديل مجموعة مستخدمين من <b>$groupnameBefore</b> الي  <b>$groupnameAfter</b> "
+                                    , "users Group has been Edit from $groupnameBefore to $groupnameAfter " , Messenger::Msg_success);
                             } else {
-                                throw new PDOException('there\'s no privilege');
+                                throw new PDOException('there\'s no privilege' );
                             }
 
                         } catch (PDOException $e) {
-                            $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .');
-                            $_SESSION['error'] = 'error';
+                            $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .', Messenger::Msg_error);
                         }
                     }
                     $this->redirect('/usersgroups');
@@ -110,15 +102,15 @@ class UsersGroupsController extends AbstractController
                             $privilegecontrol = new privilegecontrolmodel($new_users_group->getGroupId(), $privilegeid);
                             $privilegecontrol->save();
                         }
-                        $this->write_msg("تم اضافة مجموعة المستخدمين " . $new_users_group->getGroupName()
-                            , "New user group has been added " . $new_users_group->getGroupName());
+                        $this->write_msg("تم اضافة مجموعة المستخدمين <b>" . $new_users_group->getGroupName()."</b>"
+                            , "New user group has been added <b>" . $new_users_group->getGroupName()."</b>" , Messenger::Msg_success);
                     } else {
                         throw new PDOException('there\'s no privilege');
                     }
 
                 } catch (PDOException $e) {
-                    $this->write_msg('. هناك خطأ ؟ لم يتم الحفظ', 'there\'s an error ? Not saved .');
-                    $_SESSION['error'] = 'error';
+                    $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .', Messenger::Msg_error);
+
                 }
             }
             $this->redirect('/usersgroups');
@@ -146,11 +138,10 @@ class UsersGroupsController extends AbstractController
                 try {
                     $usersGroupName = $usersGroup->getGroupName();
                     if ($usersGroup->delete()) {
-                        $this->write_msg("تم حذف مجموعة المستخدمين $usersGroupName بنجاح", "A Users Group $usersGroupName has been successfully deleted");
+                        $this->write_msg("تم حذف مجموعة المستخدمين <b>$usersGroupName</b> بنجاح", "A Users Group <b>$usersGroupName</b> has been successfully deleted" , Messenger::Msg_success);
                     }
                 } catch (PDOException $e) {
-                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .');
-                    $_SESSION['error'] = 'error';
+                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .' , Messenger::Msg_error);
                 }
                 $this->redirect('/usersgroups');
 

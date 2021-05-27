@@ -7,39 +7,31 @@ class Template
 {
     private $template;
     private $data;
+    private $registry;
 
+    public function __construct($template)
+    {
+        $this->template = $template;
+    }
 
-    public function in_old($array , $value ){
-        if (in_array($value , $array)){
+    public function in_old($array, $value)
+    {
+        if (in_array($value, $array)) {
             echo 'checked';
-        }else{
+        } else {
             echo '';
         }
     }
 
     public function GetMessage()
     {
-        if (isset($_SESSION['message'])) {
-            if (!isset($_SESSION['error'])) {
+        $messages = $this->_msg->getMsg();
+        if ($messages !== null) {
+            foreach ($messages as $message) {
                 ?>
-
-                <div class="alert alert-success message" id="message"><?= $_SESSION['message'] ?></div>
-
+                <div class="alert <?= $message[1] ?> message" id="message"><?= $message[0] ?></div>
                 <?php
-            } else {
-                if (is_array($_SESSION['message'])) {
-                    foreach ($_SESSION['message'] as $message) {
-                        ?>
-                            <div class="alert alert-danger message" id="message"><?= $message ?></div>
-                        <?php
-                    }
-                } else {
-                    ?>
-                        <div class="alert alert-danger message" id="message"><?= $_SESSION['message'] ?></div>
-                    <?php
-                }
             }
-            unset($_SESSION['message'] , $_SESSION['error']);
         }
     }
 
@@ -61,39 +53,30 @@ class Template
         $this->data = $data;
     }
 
-    public function __construct($template)
+    public function setRegistry($registry)
     {
-        $this->template = $template;
+        $this->registry = $registry;
+    }
+
+    public function __get($object)
+    {
+        return $this->registry->$object;
+    }
+
+    public function render($file_view)
+    {
+        $this->template_header_start();
+        $this->header_resources();
+        $this->template_header_end();
+        $this->template_block($file_view);
+        $this->footer_resources();
+        $this->template_footer();
     }
 
     private function template_header_start()
     {
         extract($this->data);
         require_once temp_PATH . 'template_header_start.php';
-    }
-
-    private function template_header_end()
-    {
-        extract($this->data);
-        require_once temp_PATH . 'template_header_end.php';
-    }
-
-    private function template_footer()
-    {
-        extract($this->data);
-        require_once temp_PATH . 'template_footer.php';
-    }
-
-    private function template_block($view)
-    {
-        extract($this->data);
-        foreach ($this->template['template'] as $key => $path) {
-            if ($key == ':view') {
-                require_once $view;
-            } else {
-                require_once $path;
-            }
-        }
     }
 
     private function header_resources()
@@ -110,6 +93,24 @@ class Template
             }
         }
         echo $paths;
+    }
+
+    private function template_header_end()
+    {
+        extract($this->data);
+        require_once temp_PATH . 'template_header_end.php';
+    }
+
+    private function template_block($view)
+    {
+        extract($this->data);
+        foreach ($this->template['template'] as $key => $path) {
+            if ($key == ':view') {
+                require_once $view;
+            } else {
+                require_once $path;
+            }
+        }
     }
 
     private function footer_resources()
@@ -130,15 +131,10 @@ class Template
         echo $script;
     }
 
-
-    public function render($file_view)
+    private function template_footer()
     {
-        $this->template_header_start();
-        $this->header_resources();
-        $this->template_header_end();
-        $this->template_block($file_view);
-        $this->footer_resources();
-        $this->template_footer();
+        extract($this->data);
+        require_once temp_PATH . 'template_footer.php';
     }
 
 }
