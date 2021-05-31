@@ -15,4 +15,14 @@ class usersController extends AbstractController
         $this->view();
     }
 
+    public function addAction(){
+        $this->_language->load('users' , 'add');
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
+//            $new_user = new UsersModel($username, $password, $email, $phone, $group_id, $subscription_date, $last_login)
+        }
+
+        $this->view();
+    }
+
 }

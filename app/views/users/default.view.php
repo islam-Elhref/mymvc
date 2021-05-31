@@ -24,10 +24,10 @@
                 <td><?= $user->getSubscriptionDate() ?></td>
                 <td><?= $user->getLastLogin() ?></td>
                 <td style="text-align: center">
-                    <a class="btn btn-outline-light btn-sm" href="\employee\edit\<?= $user->getUserId() ?>"> <i
+                    <a class="btn btn-outline-light btn-sm" href="\users\edit\<?= $user->getUserId() ?>"> <i
                                 class="fa fa-user-edit"></i> <?= isset($Text_edit) ? $Text_edit : '' ?></a>
                     &nbsp;
-                    <a class="btn btn-outline-danger btn-sm delete" href="\employee\delete\<?= $user->getUserId() ?>">
+                    <a class="btn btn-outline-danger btn-sm delete" href="\users\delete\<?= $user->getUserId() ?>">
                         <i class="fa fa-user-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?></a>
                 </td>
             </tr>
@@ -39,4 +39,4 @@
 
 </table>
 
-<a class="btn btn-light btn_add" href="/employee/add"><?= isset($text_add_new_user) ? $text_add_new_user : '' ?></a>
+<a class="btn btn-light btn_add" href="/users/add"><?= isset($text_add_new_user) ? $text_add_new_user : '' ?></a>
