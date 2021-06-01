@@ -17,7 +17,7 @@ class usersController extends AbstractController
 
     public function addAction(){
         $this->_language->load('users' , 'add');
-
+        $this->_language->load('users' , 'msgs');
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 //            $new_user = new UsersModel($username, $password, $email, $phone, $group_id, $subscription_date, $last_login)
         }
