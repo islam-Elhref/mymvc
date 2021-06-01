@@ -27,6 +27,10 @@ class UsersGroupsController extends AbstractController
 
     public function editAction()
     {
+        $this->_language->load('usersgroups', 'edit');
+        $this->_language->load('usersgroups', 'msgs');
+        $msgs = $this->_language->getDictionary();
+
         if (isset($this->_params[0])) {
             $usersGroupId = abs($this->filterInt($this->_params[0]));
             $usersGroup = UsersGroupsModel::getByPK($usersGroupId);
@@ -40,6 +44,7 @@ class UsersGroupsController extends AbstractController
                     $groupnameBefore = $usersGroup->getGroupName();
                     $groupnameAfter = $_POST['name'];
                     $usersGroup->setGroupName($groupnameAfter);
+
 
                     if ($usersGroup->check_input_empty() === true) {
                         try {
@@ -57,15 +62,16 @@ class UsersGroupsController extends AbstractController
                                     $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
                                     $privilegecontrol->save();
                                 }
+                                $msg_success = str_replace(array('name', 'other'), array($groupnameBefore, $groupnameAfter), $msgs['msg_success_edit']);
+                                $this->_msg->addMsg($msg_success , Messenger::Msg_success);
 
-                                $this->write_msg(" تم تعديل مجموعة مستخدمين من <b>$groupnameBefore</b> الي  <b>$groupnameAfter</b> "
-                                    , "users Group has been Edit from $groupnameBefore to $groupnameAfter " , Messenger::Msg_success);
                             } else {
+                                $this->_msg->addMsg('there\'s no privilege' , Messenger::Msg_success);
                                 throw new PDOException('there\'s no privilege' );
                             }
 
                         } catch (PDOException $e) {
-                            $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .', Messenger::Msg_error);
+                            $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
                         }
                     }
                     $this->redirect('/usersgroups');
@@ -73,7 +79,6 @@ class UsersGroupsController extends AbstractController
 
 
                 // write variable in $this->_data[''] and language ;
-                $this->_language->load('usersgroups', 'edit');
                 $this->_data['privileges'] = privilegesmodel::getAll();
                 $this->_data['privileges_old'] = $array_privilege_id;
                 $this->_data['usergroup'] = $usersGroup;
@@ -90,6 +95,10 @@ class UsersGroupsController extends AbstractController
 
     public function addAction()
     {
+        $this->_language->load('usersgroups', 'add');
+        $this->_language->load('usersgroups' , 'msgs' );
+        $msgs = $this->_language->getDictionary();
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             $new_users_group = new UsersGroupsModel($_POST['name']);
@@ -102,8 +111,7 @@ class UsersGroupsController extends AbstractController
                             $privilegecontrol = new privilegecontrolmodel($new_users_group->getGroupId(), $privilegeid);
                             $privilegecontrol->save();
                         }
-                        $this->write_msg("تم اضافة مجموعة المستخدمين <b>" . $new_users_group->getGroupName()."</b>"
-                            , "New user group has been added <b>" . $new_users_group->getGroupName()."</b>" , Messenger::Msg_success);
+
                     } else {
                         throw new PDOException('there\'s no privilege');
                     }
@@ -116,7 +124,6 @@ class UsersGroupsController extends AbstractController
             $this->redirect('/usersgroups');
         }
 
-        $this->_language->load('usersgroups', 'add');
         $this->_data['privileges'] = privilegesmodel::getAll();
         $this->view();
     }
