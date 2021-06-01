@@ -15,7 +15,7 @@
             ?>
             <tr>
                 <td class="use_title"><?= $privilege->getPrivilegeName() ?></td>
-                <td><?= $privilege->getPrivilegeurl() ?></td>
+                <td class="dr_english" ><?= $privilege->getPrivilegeurl() ?></td>
                 <!-- control edit and delete  -->
                 <td style="text-align: center">
                     <a class="btn btn-outline-light btn-sm" href="\privileges\edit\<?= $privilege->getPrivilegeId() ?>"> <i

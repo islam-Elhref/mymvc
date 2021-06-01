@@ -11,7 +11,7 @@
             </div>
             <div class="form-group">
                 <label for="url"><?= isset($text_table_privilege_url) ? $text_table_privilege_url : '' ?></label>
-                <input type="text" class="form-control box" id="url" required name="url" pattern="/.+"
+                <input type="text" class="form-control box dr_english" id="url" required name="url" pattern="/.+"
                        value="<?= isset($privilege) ? $privilege->getPrivilegeurl() : '' ; ?>">
                 <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                 <div class="invalid-feedback"><?= isset($invalid_msg_privilege_url) ? $invalid_msg_privilege_url : '' ?></div>
