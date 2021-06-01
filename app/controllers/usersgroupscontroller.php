@@ -111,13 +111,15 @@ class UsersGroupsController extends AbstractController
                             $privilegecontrol = new privilegecontrolmodel($new_users_group->getGroupId(), $privilegeid);
                             $privilegecontrol->save();
                         }
-
+                        $user_group_name = $new_users_group->getGroupName();
+                        $msg_success = str_replace('name', $user_group_name, $msgs['msg_success_add']);
+                        $this->_msg->addMsg($msg_success , Messenger::Msg_success);
                     } else {
                         throw new PDOException('there\'s no privilege');
                     }
 
                 } catch (PDOException $e) {
-                    $this->write_msg('. اسم المجموعة موجود مسبقا ؟ لم يتم الحفظ', 'Users Group name is exist ? Not saved .', Messenger::Msg_error);
+                    $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
 
                 }
             }
@@ -142,13 +144,17 @@ class UsersGroupsController extends AbstractController
             $usersGroup = UsersGroupsModel::getByPK($usersGroupId);
 
             if ($usersGroup !== false) {
+
+                $this->_language->load('usersgroups', 'msgs');
+                $msg = $this->_language->getDictionary();
                 try {
                     $usersGroupName = $usersGroup->getGroupName();
                     if ($usersGroup->delete()) {
-                        $this->write_msg("تم حذف مجموعة المستخدمين <b>$usersGroupName</b> بنجاح", "A Users Group <b>$usersGroupName</b> has been successfully deleted" , Messenger::Msg_success);
+                        $msg_success = str_replace('name', $usersGroupName, $msg['msg_success_delete']);
+                        $this->_msg->addMsg($msg_success , Messenger::Msg_success);
                     }
                 } catch (PDOException $e) {
-                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .' , Messenger::Msg_error);
+                    $this->_msg->addMsg($msg['msg_error_add'] , Messenger::Msg_error);
                 }
                 $this->redirect('/usersgroups');
 
