@@ -1,7 +1,7 @@
 <div class="navbar">
 
     <div class="navbar-info">
-        <img src="../img/1.jpg" alt="">
+        <img src="/img/1.jpg" alt="">
         <h3>app admin</h3>
     </div>
     <ul class="list-unstyled links">
