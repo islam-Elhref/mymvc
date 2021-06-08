@@ -5,9 +5,12 @@ namespace MYMVC\CONTROLLERS;
 
 
 use MYMVC\LIB\FrontController;
+use MYMVC\LIB\Validation;
 
 class AbstractController
 {
+    use Validation;
+
     private $_controller;
     private $_action;
     protected $_params;

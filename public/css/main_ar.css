@@ -104,6 +104,15 @@ address {
 .dr_english{
     direction: ltr;
 }
+.dr_arabic{
+    direction: rtl;
+}
+
+.row_reverse{
+    flex-direction: row-reverse;
+}
+
+
 
 ol, ul, dl {
     margin-top: 0;

@@ -65,7 +65,7 @@ setTimeout(function () {
             $(this).remove();
         })
     })
-}, 5000)
+}, 10000)
 
 //confirm
 $('.delete').click(function (event) {

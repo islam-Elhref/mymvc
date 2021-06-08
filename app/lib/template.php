@@ -23,15 +23,17 @@ class Template
         }
     }
 
-    public function GetMessage()
+    public function GetMessage($want = 'all')
     {
         $messages = $this->_msg->getMsg();
         if ($messages !== null) {
+
             foreach ($messages as $message) {
                 ?>
                 <div class="alert <?= $message[1] ?> message" id="message"><?= $message[0] ?></div>
                 <?php
             }
+
         }
     }
 

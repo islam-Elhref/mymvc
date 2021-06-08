@@ -44,7 +44,7 @@ class PrivilegesController extends AbstractController
                             $msg_success = str_replace('name', $privilegeName, $msgs['msg_success_edit']);
                             $this->_msg->addMsg($msg_success , Messenger::Msg_success);
                         } catch (PDOException $e) {
-                            $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_success);
+                            $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
                         }
                     }
                     $this->redirect('/privileges');
@@ -94,6 +94,8 @@ class PrivilegesController extends AbstractController
         }
 
         if (isset($this->_params[0]) && $path == '/privileges') {
+            $this->_language->load('privileges', 'msgs');
+            $msgs = $this->_language->getDictionary();
 
             $privilege_id = abs($this->filterInt($this->_params[0]));
             $privilege = privilegesmodel::getByPK($privilege_id);
@@ -102,11 +104,11 @@ class PrivilegesController extends AbstractController
                 try {
                     $privilege->delete();
                     $privilegeName = $privilege->getPrivilegeName();
-                    $this->write_msg("تم حذف الصلاحيه <b>$privilegeName</b> بنجاح", "A Privilege <b>$privilegeName</b> has been successfully deleted" , Messenger::Msg_success);
+                    $msg_success = str_replace('name', $privilegeName, $msgs['msg_success_delete']);
+                    $this->_msg->addMsg($msg_success , Messenger::Msg_success);
 
                 } catch (PDOException $e) {
-                    $this->write_msg('. هناك خطأ ما ؟ لم يتم الحذف', 'There is an error? Not Delete .',Messenger::Msg_error);
-
+                    $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
                 }
                 $this->redirect('/privileges');
 
