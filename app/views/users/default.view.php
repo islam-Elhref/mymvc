@@ -18,7 +18,7 @@
     ?>
             <tr>
                 <td><?= $user->getUsername() ?></td>
-                <td><?= $user->getGroupId() ?></td>
+                <td><?= $user->getGroupName() ?></td>
                 <td><?= $user->getEmail() ?></td>
                 <td><?= $user->getPhone() ?></td>
                 <td><?= $user->getSubscriptionDate() ?></td>

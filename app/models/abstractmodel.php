@@ -57,16 +57,12 @@ class AbstractModel
 
     }
 
-    public static function getAll($key = '', $type = 'ASC')
+    public static function getAll($sql = '')
     {
-        if ($key == '') {
-            $key = static::$primaryKey;
-        }
-        if ($type !== 'ASC' && $type !== 'DESC') {
-            $type = 'ASC';
+        if ($sql == ''){
+            $sql = 'SELECT * FROM ' . static::$tableName ;
         }
 
-        $sql = 'SELECT * FROM ' . static::$tableName . ' ORDER BY `' . $key . '`' . $type;
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $stmt->execute();
         if (method_exists(get_called_class(), '__construct')) {
@@ -106,6 +102,8 @@ class AbstractModel
 
         }
     }
+
+
 
     private function update()
     {
@@ -173,35 +171,6 @@ class AbstractModel
         $stmt->bindValue(":" . static::$primaryKey, $this->{static::$primaryKey});
 
        return $stmt->execute();
-    }
-
-    public function check_input_empty()
-    {
-        foreach ($this as $key => $value) {
-            if ($key == static::$primaryKey) {
-                continue;
-            } else {
-                if ($value == '') {
-                    $lang = $_SESSION['lang'];
-
-                    if ($lang === 'ar') {
-                        $this->message[]= $key . ' لا يجب ان يكون فارغ' . '<br>';
-                    } else {
-                        $this->message[]= $key . ' must be not empty ' . '<br>';
-                    }
-                    $_SESSION['error'] = 'error';
-
-                }
-            }
-        }
-
-        if (!empty($this->message)) {
-            $_SESSION['message'] = $this->message;
-            $_SESSION['error'] = 'error';
-            return false;
-        } else {
-            return true;
-        }
     }
 
 

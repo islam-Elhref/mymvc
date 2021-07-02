@@ -38,6 +38,25 @@ public function load($controller , $action){
        return $this->Dictionary ;
     }
 
+    public function get($key)
+    {
+        if (array_key_exists($key, $this->Dictionary)){
+            return $this->Dictionary[$key];
+        }
+    }
+
+    public function feed_msg($key , $data ){
+            
+        if (array_key_exists($key, $this->Dictionary)){
+            if ($this->get($data[0]) !== null){
+                $data[0] = $this->get($data[0]);
+            }
+            array_unshift($data , $this->get($key));
+           return call_user_func_array('sprintf', $data);
+        }
+    }
+
+
 
 
 }

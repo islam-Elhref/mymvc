@@ -35,55 +35,86 @@ trait Validation
 
     public function num($value)
     {
-        return (bool)preg_match($this->_regexpatterns['num'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['num'], $value);
+        }
+        return true ;
     }
 
     public function int($value)
     {
+        if ($value != null){
         return (bool)preg_match($this->_regexpatterns['int'], $value);
+        }
+        return true ;
     }
 
     public function float($value)
     {
-        return (bool)preg_match($this->_regexpatterns['float'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['float'], $value);
+        }
+        return true ;
     }
 
     public function alpha($value)
     {
-        return (bool)preg_match($this->_regexpatterns['alpha'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['alpha'], $value);
+        }
+        return true ;
     }
 
     public function alphaEn($value)
     {
-        return (bool)preg_match($this->_regexpatterns['alphaEn'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['alphaEn'], $value);
+        }
+        return true ;
     }
 
     public function alphanum($value)
     {
-        return (bool)preg_match($this->_regexpatterns['alphanum'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['alphanum'], $value);
+        }
+        return true ;
     }
 
     public function alphanumEn($value)
     {
-        return (bool)preg_match($this->_regexpatterns['alphanumEn'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['alphanumEn'], $value);
+        }
+        return true ;
     }
 
     public function lt($value, $num)
     {
-        if (is_numeric($value)) {
-            return $value < $num;
-        } elseif (is_string($value)) {
-            return mb_strlen($value, 'utf-8') < $num;
-        }
+            if (is_string($value)) {
+                return mb_strlen($value, 'utf-8') < $num;
+            } elseif (is_numeric($value)) {
+                return $value < $num;
+            }
+
     }
 
     public function gt($value, $num)
     {
-        if (is_numeric($value)) {
-            return $value > $num;
-        } elseif (is_string($value)) {
-            return mb_strlen($value, 'utf-8') > $num;
-        }
+            if (is_string($value)) {
+                return mb_strlen($value, 'utf-8') > $num;
+            } elseif (is_numeric($value)) {
+                return $value > $num;
+            }
+    }
+
+    public function eq($value, $match_aginste)
+    {
+            return $value == $match_aginste;
+    }
+    public function eqinput($value, $other_input)
+    {
+        return $value == $other_input;
     }
 
     public function min($value, $min)
@@ -91,14 +122,14 @@ trait Validation
         return $value >= $min;
     }
 
-    public function max($value, $max)
-    {
-        return $value <= $max;
-    }
-
     public function smin($value, $min)
     {
         return mb_strlen($value, 'utf-8') >= $min;
+    }
+
+    public function max($value, $max)
+    {
+        return $value <= $max;
     }
 
     public function smax($value, $max)
@@ -109,13 +140,22 @@ trait Validation
 
     public function between($value, $min, $max)
     {
-        $temp_min = ($min <= $max) ? $min : $max;
-        $temp_max = ($min <= $max) ? $max : $min;
-        if (is_numeric($value)) {
+        if ($value != null) {
+            $temp_min = ($min <= $max) ? $min : $max;
+            $temp_max = ($min <= $max) ? $max : $min;
             return $value >= $temp_min && $value <= $temp_max;
-        } elseif (is_string($value)) {
+        }
+        return true;
+    }
+
+    public function sbetween($value, $min, $max)
+    {
+        if ($value != null) {
+            $temp_min = ($min <= $max) ? $min : $max;
+            $temp_max = ($min <= $max) ? $max : $min;
             return mb_strlen($value, 'utf-8') >= $temp_min && mb_strlen($value, 'utf-8') <= $temp_max;
         }
+        return true ;
     }
 
     public function vdate($date)
@@ -151,40 +191,47 @@ trait Validation
         return (bool)filter_var($value, FILTER_VALIDATE_URL);
     }
 
-    //preg_match('/\w+\((\d+)\)/', 'islam min(55)' , $m);
 
-    public function is_valid($rules, array $input_type)
+    public function is_valid($rules_to_valid, $inputs)
     {
-
         $error = [];
-        $lang =  $this->_language->getDictionary();
+        foreach ($rules_to_valid as $input => $rules) {
 
-        foreach ($rules as $input => $rule_input) {
-            $rule_input = explode('|', $rule_input);
+            $rules = explode('|', $rules);
 
-            if (isset($input_type[$input])) {
-                $value = $input_type[$input];
-            } else {
-                $value = '';
-            }
+            $value = isset($inputs[$input]) ? $inputs[$input] : null;
 
-            foreach ($rule_input as $rule) {
-                if (preg_match('/(\w+)\((\d+)\)/', $rule, $m)) {
-                    $temp = $m[1];
-                    if (!$this->$temp($value, $m[2])) {
-                        $error[] = $input . ' ' . $rule;
-                        $this->_msg->addmsg($lang['msg_'.$input.'_'. $m[1]] , Messenger::Msg_error , $input);
+            foreach ($rules as $rule) {
+                if (preg_match('/^\w+$/', $rule)) {
+                    if ($this->{$rule}($value) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
                     }
+                } elseif (preg_match('/^(\w+)\((\d+|\w+)\)$/', $rule, $m)) {
+                    $rule = $m[1];
+                    $other_value = $rule == 'eqinput' ? $inputs[$m[2]] : $m[2] ;
+                    $label = $rule == 'eqinput' ? $this->_language->get("Text_label_$m[2]") : $m[2] ;
 
-                } elseif (preg_match('/\w+/', $rule, $m)) {
-                    if (!$this->{$rule}($value)) {
-                        $error[] = $input . ' ' . $rule;
-                        $this->_msg->addmsg($lang['msg_'.$input.'_'. $m[0]] , Messenger::Msg_error , $input);
+                    if ($this->{$rule}($value, $other_value) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg('msg_error_' . $rule, ["Text_label_$input", $label]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
+                    }
+                } elseif (preg_match('/^(\w+)\((\d+)\,(\d+)\)$/', $rule, $m)) {
+                    $rule = $m[1];
+                    if ($this->{$rule}($value, $m[2], $m[3]) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input", $m[2], $m[3]]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
                     }
                 }
+
             }
         }
+
         return empty($error) ? true : false;
+
     }
 
 

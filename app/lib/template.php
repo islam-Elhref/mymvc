@@ -14,6 +14,19 @@ class Template
         $this->template = $template;
     }
 
+    public function showvalue($fieldname , $object = null){
+        if (isset($_POST[$fieldname])){
+            return $_POST[$fieldname];
+        }else{
+            if ($object != null) {
+                $input = "get$fieldname";
+                return  $object->$input();
+            }else{
+                return '' ;
+            }
+        }
+    }
+
     public function in_old($array, $value)
     {
         if (in_array($value, $array)) {
@@ -30,7 +43,7 @@ class Template
 
             foreach ($messages as $message) {
                 ?>
-                <div class="alert <?= $message[1] ?> message" id="message"><?= $message[0] ?></div>
+                <div class="alert p-2 m-1 <?= $message[1] ?> message" id="message"><?= $message[0] ?></div>
                 <?php
             }
 
@@ -65,15 +78,6 @@ class Template
         return $this->registry->$object;
     }
 
-    public function render($file_view)
-    {
-        $this->template_header_start();
-        $this->header_resources();
-        $this->template_header_end();
-        $this->template_block($file_view);
-        $this->footer_resources();
-        $this->template_footer();
-    }
 
     private function template_header_start()
     {
@@ -139,4 +143,14 @@ class Template
         require_once temp_PATH . 'template_footer.php';
     }
 
+
+    public function render($file_view)
+    {
+        $this->template_header_start();
+        $this->header_resources();
+        $this->template_header_end();
+        $this->template_block($file_view);
+        $this->footer_resources();
+        $this->template_footer();
+    }
 }

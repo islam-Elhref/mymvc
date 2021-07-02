@@ -32,13 +32,13 @@ class Messenger
         return self::$instance;
     }
 
-    public function addMsg($msg, $type , $name = '')
+    public function addMsg($msg, $type)
     {
         if (!isset($this->session->msg) || !is_array($this->session->msg)) {
             $this->session->msg = [];
         }
         $tempMsgs = $this->session->msg;
-        $tempMsgs[$name] = [$msg, $type];
+        $tempMsgs[] = [$msg, $type];
         $this->session->msg = $tempMsgs;
     }
 
