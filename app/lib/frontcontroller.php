@@ -42,7 +42,7 @@ class FrontController
         $Class_controller = 'MYMVC\CONTROLLERS\\' . ucfirst($this->_controller) . 'Controller';
         $actionName = lcfirst($this->_action) . 'Action';
 
-        if (!$this->auth->is_authantcate()){
+        if (!$this->auth->is_authantcate() && $this->_controller != 'language' ){
             $Class_controller = 'MYMVC\CONTROLLERS\\' . 'AuthController';
             $this->_controller = 'auth';
             $this->_action = 'login' ;

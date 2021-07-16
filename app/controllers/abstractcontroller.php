@@ -5,6 +5,10 @@ namespace MYMVC\CONTROLLERS;
 
 
 use MYMVC\LIB\FrontController;
+use MYMVC\LIB\Language;
+use MYMVC\LIB\Messenger;
+use MYMVC\LIB\MySession;
+use MYMVC\LIB\Registry;
 use MYMVC\LIB\Template;
 use MYMVC\LIB\Validation;
 
@@ -19,9 +23,24 @@ class AbstractController
      * @var Template
      */
     protected $_template;
+    /**
+     * @var Registry
+     */
     protected $registry;
     protected $_data = [];
 
+
+    protected function getLang(): Language
+    {
+        return $this->_language;
+    }
+    protected function getmsg(): Messenger{
+        return $this->_msg;
+    }
+
+    protected function getsession(): MySession{
+        return $this->_sessions;
+    }
 
     public function notfoundAction()
     {

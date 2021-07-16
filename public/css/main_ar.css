@@ -9205,7 +9205,7 @@ legend{
 }
 
 .form-check-input:checked[type=checkbox] {
-    background-image: url("/img/checkmark-64.jpg");
+    background-image: url("/public/img/1.jpg");
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -9222,5 +9222,6 @@ legend{
 }
 
 /* checkbtn */
+
 
 

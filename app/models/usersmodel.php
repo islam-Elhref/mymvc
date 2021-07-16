@@ -78,6 +78,9 @@ class UsersModel extends AbstractModel
     {
         return $this->password;
     }
+    public function removePassword(){
+        unset($this->password);
+    }
     public function getGroupName()
     {
         return $this->group_name;

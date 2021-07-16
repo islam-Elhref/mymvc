@@ -32,12 +32,18 @@ public function load($controller , $action){
 }
 
 
-
+    /**
+     * @return array
+     */
     public function getDictionary()
     {
        return $this->Dictionary ;
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     */
     public function get($key)
     {
         if (array_key_exists($key, $this->Dictionary)){

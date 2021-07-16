@@ -113,4 +113,9 @@ class usersController extends AbstractController
             }
 
     }
+
+    public static function userLogin(){
+        $user =  UsersModel::getone([ "username" => 'islam' ]);
+    }
+
 }

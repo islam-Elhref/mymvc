@@ -38,6 +38,16 @@ class Template
         }
     }
 
+   public function checkedbtn($fieldname , $object = null)
+    {
+        $input = "$fieldname";
+        if ( ( isset($_POST[$fieldname]) && !empty($_POST[$fieldname]) ) || ( $object != null &&  $object->$input() != '' ) ) {
+            return 'checked';
+        } else {
+            return '';
+        }
+    }
+
     public function in_old($array, $value)
     {
         if (in_array($value, $array)) {
@@ -96,6 +106,18 @@ class Template
         $this->template['template'] = $newTemplate;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getHeader_resources()
+    {
+        return $this->template['header_resources'];
+    }
+
+    public function changeHeaderResources($newHeader){
+        $this->template['header_resources'] = $newHeader;
+    }
+
     public function __get($object)
     {
         return $this->registry->$object;
@@ -112,9 +134,10 @@ class Template
     {
         $paths = '';
         $mainLang = 'main_' . $_SESSION['lang'];
+        $loginLang = 'login_' . $_SESSION['lang'];
         foreach ($this->template['header_resources'] as $key => $path) {
-            if ($key == "main_ar" || $key == 'main_en') {
-                if ($mainLang == $key) {
+            if ($key == "main_ar" || $key == 'main_en' || $key == "login_ar" || $key == 'login_en') {
+                if ($mainLang == $key || $loginLang == $key) {
                     $paths .= '<link rel="stylesheet" href="' . $path . '">';
                 }
             } else {
