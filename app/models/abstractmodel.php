@@ -164,6 +164,38 @@ class AbstractModel
         }
     }
 
+    public static function getone(array $array)
+    {
+        $whereCond = [];
+
+        $column = array_keys($array);
+        $value = array_values($array);
+
+        for ($i = 0  , $ii = count($column) ; $i < $ii ; $i++  ){
+            $whereCond[] = $column[$i] . '=' ."'". $value[$i] ."'";
+        }
+        $whereCond =  implode(' And ' , $whereCond);
+
+        $sql = 'SELECT * FROM ' . static::$tableName . ' where ' . $whereCond  ;
+
+        $stmt = DatabaseHandler::factory()->prepare($sql);
+
+        if (method_exists(get_called_class(), '__construct')) {
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, get_called_class(), static::$table_schema);
+        } else {
+            $stmt->setFetchMode(pdo::FETCH_CLASS, get_called_class());
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch();
+
+        if (is_a($result, get_called_class()) && !empty($result)) {
+            return $result;
+        }else{
+            return false;
+        }
+    }
+
     public function delete()
     {
         $sql = 'DELETE FROM ' . static::$tableName . ' WHERE ' . static::$primaryKey . '=:' . static::$primaryKey;

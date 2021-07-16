@@ -11,12 +11,17 @@ class FrontController
     private $_action;
     private $template;
     private $registry ;
+    /**
+     * @var Authantcation
+     */
+    private $auth;
     private $_params = [];
 
-    public function __construct(Template $template , Registry $registry)
+    public function __construct(Template $template , Registry $registry , Authantcation $auth)
     {
         $this->registry = $registry;
         $this->template = $template;
+        $this->auth = $auth ;
         $this->parse_url();
     }
 
@@ -37,7 +42,15 @@ class FrontController
         $Class_controller = 'MYMVC\CONTROLLERS\\' . ucfirst($this->_controller) . 'Controller';
         $actionName = lcfirst($this->_action) . 'Action';
 
+        if (!$this->auth->is_authantcate()){
+            $Class_controller = 'MYMVC\CONTROLLERS\\' . 'AuthController';
+            $this->_controller = 'auth';
+            $this->_action = 'login' ;
+            $actionName = lcfirst($this->_action) . 'Action';
+        }
+
         if (!class_exists($Class_controller)) {
+
             $Class_controller = self::NOT_FOUND_CONTROLLER;
         }
         $controller = new $Class_controller();
@@ -45,6 +58,8 @@ class FrontController
         if (!method_exists($controller, $actionName)) {
             $this->_action = $actionName = $this::NOT_FOUND_ACTION;
         }
+
+
 
 
         $controller->setController($this->_controller);

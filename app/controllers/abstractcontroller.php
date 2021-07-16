@@ -5,6 +5,7 @@ namespace MYMVC\CONTROLLERS;
 
 
 use MYMVC\LIB\FrontController;
+use MYMVC\LIB\Template;
 use MYMVC\LIB\Validation;
 
 class AbstractController
@@ -14,6 +15,9 @@ class AbstractController
     private $_controller;
     private $_action;
     protected $_params;
+    /**
+     * @var Template
+     */
     protected $_template;
     protected $registry;
     protected $_data = [];

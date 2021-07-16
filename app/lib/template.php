@@ -14,16 +14,27 @@ class Template
         $this->template = $template;
     }
 
-    public function showvalue($fieldname , $object = null){
-        if (isset($_POST[$fieldname])){
+    public function showvalue($fieldname, $object = null)
+    {
+        if (isset($_POST[$fieldname])) {
             return $_POST[$fieldname];
-        }else{
+        } else {
             if ($object != null) {
                 $input = "get$fieldname";
-                return  $object->$input();
-            }else{
-                return '' ;
+                return $object->$input();
+            } else {
+                return '';
             }
+        }
+    }
+
+    public function floatlabel($fieldname, $object = null)
+    {
+        $input = "get$fieldname";
+        if ( ( isset($_POST[$fieldname]) && !empty($_POST[$fieldname]) ) || ( $object != null &&  $object->$input() != '' ) ) {
+            return 'class="active"';
+        } else {
+            return '';
         }
     }
 
@@ -71,6 +82,18 @@ class Template
     public function setRegistry($registry)
     {
         $this->registry = $registry;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplate()
+    {
+        return $this->template['template'];
+    }
+
+    public function changeTemplate($newTemplate){
+        $this->template['template'] = $newTemplate;
     }
 
     public function __get($object)

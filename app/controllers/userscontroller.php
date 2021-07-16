@@ -4,6 +4,7 @@
 namespace MYMVC\CONTROLLERS;
 
 
+use http\Header;
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
@@ -40,7 +41,7 @@ class usersController extends AbstractController
         $this->_language->load('validation' , 'errors');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid, $_POST) == true ){
-            $user =  new UsersModel($_POST['Username'], $_POST['Password'], $_POST['Email'], $_POST['Phone'], $_POST['group_id']) ;
+            $user =  new UsersModel($_POST['Username'], UsersModel::cryptPassword($_POST['Password'] ) , $_POST['Email'], $_POST['Phone'], $_POST['group_id']) ;
             try {
                 $user->save();
                 $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]) , Messenger::Msg_success);
@@ -68,11 +69,13 @@ class usersController extends AbstractController
 
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid, $_POST) == true){
-                $user_edit =  new UsersModel($_POST['Username'], $_POST['Password'], $_POST['Email'], $_POST['Phone'], $_POST['group_id']) ;
+
+                $password = $_POST['Password'] == '' ? $user->getPassword() : UsersModel::cryptPassword($_POST['Password']) ;
+
+                $user_edit = $user->edit_action_construct($_POST['Username'], $password , $_POST['Email'], $_POST['Phone'], $_POST['group_id']  ) ;
                 $user_edit->setUserId($user->getUserId());
                     try {
                         $user_edit->save();
-
                         if ($user->getUsername() == $_POST['Username'] ) {
                             $this->_msg->addMsg($this->_language->feed_msg('msg_success_edit', [$user->getUsername()]   ) , Messenger::Msg_success);
                         }else{
@@ -94,4 +97,20 @@ class usersController extends AbstractController
         }
     }
 
+    public function userexistAction(){
+
+        // $_post['input'] دي بس بتديني اسم الانبوت
+        // $_post[$_post[input]]   ادي بتديني القيمه بتاعة الانبوت اللي جبته من الكود السابق
+
+            if(isset($_POST[$_POST['input']])){
+                header('content-type: text/plain');
+                $user =  UsersModel::getone([ "$_POST[input]" => $this->filterString($_POST[$_POST['input']]) ]);
+                if (is_object($user) && !empty($user)){
+                    echo 1 ;
+                }else{
+                    echo 0 ;
+                }
+            }
+
+    }
 }

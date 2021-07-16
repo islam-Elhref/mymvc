@@ -1,6 +1,7 @@
 <?php
 namespace MYMVC;
 
+use MYMVC\LIB\Authantcation;
 use MYMVC\LIB\FrontController;
 use MYMVC\LIB\Language;
 use MYMVC\LIB\Messenger;
@@ -25,6 +26,7 @@ $language = new Language();
 $template = new Template($temp_paths);
 $messenger = Messenger::getInstance($mysession);
 
+$authantcation = Authantcation::getInstance($mysession);
 
 $registry = Registry::getInstance();
 $registry->_language = $language ;
@@ -32,7 +34,7 @@ $registry->_sessions  = $mysession;
 $registry->_msg = $messenger;
 
 
-$controller = new FrontController($template , $registry);
+$controller = new FrontController($template , $registry , $authantcation );
 $controller->dispatch();
 
 

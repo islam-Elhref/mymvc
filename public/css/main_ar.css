@@ -1093,7 +1093,7 @@ textarea.form-control {
     box-shadow: 0 0 0 .2rem rgba(40, 167, 69, 0.25)
 }
 
-.invalid-feedback {
+.invalid-feedback , .invalid-checkExist {
     display: none;
     width: 100%;
     margin-top: .25rem;
@@ -1116,9 +1116,12 @@ textarea.form-control {
     border-radius: .25rem
 }
 
-.was-validated :invalid ~ .invalid-feedback, .was-validated :invalid ~ .invalid-tooltip, .is-invalid ~ .invalid-feedback, .is-invalid ~ .invalid-tooltip {
+
+
+.was-validated :invalid ~ .invalid-feedback , .was-validated :invalid ~ .invalid-tooltip, .is-invalid ~ .invalid-feedback , .is-invalid ~ .invalid-checkExist, .is-invalid ~ .invalid-tooltip {
     display: block
 }
+
 
 .was-validated .form-control:invalid, .form-control.is-invalid {
     border-color: #dc3545;
@@ -1154,7 +1157,7 @@ textarea.form-control {
     color: #dc3545
 }
 
-.was-validated .form-check-input:invalid ~ .invalid-feedback, .was-validated .form-check-input:invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback, .form-check-input.is-invalid ~ .invalid-tooltip {
+.was-validated .form-check-input:invalid ~ .invalid-feedback , .was-validated .form-check-input:invalid ~ .invalid-checkExist, .was-validated .form-check-input:invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback , .form-check-input.is-invalid ~ .invalid-checkExist, .form-check-input.is-invalid ~ .invalid-tooltip {
     display: block
 }
 
@@ -1275,6 +1278,7 @@ textarea.form-control {
         transition: none
     }
 }
+
 
 .btn:hover {
     color: #212529;
@@ -9114,7 +9118,7 @@ button[type = submit ] , input [type = submit ]{
     background-position: left calc(0.375em + .1875rem) center;
 }
 
-.invalid-feedback , .valid-feedback {
+.invalid-feedback , .valid-feedback , .invalid-checkExist {
     text-align: right;
     direction: rtl;
 }
