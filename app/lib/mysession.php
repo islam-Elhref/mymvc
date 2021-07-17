@@ -121,11 +121,11 @@ class MySession extends SessionHandler
 
     private function renew_session()
     {
+
         if (date('i', time() - $this->start_time) >= $this->time_end_session) {
             session_regenerate_id(true);
             $this->start_time = time();
             $this->makeFingerPrint();
-
 
         }
     }
@@ -136,6 +136,7 @@ class MySession extends SessionHandler
             if (session_start()) {
                 if (!isset($this->start_time)) {
                     $this->start_time = time();
+                    $this->user_time = time();
                 } else {
                     $this->renew_session();
                 }
@@ -144,6 +145,13 @@ class MySession extends SessionHandler
         }
     }
 
+    public function checkUser(){
+        if (date('i', time() - $this->user_time) >= $this->time_end_session) {
+            $this->user_time = time();
+            return true ;
+        }
+        return false ;
+    }
 
 }
 

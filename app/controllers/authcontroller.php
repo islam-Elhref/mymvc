@@ -31,9 +31,8 @@ class AuthController extends AbstractController
 
                             $olduser->setLastLogin(date('Y-m-d h:i:s'));
                             $olduser->save();
-                            $user_with_out_Pass = $olduser;
-                            $user_with_out_Pass->removePassword();
-                            $this->getsession()->u = $user_with_out_Pass;
+                            $olduser->user_save_in_session_wzout_pass($olduser , $this->getsession() );
+
                             $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
                             $this->redirect($link);
                         }
@@ -72,22 +71,20 @@ class AuthController extends AbstractController
 
 
                             if ($user->checkPassword($password)) {
-                                if (isset($_POST['remember'])) {
+                                if (isset($_POST['remember'])) { // generate cookie remember
                                     $array = ['username' => $username, 'password' => $user->getPassword()];
                                     setcookie('remember', serialize($array), (time() + (86400 * 30)), '/');
-                                } else {
+                                } else { // delete cookie
                                     if (isset($_COOKIE['remember'])) {
                                         unset($_COOKIE['remember']);
                                         setcookie('remember', null, -1, '/');
                                     }
-                                }
+                                } // generate or delete cookie
 
                                 $user->setLastLogin(date('Y-m-d h:i:s'));
                                 $user->save();
-                                $user_with_out_Pass = $user;
-                                $user_with_out_Pass->removePassword();
+                                $user->user_save_in_session_wzout_pass($user , $this->getsession());
                                 $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_success', [$username]), Messenger::Msg_success);
-                                $this->getsession()->u = $user_with_out_Pass;
 
                                 $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
                                 $this->redirect($link);

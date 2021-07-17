@@ -3,6 +3,7 @@
 namespace MYMVC\MODELS;
 
 use MYMVC\LIB\filter;
+use MYMVC\LIB\MySession;
 
 class UsersModel extends AbstractModel
 {
@@ -126,5 +127,10 @@ class UsersModel extends AbstractModel
         return UsersModel::getAll('SELECT u.* , ug.group_name as group_name FROM ' . self::$tableName . ' u inner JOIN users_group ug on u.group_id = ug.group_id ');
     }
 
+    public function user_save_in_session_wzout_pass($user , MySession $session){
+        $user_with_out_Pass = $user;
+        $user_with_out_Pass->removePassword();
+        $session->u = $user_with_out_Pass;
+    }
 
 }
