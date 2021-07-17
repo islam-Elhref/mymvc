@@ -17,7 +17,7 @@ echo "</br>";
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        <input type="text" name="username" class="form-control input_user" required value="" placeholder="<?= $Text_label_Username  ?>" title="<?= $invalid_msg_username ?>"  oninvalid="this.setCustomValidity(this.title)" oninput="this.setCustomValidity('')" >
+                        <input type="text" name="username" class="form-control input_user" required  value="<?= $this->showvalue('username')  ?>" placeholder="<?= $Text_label_Username  ?>" title="<?= $invalid_msg_username ?>"  oninvalid="this.setCustomValidity(this.title)" oninput="this.setCustomValidity('')" >
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">

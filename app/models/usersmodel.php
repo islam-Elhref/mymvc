@@ -14,7 +14,7 @@ class UsersModel extends AbstractModel
     protected static $primaryKey = 'user_id';
 
     protected $user_id, $username, $password, $email, $phone;
-    protected $group_id, $subscription_date, $last_login;
+    protected $group_id, $subscription_date, $last_login , $status;
 
     protected static $table_schema = [
         'username' => self::DATA_TYPE_STR,
@@ -38,7 +38,6 @@ class UsersModel extends AbstractModel
         $this->phone = $this->filterString($phone);
         $this->group_id = $this->filterInt($group_id);
         $this->subscription_date = date('Y-m-d');
-        $this->last_login = date('Y-m-d h:i:s');
     }
     public function edit_action_construct($username, $password, $email, $phone, $group_id){
         $this->username = $this->filterString($username);
@@ -78,6 +77,11 @@ class UsersModel extends AbstractModel
     {
         return $this->password;
     }
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     public function removePassword(){
         unset($this->password);
     }
@@ -92,6 +96,10 @@ class UsersModel extends AbstractModel
     public function getLastLogin()
     {
         return $this->last_login;
+    }
+    public function setLastLogin($last_login)
+    {
+        $this->last_login = $last_login;
     }
     public function getPhone()
     {
@@ -117,5 +125,6 @@ class UsersModel extends AbstractModel
     {
         return UsersModel::getAll('SELECT u.* , ug.group_name as group_name FROM ' . self::$tableName . ' u inner JOIN users_group ug on u.group_id = ug.group_id ');
     }
+
 
 }

@@ -9,6 +9,7 @@ class Template
     private $data;
     private $registry;
 
+
     public function __construct($template)
     {
         $this->template = $template;
@@ -155,7 +156,7 @@ class Template
 
     private function template_block($view)
     {
-        extract($this->data);
+        extract($this->data , EXTR_REFS);
         foreach ($this->template['template'] as $key => $path) {
             if ($key == ':view') {
                 require_once $view;
@@ -189,7 +190,10 @@ class Template
         require_once temp_PATH . 'template_footer.php';
     }
 
-
+    /**
+     * @param $file_view
+     * @var Template
+     */
     public function render($file_view)
     {
         $this->template_header_start();

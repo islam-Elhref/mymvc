@@ -52,7 +52,7 @@ public function load($controller , $action){
     }
 
     public function feed_msg($key , $data ){
-            
+
         if (array_key_exists($key, $this->Dictionary)){
             if ($this->get($data[0]) !== null){
                 $data[0] = $this->get($data[0]);

@@ -4,8 +4,12 @@
 namespace MYMVC\LIB;
 
 
+use MYMVC\MODELS\UsersModel;
+
 class Authantcation
 {
+    use Helper;
+
     private $session;
     private static $_instance ;
 
@@ -28,7 +32,18 @@ class Authantcation
 
     public function is_authantcate(){
         if(isset($this->session->u) && $this->session->u != ''){
-            return 1 ;
+            $user = UsersModel::getonetest(['user_id' => $this->session->u->getUserId() ]);
+            if ($user->getStatus() == 1 ){
+                return 1 ;
+            }else{
+                $this->session->kill();
+                if (isset($_COOKIE['remember'])) {
+                    unset($_COOKIE['remember']);
+                    setcookie('remember', null, -1, '/');
+                }
+                $this->redirect('/');
+                return false;
+            }
         }
         return false;
     }
