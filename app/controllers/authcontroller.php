@@ -105,7 +105,7 @@ class AuthController extends AbstractController
             }
             $this->view();
         } else {
-            $this->redirect('/');
+            $this->redirect_back();
         }
     }
 
@@ -113,11 +113,13 @@ class AuthController extends AbstractController
     public function logoutAction()
     {
         if (isset($_SERVER['HTTP_REFERER'])) {
-            $this->getsession()->kill();
-            if (isset($_COOKIE['remember'])) {
+            $this->getsession()->kill(); // kill sessions
+
+            if (isset($_COOKIE['remember'])) { // if cookie isset kill cookie
                 unset($_COOKIE['remember']);
                 setcookie('remember', null, -1, '/');
             }
+//            for redirect only
             if ($_SERVER['HTTP_REFERER'] == 'http://mymvc.com/auth/logout') {
                 $link = '/';
             } else {

@@ -145,7 +145,7 @@ class MySession extends SessionHandler
         }
     }
 
-    public function checkUser(){
+    public function checkUserTime(){
         if (date('i', time() - $this->user_time) >= $this->time_end_session) {
             $this->user_time = time();
             return true ;

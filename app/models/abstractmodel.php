@@ -78,6 +78,10 @@ class AbstractModel
         }
     }
 
+    /**
+     * @param array $array
+     * @return $this | false
+     */
     public static function getByPK($PK)
     {
         if (!empty($PK) && trim($PK) != '') {

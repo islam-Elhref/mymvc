@@ -38,7 +38,7 @@ class Authantcation
     {
         if (isset($this->session->u) && $this->session->u != '') {
 
-            if ($this->session->checkUser()) {
+            if ($this->session->checkUserTime()) {
                 $user = UsersModel::getonetest(['user_id' => $this->session->u->getUserId()]);
                 $user->user_save_in_session_wzout_pass($user, $this->session);
             }

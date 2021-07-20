@@ -40,6 +40,7 @@ class UsersModel extends AbstractModel
         $this->group_id = $this->filterInt($group_id);
         $this->subscription_date = date('Y-m-d');
     }
+
     public function edit_action_construct($username, $password, $email, $phone, $group_id){
         $this->username = $this->filterString($username);
         $this->password = $password;
