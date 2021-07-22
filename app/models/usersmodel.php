@@ -25,6 +25,7 @@ class UsersModel extends AbstractModel
         'group_id' => self::DATA_TYPE_int,
         'subscription_date' => self::DATA_TYPE_STR,
         'last_login' => self::DATA_TYPE_STR,
+        'status' => self::DATA_TYPE_int,
     ];
 
     public function __construct($username, $password, $email, $phone, $group_id )
@@ -84,6 +85,11 @@ class UsersModel extends AbstractModel
         return $this->status;
     }
 
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
+
     public function removePassword(){
         unset($this->password);
     }
@@ -131,6 +137,9 @@ class UsersModel extends AbstractModel
     public function user_save_in_session_wzout_pass($user , MySession $session){
         $user_with_out_Pass = $user;
         $user_with_out_Pass->removePassword();
+        if ( isset($session->profile) ) {
+            unset($session->profile);
+        }
         $session->u = $user_with_out_Pass;
     }
 

@@ -23,6 +23,13 @@
     }, false);
 })();
 
+$('.input-group.date').datepicker({
+
+    autoclose: true,
+    todayHighlight: true,
+    toggleActive: true
+});
+
 $(document).ready(function () {
 
     $("input[title]:invalid").keydown(function () {
@@ -117,8 +124,8 @@ $('.delete').click(function (event) {
     event.preventDefault();
     $.confirm({
         title: msg + ' ' + name + ' ?',
-        content: 'This dialog will automatically trigger \'cancel\' in 8 seconds if you don\'t respond.',
-        autoClose: 'cancel|8000',
+        content: 'This dialog will automatically trigger \'cancel\' in 20 seconds if you don\'t respond.',
+        autoClose: 'cancel|20000',
         buttons: {
             deleteUser: {
                 text: textDelete,

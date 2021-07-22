@@ -38,15 +38,15 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['num'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function int($value)
     {
-        if ($value != null){
-        return (bool)preg_match($this->_regexpatterns['int'], $value);
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['int'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function float($value)
@@ -54,7 +54,7 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['float'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function alpha($value)
@@ -62,7 +62,7 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['alpha'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function alphaEn($value)
@@ -70,7 +70,7 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['alphaEn'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function alphanum($value)
@@ -78,7 +78,7 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['alphanum'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function alphanumEn($value)
@@ -86,32 +86,33 @@ trait Validation
         if ($value != null) {
             return (bool)preg_match($this->_regexpatterns['alphanumEn'], $value);
         }
-        return true ;
+        return true;
     }
 
     public function lt($value, $num)
     {
-            if (is_string($value)) {
-                return mb_strlen($value, 'utf-8') < $num;
-            } elseif (is_numeric($value)) {
-                return $value < $num;
-            }
+        if (is_string($value)) {
+            return mb_strlen($value, 'utf-8') < $num;
+        } elseif (is_numeric($value)) {
+            return $value < $num;
+        }
 
     }
 
     public function gt($value, $num)
     {
-            if (is_string($value)) {
-                return mb_strlen($value, 'utf-8') > $num;
-            } elseif (is_numeric($value)) {
-                return $value > $num;
-            }
+        if (is_string($value)) {
+            return mb_strlen($value, 'utf-8') > $num;
+        } elseif (is_numeric($value)) {
+            return $value > $num;
+        }
     }
 
     public function eq($value, $match_aginste)
     {
-            return $value == $match_aginste;
+        return $value == $match_aginste;
     }
+
     public function eqinput($value, $other_input)
     {
         return $value == $other_input;
@@ -155,84 +156,89 @@ trait Validation
             $temp_max = ($min <= $max) ? $max : $min;
             return mb_strlen($value, 'utf-8') >= $temp_min && mb_strlen($value, 'utf-8') <= $temp_max;
         }
-        return true ;
+        return true;
     }
 
     public function vdate($date)
     {
-        return (bool)preg_match($this->_regexpatterns['vdate'], $date);
+            return (bool)preg_match($this->_regexpatterns['vdate'], $date);
     }
-
-    public function myvdate($date)
-    {
-        $first_check = date_parse($date);
-        if ($first_check['year'] != false || $first_check['day'] != false || $first_check['month'] != false) {
-            $arr_date = explode('-', $date);
-            $year = $arr_date[0];
-            $month = (strlen($arr_date[1]) < 2) ? 0 . $arr_date[1] : $arr_date[1];
-            $day = (strlen($arr_date[2]) < 2) ? 0 . $arr_date[2] : $arr_date[2];
-            $first_valid = checkdate($month, $day, $year);
-            if ($first_valid) {
-                $tempDate = $year . '-' . $month . '-' . $day;
-                return $this->vdate($tempDate);
-            }
-        }
-
-        return false;
-    }
-
-    public function vemail($value)
-    {
-        return (bool)preg_match($this->_regexpatterns['vemail'], $value);
-    }
-
-    public function url($value)
-    {
-        return (bool)filter_var($value, FILTER_VALIDATE_URL);
-    }
-
-
-    public function is_valid($rules_to_valid, $inputs)
-    {
-        $error = [];
-        foreach ($rules_to_valid as $input => $rules) {
-
-            $rules = explode('|', $rules);
-
-            $value = isset($inputs[$input]) ? $inputs[$input] : null;
-
-            foreach ($rules as $rule) {
-                if (preg_match('/^\w+$/', $rule)) {
-                    if ($this->{$rule}($value) == false) {
-                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
-                        $error[] = 'error';
-                        break;
-                    }
-                } elseif (preg_match('/^(\w+)\((\d+|\w+)\)$/', $rule, $m)) {
-                    $rule = $m[1];
-                    $other_value = $rule == 'eqinput' ? $inputs[$m[2]] : $m[2] ;
-                    $label = $rule == 'eqinput' ? $this->_language->get("Text_label_$m[2]") : $m[2] ;
-
-                    if ($this->{$rule}($value, $other_value) == false) {
-                        $this->_msg->addMsg($this->_language->feed_msg('msg_error_' . $rule, ["Text_label_$input", $label]), Messenger::Msg_error);
-                        $error[] = 'error';
-                        break;
-                    }
-                } elseif (preg_match('/^(\w+)\((\d+)\,(\d+)\)$/', $rule, $m)) {
-                    $rule = $m[1];
-                    if ($this->{$rule}($value, $m[2], $m[3]) == false) {
-                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input", $m[2], $m[3]]), Messenger::Msg_error);
-                        $error[] = 'error';
-                        break;
+        public function myvdate($date)
+        {
+            if ($date != null) {
+                $first_check = date_parse($date);
+                if ($first_check['year'] != false || $first_check['day'] != false || $first_check['month'] != false) {
+                    $arr_date = explode('-', $date);
+                    $year = $first_check['year'];
+                    $month = (strlen($first_check['month']) < 2) ? 0 . $first_check['month'] : $first_check['month'];
+                    $day = (strlen($first_check['day']) < 2) ? 0 . $first_check['day'] : $first_check['day'];
+                    $first_valid = checkdate($month, $day, $year);
+                    if ($first_valid) {
+                        $tempDate = $year . '-' . $month . '-' . $day;
+                        return $this->vdate($tempDate);
                     }
                 }
+                return false;
 
             }
+            return true;
         }
 
-        return empty($error) ? true : false;
+        public
+        function vemail($value)
+        {
+            return (bool)preg_match($this->_regexpatterns['vemail'], $value);
+        }
+
+        public
+        function url($value)
+        {
+            return (bool)filter_var($value, FILTER_VALIDATE_URL);
+        }
+
+
+        public
+        function is_valid($rules_to_valid, $inputs)
+        {
+            $error = [];
+            foreach ($rules_to_valid as $input => $rules) {
+
+                $rules = explode('|', $rules);
+
+                $value = isset($inputs[$input]) ? $inputs[$input] : null;
+
+                foreach ($rules as $rule) {
+                    if (preg_match('/^\w+$/', $rule)) {
+                        if ($this->{$rule}($value) == false) {
+                            $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
+                            $error[] = 'error';
+                            break;
+                        }
+                    } elseif (preg_match('/^(\w+)\((\d+|\w+)\)$/', $rule, $m)) {
+                        $rule = $m[1];
+                        $other_value = $rule == 'eqinput' ? $inputs[$m[2]] : $m[2];
+                        $label = $rule == 'eqinput' ? $this->_language->get("Text_label_$m[2]") : $m[2];
+
+                        if ($this->{$rule}($value, $other_value) == false) {
+                            $this->_msg->addMsg($this->_language->feed_msg('msg_error_' . $rule, ["Text_label_$input", $label]), Messenger::Msg_error);
+                            $error[] = 'error';
+                            break;
+                        }
+                    } elseif (preg_match('/^(\w+)\((\d+)\,(\d+)\)$/', $rule, $m)) {
+                        $rule = $m[1];
+                        if ($this->{$rule}($value, $m[2], $m[3]) == false) {
+                            $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input", $m[2], $m[3]]), Messenger::Msg_error);
+                            $error[] = 'error';
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            return empty($error) ? true : false;
+
+        }
+
 
     }
-
-
-}

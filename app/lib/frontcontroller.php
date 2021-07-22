@@ -5,6 +5,8 @@ namespace MYMVC\LIB;
 
 class FrontController
 {
+    use Helper;
+
     const NOT_FOUND_CONTROLLER = 'MYMVC\CONTROLLERS\\' . 'NotFoundController';
     const NOT_FOUND_ACTION = 'notfoundAction';
     private $_controller;
@@ -47,6 +49,14 @@ class FrontController
             $this->_controller = 'auth';
             $this->_action = 'login' ;
             $actionName = lcfirst($this->_action) . 'Action';
+        }else{
+
+            if ($this->auth->is_authantcate() == 3) {
+
+                if (($this->_controller != 'usersprofile' && $this->_action != 'add') && ($this->_controller != 'auth' && $this->_action != 'logout') ) {
+                    $this->redirect('/usersprofile/add');
+                }
+            }
         }
 
         if (!class_exists($Class_controller)) {

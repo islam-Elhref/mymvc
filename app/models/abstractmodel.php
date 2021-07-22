@@ -114,10 +114,13 @@ class AbstractModel
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $this->bindParams($stmt);
         $stmt->bindValue(":" . static::$primaryKey, $this->{static::$primaryKey});
-        return $stmt->execute();
+        if ($stmt->execute()){
+            return true;
+        }
+        return false;
     }
 
-    private function create()
+    public function create()
     {
 
         $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam();

@@ -36,7 +36,3 @@ $registry->_msg = $messenger;
 
 $controller = new FrontController($template , $registry , $authantcation );
 $controller->dispatch();
-
-
-
-
