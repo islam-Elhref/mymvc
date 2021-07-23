@@ -30,9 +30,9 @@ class UsersprofileModel extends AbstractModel
         $this->user_id = $this->filterInt($user_id);
         $this->firstname = $this->filterString($firstname);
         $this->lastname = $this->filterString($lastname);
-        $this->address = isset($address) && $address != '' ?$this->filterEmail($address) : '';
-        $this->image = isset($image) && $image != '' ?$this->filterEmail($image) : '';
-        $this->dob = isset($dob) && $dob != '' ?$this->filterEmail($dob) : '';
+        $this->address = isset($address) && $address != '' ?$this->filterString($address) : '';
+        $this->image = isset($image) && $image != '' ?$this->filterString($image) : '';
+        $this->dob = isset($dob) && $dob != '' ? $dob : '';
     }
 
 

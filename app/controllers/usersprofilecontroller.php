@@ -52,6 +52,7 @@ class usersprofileController extends AbstractController
                         $user->setStatus(1);
                         $user->save();
                         $user->user_save_in_session_wzout_pass($user, $this->getsession());
+                        $user->setLastLogin(date('Y-m-d h:i:s'));
                         $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
                         $this->redirect('/');
 

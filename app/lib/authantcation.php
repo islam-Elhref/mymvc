@@ -45,18 +45,16 @@ class Authantcation
                 $olduser = UsersModel::getonetest(['username' => $username]);
                 if (!empty($olduser)) {
 
-                    if ($olduser->getPassword() === $password) {
+                    if ($olduser->checkPassword($password)) {
+
                         if ($olduser->getStatus() == 1) {
                             $olduser->setLastLogin(date('Y-m-d h:i:s'));
                             $olduser->save();
                             $olduser->user_save_in_session_wzout_pass($olduser, $this->session);
-
                             $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
                             $this->redirect($link);
                         }elseif ($olduser->getStatus() == 3){
-                            $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_user_profile', [$username]), Messenger::Msg_error);
-                            $this->getsession()->profile = $olduser->getUserId();
-                            $this->redirect('/usersprofile/add');
+                            $this->session->profile = $olduser->getUserId();
                         }
 
                     }
@@ -69,6 +67,7 @@ class Authantcation
 
     public function is_authantcate()
     {
+
         if (isset($this->session->u) && $this->session->u != '') {
 
             if ($this->session->checkUserTime()) {

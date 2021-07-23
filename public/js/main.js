@@ -23,12 +23,14 @@
     }, false);
 })();
 
-$('.input-group.date').datepicker({
-
-    autoclose: true,
-    todayHighlight: true,
-    toggleActive: true
-});
+$( function() {
+    $( "#datepicker" ).datepicker({
+        dateFormat: "yy-mm-dd",
+        changeYear: true,
+        changeMonth: true,
+        yearRange: "1950: "
+    });
+} );
 
 $(document).ready(function () {
 

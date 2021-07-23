@@ -36,17 +36,13 @@ $this->GetMessage();
 
                 <div class="form-group col-md-4 flex-column"> <!-- image -->
                     <label class="active" for="image"><?= isset($Text_label_image) ? $Text_label_image : '' ?></label>
-                    <input type="file" class="form-control " id="image" name="image" maxlength="50" >
+                    <input type="file" class="form-control " id="image" name="image" maxlength="50">
                 </div>
 
                 <div class="form-group col-md-4 flex-column"> <!-- dob -->
-                    <div class="input-group date">
-                        <label class="active" style="z-index: 9999"  for="dob"><?= isset($Text_label_dob) ? $Text_label_dob : '' ?></label>
-                        <input type="text" class="form-control" id="dob" name="dob">
-                        <span class="input-group-addon">
-                        <i class="glyphicon glyphicon-th"></i>
-                        </span>
-                    </div>
+                    <label class="active" style="z-index: 9999"
+                           for="dob"><?= isset($Text_label_dob) ? $Text_label_dob : '' ?></label>
+                    <input type="text" class="form-control" autocomplete="off" id="datepicker" id="dob" name="dob">
                 </div>
             </div>
 
