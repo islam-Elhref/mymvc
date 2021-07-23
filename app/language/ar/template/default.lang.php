@@ -3,6 +3,7 @@
 
 
 $_['Text_logout'] = 'تسجيل الخروج' ;
+$_['Text_welcome'] = ' مرحباً ' ;
 $_['h1FirstName'] = 'مخزن';
 $_['h1SecondName'] = 'الحريف';
 $_['Text_user_info'] = 'البيانات الشخصية';

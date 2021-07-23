@@ -42,7 +42,7 @@ class Authantcation
             $password = $array['password'];
 
             try {
-                $olduser = UsersModel::getonetest(['username' => $username]);
+                $olduser = UsersModel::getuser(['username' => $username]);
                 if (!empty($olduser)) {
 
                     if ($olduser->checkPassword($password)) {
@@ -71,7 +71,7 @@ class Authantcation
         if (isset($this->session->u) && $this->session->u != '') {
 
             if ($this->session->checkUserTime()) {
-                $user = UsersModel::getonetest(['user_id' => $this->session->u->getUserId()]);
+                $user = UsersModel::getuser(['user_id' => $this->session->u->getUserId()]);
                 $user->user_save_in_session_wzout_pass($user, $this->session);
             }
             if ($this->session->u->getStatus() == 1) {

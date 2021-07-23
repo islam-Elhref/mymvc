@@ -3,6 +3,8 @@
 namespace MYMVC\LIB;
 
 
+use MYMVC\MODELS\UsersModel;
+
 class Template
 {
     private $template;
@@ -13,6 +15,13 @@ class Template
     public function __construct($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return UsersModel
+     */
+    public function getuser(){
+      return $this->_sessions->u;
     }
 
     public function showvalue($fieldname, $object = null)
@@ -153,6 +162,7 @@ class Template
         extract($this->data);
         require_once temp_PATH . 'template_header_end.php';
     }
+
 
     private function template_block($view)
     {

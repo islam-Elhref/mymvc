@@ -2,6 +2,7 @@
 
 
 $_['Text_logout'] = 'LogOut' ;
+$_['Text_welcome'] = 'Welcome' ;
 $_['h1FirstName'] = 'Elhref';
 $_['h1SecondName'] = 'store';
 $_['Text_user_info'] = 'User Information';

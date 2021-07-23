@@ -41,4 +41,57 @@ class UsersprofileModel extends AbstractModel
         $this->user_id = $user_id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDob(): string
+    {
+        return $this->dob;
+    }
+
+    public function getMixName(){
+        return sprintf("%s %s", $this->firstname , $this->lastname);
+    }
+
+
 }

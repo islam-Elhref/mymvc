@@ -1,8 +1,10 @@
 <div class="navbar">
 
+
     <div class="navbar-info">
-        <img src="/img/1.jpg" alt="">
-        <h3>app admin</h3>
+        <img src="/img/usersImage/<?= $this->getuser()->getProfile()->getImage() ?>" alt="image profile">
+        <h3><?= $this->getuser()->getProfile()->getMixName() ?></h3>
+        <p><?= $this->getuser()->getGroupName() ?></p>
     </div>
     <ul class="list-unstyled links">
 

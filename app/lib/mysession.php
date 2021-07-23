@@ -3,6 +3,7 @@
 namespace MYMVC\LIB;
 
 
+use MYMVC\MODELS\UsersModel;
 use SessionHandler;
 
 class MySession extends SessionHandler
@@ -61,6 +62,9 @@ class MySession extends SessionHandler
         return parent::write($id, $data_enc);
     }
 
+    protected function getsession(): MySession{
+        return $this->_sessions;
+    }
 
     public function __set($name, $value)
     {
@@ -71,6 +75,7 @@ class MySession extends SessionHandler
     {
         return isset($_SESSION[$name]) ? $_SESSION[$name] : exit();
     }
+
 
     public function __isset($name)
     {
@@ -146,7 +151,7 @@ class MySession extends SessionHandler
     }
 
     public function checkUserTime(){
-        if (date('i', time() - $this->user_time) >= $this->time_end_session) {
+        if (date('i', time() - $this->user_time) >= 5) {
             $this->user_time = time();
             return true ;
         }

@@ -11,7 +11,6 @@ use \PDOStatement;
 
 class AbstractModel
 {
-    protected $message = [];
 
     const DATA_TYPE_STR = pdo::PARAM_STR;
     const DATA_TYPE_int = pdo::PARAM_INT;
@@ -222,7 +221,7 @@ class AbstractModel
      * @param array $array
      * @return $this | false
      */
-    public static function getonetest(array $array)
+    public static function getonetest(array $array , $join = '')
     {
         $whereCond = [];
 
@@ -235,7 +234,8 @@ class AbstractModel
 
         $whereCond = implode(' And ', $whereCond);
 
-        $sql = 'SELECT * FROM ' . static::$tableName . ' where ' . $whereCond;
+        $sql = 'SELECT * FROM ' . static::$tableName . ' ' . $join . ' where ' . $whereCond;
+
 
         $stmt = DatabaseHandler::factory()->prepare($sql);
 

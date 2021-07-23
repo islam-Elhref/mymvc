@@ -12,6 +12,7 @@ use Validation ;
 
     public function defaultAction(){
         $this->_language->load('Index','default');
+
         $this->view();
     }
 

@@ -31,7 +31,7 @@ class usersController extends AbstractController
     public function defaultAction()
     {
         $this->_language->load('users', 'default');
-        $this->_data['users'] = UsersModel::usersgetAll();
+        $this->_data['users'] = UsersModel::usersgetAll($this->getsession()->u);
         $this->view();
     }
 
@@ -62,8 +62,7 @@ class usersController extends AbstractController
         $id = isset($this->_params[0]) ? $this->filterInt($this->_params[0]) : '';
         $user = UsersModel::getByPK($id);
         $olduser = clone $user;
-
-        if ($user != false) {
+        if ($user != false  && isset($_SERVER['HTTP_REFERER']) && $user->getUserId() != $this->getsession()->u->getUserId() ) {
             $this->_language->load('users', 'edit'); // language edit
             $this->_language->load('users', 'label'); // language label input
             $this->_language->load('users', 'msgs'); // language for msgs success and faild
@@ -108,7 +107,7 @@ class usersController extends AbstractController
             $user = UsersModel::getByPK($user_id);
             $this->getLang()->load('users', 'msgs');
 
-            if (!empty($user)) {
+            if (!empty($user) && $user->getUserId() != $this->getsession()->u->getUserId()) {
                 try {
                     $user->delete();
                     $msg = $this->getLang()->feed_msg('msg_success_delete', [$user->getUsername()]);

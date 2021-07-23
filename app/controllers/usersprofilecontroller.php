@@ -50,9 +50,9 @@ class usersprofileController extends AbstractController
                         $usersprofile = new UsersprofileModel($userid, $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['image'], $_POST['dob']);
                         $usersprofile->save(false);
                         $user->setStatus(1);
+                        $user->setLastLogin(date('Y-m-d h:i:s'));
                         $user->save();
                         $user->user_save_in_session_wzout_pass($user, $this->getsession());
-                        $user->setLastLogin(date('Y-m-d h:i:s'));
                         $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
                         $this->redirect('/');
 

@@ -32,7 +32,7 @@ class AuthController extends AbstractController
                 $username = $this->filterString($_POST['username']);
                 $password = $_POST['password'];
                 try {
-                    $user = UsersModel::getonetest(['username' => $username]);
+                    $user = UsersModel::getuser(['username' => $username]);
                     if (!empty($user)) {
 
 

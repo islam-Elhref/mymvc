@@ -3,7 +3,7 @@
         <div class="dropdown">
             <button class="btn dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                مرحبا اسلام
+                <?= $Text_welcome ?>  <?=$this->getuser()->getusername() ?>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <a class="dropdown-item" href="#"> <?= isset($Text_user_info) ? $Text_user_info : '' ?> </a>

@@ -15,7 +15,11 @@ class UsersModel extends AbstractModel
     protected static $primaryKey = 'user_id';
 
     protected $user_id, $username, $password, $email, $phone;
-    protected $group_id, $subscription_date, $last_login , $status;
+    protected $group_id, $subscription_date, $last_login , $status , $group_name;
+    /**
+     * @var UsersprofileModel
+     */
+    protected $profile;
 
     protected static $table_schema = [
         'username' => self::DATA_TYPE_STR,
@@ -40,6 +44,7 @@ class UsersModel extends AbstractModel
         $this->phone = $this->filterString($phone);
         $this->group_id = $this->filterInt($group_id);
         $this->subscription_date = date('Y-m-d');
+        $this->setStatus(3);
     }
 
     public function edit_action_construct($username, $password, $email, $phone, $group_id){
@@ -84,18 +89,33 @@ class UsersModel extends AbstractModel
     {
         return $this->status;
     }
+    public function getGroupName()
+    {
+        return $this->group_name;
+    }
 
     public function setStatus($status): void
     {
         $this->status = $status;
     }
 
+    /**
+     * @param mixed $profile
+     */
+    public function setProfile($profile): void
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProfile()
+    {
+        return $this->profile;
+    }
     public function removePassword(){
         unset($this->password);
-    }
-    public function getGroupName()
-    {
-        return $this->group_name;
     }
     public function getSubscriptionDate()
     {
@@ -113,6 +133,7 @@ class UsersModel extends AbstractModel
     {
         return $this->phone;
     }
+
     public static function cryptPassword($password)
     {
         $options = [
@@ -129,17 +150,24 @@ class UsersModel extends AbstractModel
         $pwd_peppered = hash_hmac("sha256", $password, 'islamعليabasس');
         return password_verify($pwd_peppered, $this->password);
     }
-    public static function usersgetAll()
+    public static function usersgetAll(UsersModel $user)
     {
-        return UsersModel::getAll('SELECT u.* , ug.group_name as group_name FROM ' . self::$tableName . ' u inner JOIN users_group ug on u.group_id = ug.group_id ');
+        return UsersModel::getAll('SELECT u.* , ug.group_name as group_name FROM ' . self::$tableName . ' u inner JOIN users_group ug on u.group_id = ug.group_id where u.user_id != '."$user->user_id" );
     }
 
-    public function user_save_in_session_wzout_pass($user , MySession $session){
+    public static function getuser(array $array)
+    {
+        return UsersModel::getonetest( $array , ' join users_group on users_group.group_id = users.group_id ' );
+    }
+
+    public function user_save_in_session_wzout_pass( UsersModel $user , MySession $session){
         $user_with_out_Pass = $user;
         $user_with_out_Pass->removePassword();
         if ( isset($session->profile) ) {
             unset($session->profile);
         }
+        $profile = UsersprofileModel::getByPK($user->getUserId());
+        $user->setProfile($profile);
         $session->u = $user_with_out_Pass;
     }
 
