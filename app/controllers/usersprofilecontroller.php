@@ -48,7 +48,7 @@ class usersprofileController extends AbstractController
                     try {
 
                         $usersprofile = new UsersprofileModel($userid, $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['image'], $_POST['dob']);
-                        $usersprofile->create();
+                        $usersprofile->save(false);
                         $user->setStatus(1);
                         $user->save();
                         $user->user_save_in_session_wzout_pass($user, $this->getsession());

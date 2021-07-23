@@ -120,7 +120,7 @@ class AbstractModel
         return false;
     }
 
-    public function create()
+    private function create()
     {
 
         $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam();
@@ -133,13 +133,18 @@ class AbstractModel
         return false;
     }
 
-    public function save()
+    public function save($checkPrimaryKey = true)
     {
-        if ($this->{static::$primaryKey} == null) {
+        if ($checkPrimaryKey == false ){
             $this->create();
-        } else {
-            $this->update();
+        }else{
+            if ($this->{static::$primaryKey} == null) {
+                $this->create();
+            } else {
+                $this->update();
+            }
         }
+
     }
 
     public static function getWhere(array $array)
