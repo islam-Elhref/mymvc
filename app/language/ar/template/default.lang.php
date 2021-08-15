@@ -34,4 +34,5 @@ $_['Text_transactions_purchases'] = 'المشتريات' ;
 $_['Text_transactions_sales'] = 'المبيعات' ;
 
 $_['Text_reports'] = 'تقارير' ;
+$_['Text_access_denied'] = 'عفوا انت لا تمتلك صلاحية الدخول لهذه الصفحه' ;
 

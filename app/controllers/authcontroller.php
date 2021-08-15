@@ -9,6 +9,7 @@ use MYMVC\LIB\Helper;
 use MYMVC\LIB\Language;
 use MYMVC\LIB\Messenger;
 use MYMVC\MODELS\UsersModel;
+use MYMVC\MODELS\UsersprofileModel;
 
 class AuthController extends AbstractController
 {
@@ -35,7 +36,6 @@ class AuthController extends AbstractController
                     $user = UsersModel::getuser(['username' => $username]);
                     if (!empty($user)) {
 
-
                         if ($user->checkPassword($password)) {
 
                             if (isset($_POST['remember'])) { // generate cookie remember
@@ -54,16 +54,23 @@ class AuthController extends AbstractController
                                 $user->save();
                                 $user->user_save_in_session_wzout_pass($user, $this->getsession());
                                 $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_success', [$username]), Messenger::Msg_success);
-
                                 $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
                                 $this->redirect($link);
 
                             } elseif ($user->getStatus() == 2) {
                                 $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_user_disabled', [$username]), Messenger::Msg_error);
                             } elseif ($user->getStatus() == 3) {
-                                $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_user_profile', [$username]), Messenger::Msg_error);
-                                $this->getsession()->profile = $user->getUserId();
-                                $this->redirect('/usersprofile/add');
+                                $userprofile = UsersprofileModel::getByPK($user->getUserId());
+                                if (!empty($userprofile)){
+                                    $user->setStatus(1);
+                                    $user->save();
+                                    $user->user_save_in_session_wzout_pass($user, $this->getsession());
+                                    $this->redirect('/');
+                                }else{
+                                    $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_user_profile', [$username]), Messenger::Msg_error);
+                                    $this->getsession()->profile = $user->getUserId();
+                                    $this->redirect('/usersprofile/add');
+                                }
                             }
 
                         } else {
@@ -80,7 +87,7 @@ class AuthController extends AbstractController
             }
             $this->view();
         } else {
-            $this->redirect_back();
+            $this->redirect('/');
         }
     }
 

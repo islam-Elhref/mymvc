@@ -12,18 +12,18 @@ class FrontController
     private $_controller;
     private $_action;
     private $template;
-    private $registry ;
+    private $registry;
     /**
      * @var Authantcation
      */
     private $auth;
     private $_params = [];
 
-    public function __construct(Template $template , Registry $registry , Authantcation $auth)
+    public function __construct(Template $template, Registry $registry, Authantcation $auth)
     {
         $this->registry = $registry;
         $this->template = $template;
-        $this->auth = $auth ;
+        $this->auth = $auth;
         $this->parse_url();
     }
 
@@ -44,33 +44,40 @@ class FrontController
         $Class_controller = 'MYMVC\CONTROLLERS\\' . ucfirst($this->_controller) . 'Controller';
         $actionName = lcfirst($this->_action) . 'Action';
 
-        if (!$this->auth->is_authantcate() && $this->_controller != 'language' ){
+        if (!$this->auth->is_authantcate() && $this->_controller != 'language') {
             $Class_controller = 'MYMVC\CONTROLLERS\\' . 'AuthController';
             $this->_controller = 'auth';
-            $this->_action = 'login' ;
+            $this->_action = 'login';
             $actionName = lcfirst($this->_action) . 'Action';
-        }else{
+        } else {
 
             if ($this->auth->is_authantcate() == 3) {
 
-                if (($this->_controller != 'usersprofile' && $this->_action != 'add') && ($this->_controller != 'auth' && $this->_action != 'logout') ) {
+                if (($this->_controller != 'usersprofile' && $this->_action != 'add') && ($this->_controller != 'auth' && $this->_action != 'logout')) {
                     $this->redirect('/usersprofile/add');
                 }
             }
+
         }
 
         if (!class_exists($Class_controller)) {
-
+            $this->_controller = 'notfound';
             $Class_controller = self::NOT_FOUND_CONTROLLER;
         }
         $controller = new $Class_controller();
 
         if (!method_exists($controller, $actionName)) {
-            $this->_action = $actionName = $this::NOT_FOUND_ACTION;
+            $this->_action = 'notfound';
+            $actionName = $this::NOT_FOUND_ACTION;
         }
-
-
-
+// لو الصفحه المراده غير موجوده في الاراي الخاصه بالاكونت ولو انا مفعل هذه الخاصيه من الكونفيج
+        if ((!$this->auth->hasAccess($this->_controller, $this->_action)) && Access_Privileges === true ) {
+            $this->redirect('/accessdenied/default');
+        }
+// for if some one open link direct
+        if (($this->_controller == 'accessdenied' && $this->_action == 'default' && !isset($_SERVER['HTTP_REFERER']))) {
+            $this->redirect('/');
+        }
 
         $controller->setController($this->_controller);
         $controller->setAction($this->_action);

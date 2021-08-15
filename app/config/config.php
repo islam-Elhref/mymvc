@@ -27,6 +27,8 @@ defined('Session_Name')                ? null : define('Session_Name' , 'sess_st
 defined('Session_Domain')                ? null : define('Session_Domain' , '.mymvc.com');
 defined('SESSION_LIFETIME')                ? null : define('SESSION_LIFETIME' , '0');
 
+defined('Access_Privileges')            ? null : define('Access_Privileges' , true);
+
 
 
 

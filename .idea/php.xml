@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/../../php/PEAR" />
+    </include_path>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
   <component name="PhpRuntimeConfiguration">
     <extensions>
       <extension name="FFI" enabled="true" />
-      <extension name="LuaSandbox" enabled="true" />
       <extension name="Parle" enabled="true" />
       <extension name="SaxonC" enabled="true" />
       <extension name="ZendCache" enabled="true" />
-      <extension name="aerospike" enabled="true" />
-      <extension name="ast" enabled="true" />
-      <extension name="blackfire" enabled="true" />
       <extension name="com_dotnet" enabled="true" />
       <extension name="crypto" enabled="true" />
-      <extension name="ds" enabled="true" />
       <extension name="event" enabled="true" />
-      <extension name="expect" enabled="true" />
       <extension name="leveldb" enabled="true" />
       <extension name="lua" enabled="true" />
       <extension name="lzf" enabled="true" />
@@ -24,14 +23,10 @@
       <extension name="msgpack" enabled="true" />
       <extension name="parallel" enabled="true" />
       <extension name="pcov" enabled="true" />
-      <extension name="phpdbg" enabled="true" />
-      <extension name="pq" enabled="true" />
       <extension name="rdkafka" enabled="true" />
-      <extension name="rpminfo" enabled="true" />
       <extension name="solr" enabled="true" />
       <extension name="stats" enabled="true" />
       <extension name="stomp" enabled="true" />
-      <extension name="svm" enabled="true" />
       <extension name="sync" enabled="true" />
       <extension name="uopz" enabled="true" />
       <extension name="uuid" enabled="true" />
@@ -42,7 +37,6 @@
       <extension name="yaf" enabled="true" />
       <extension name="yar" enabled="true" />
       <extension name="zookeeper" enabled="true" />
-      <extension name="zstd" enabled="true" />
     </extensions>
   </component>
 </project>

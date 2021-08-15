@@ -12,6 +12,14 @@ class Authantcation
 
     private $session;
     private static $_instance;
+    private $default_routes = [
+        '/index/default',
+        '/auth/logout',
+        '/auth/login',
+        '/language/default',
+        '/accessdenied/default',
+        '/notfound/notfound',
+    ];
 
     private function __construct($session)
     {
@@ -68,13 +76,14 @@ class Authantcation
     public function is_authantcate()
     {
 
-        if (isset($this->session->u) && $this->session->u != '') {
 
+        if (isset($this->session->u) && $this->session->u != '') {
             if ($this->session->checkUserTime()) {
                 $user = UsersModel::getuser(['user_id' => $this->session->u->getUserId()]);
                 $user->user_save_in_session_wzout_pass($user, $this->session);
-            }
-            if ($this->session->u->getStatus() == 1) {
+            } //check user after 5 min
+
+            if ($this->session->u->getStatus() == 1) { // if status = 1 return 1 if not kill session and kill cookie remember
                 return 1;
             } else {
                 $this->session->kill();
@@ -88,11 +97,24 @@ class Authantcation
             }
         } else {
             $this->checkcookie();
-            if (isset($this->session->profile)) {
+            if (isset($this->session->profile)) { // if there session profile return 3
                 return 3;
             }
         }
         return false;
     }
+
+    public function hasAccess($controler , $action){
+       $url = strtolower('/'.$controler.'/'.$action ) ;
+       if (isset($this->session->u) && $this->session->u != '' ){
+            $route_privileges = array_merge($this->default_routes , $this->session->u->getPrivileges());
+            if (in_array($url , $route_privileges)){
+                return true;
+            }
+       }else{
+           return true;
+       }
+    }
+
 
 }

@@ -123,6 +123,37 @@ class usersController extends AbstractController
         }
     }
 
+    public function permitAction()
+    {
+        if (isset($this->_params[0]) && is_numeric($this->_params[0]) && isset($_SERVER['HTTP_REFERER'])) {
+            $user_id = $this->filterInt($this->_params[0]);
+            $user = UsersModel::getByPK($user_id);
+            $this->getLang()->load('users', 'msgs');
+
+            if (!empty($user) && $user->getUserId() != $this->getsession()->u->getUserId()) {
+                try {
+                    $text_msg = '';
+                    if ($user->getStatus() == 1 || $user->getStatus() == 3){
+                        $user->setStatus(2);
+                        $text_msg = 'msg_success_block';
+                    }elseif ($user->getStatus() == 2){
+                        $user->setStatus(3);
+                        $text_msg = 'msg_success_unblock';
+                    }
+                    $user->save();
+                    $msg = $this->getLang()->feed_msg($text_msg, [$user->getUsername()]);
+                    $this->getmsg()->addMsg($msg, Messenger::Msg_success);
+                } catch (PDOException $e) {
+                    $msg = $this->getLang()->get('msg_error_permit');
+                    $this->getmsg()->addMsg($msg, Messenger::Msg_error);
+                }
+            }
+            $this->redirect('/users');
+        } else {
+            $this->redirect('/users');
+        }
+    }
+
     public function userexistAction()
     {
 

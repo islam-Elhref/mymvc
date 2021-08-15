@@ -33,8 +33,8 @@ class usersprofileController extends AbstractController
 
             $userid = $this->filterInt($this->getsession()->profile);
             $user = UsersModel::getByPK($userid);
-
             if (!empty($user) && $user->getStatus() == 3) {
+
                 $view = array_intersect([':view' => 'view'], $this->_template->getTemplate());
                 $this->_template->changeTemplate($view);
 
@@ -53,20 +53,21 @@ class usersprofileController extends AbstractController
                         $user->setLastLogin(date('Y-m-d h:i:s'));
                         $user->save();
                         $user->user_save_in_session_wzout_pass($user, $this->getsession());
-                        $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
+                        $this->_msg->addMsg($this->_language->feed_msg('msg_success_user_profile_add', [$user->getUsername()]), Messenger::Msg_success);
                         $this->redirect('/');
 
                     } catch (PDOException $e) {
                         $this->_msg->addMsg($this->_language->feed_msg('msg_error', [$e->getMessage()]), Messenger::Msg_error);
                     }
                 }
-
                 $this->view();
+
+
             } else {
                 $this->redirect_back();
             }
         } else {
-            $this->redirect_back();
+            $this->redirect('/');
         }
     }
 

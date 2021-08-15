@@ -3,14 +3,14 @@
     <div class="form">
         <form method="post" enctype="application/x-www-form-urlencoded" class="needs-validation was-validated" novalidate>
             <div class="form-group">
-                <label for="name"><?= isset($Text_name) ? $Text_name : '' ?></label>
+                <label for="name"><?= isset($Text_label_name) ? $Text_label_name : '' ?></label>
                 <input type="text" class="form-control box" id="name" required name="name"
                        value="<?= isset($privilege) ? $privilege->getPrivilegeName() : '' ; ?>" >
                 <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                 <div class="invalid-feedback"><?= isset($invalid_msg_privilege_name) ? $invalid_msg_privilege_name : '' ?></div>
             </div>
             <div class="form-group">
-                <label for="url"><?= isset($text_table_privilege_url) ? $text_table_privilege_url : '' ?></label>
+                <label for="url"><?= isset($Text_label_url) ? $Text_label_url : '' ?></label>
                 <input type="text" class="form-control box dr_english" id="url" required name="url" pattern="/.+"
                        value="<?= isset($privilege) ? $privilege->getPrivilegeurl() : '' ; ?>">
                 <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>

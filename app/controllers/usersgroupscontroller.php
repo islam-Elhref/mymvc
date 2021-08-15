@@ -1,9 +1,11 @@
 <?php
+
 namespace MYMVC\CONTROLLERS;
 
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
+use MYMVC\LIB\Validation;
 use MYMVC\MODELS\privilegecontrolmodel;
 use MYMVC\MODELS\privilegesmodel;
 use MYMVC\MODELS\UsersGroupsModel;
@@ -12,6 +14,11 @@ use PDOException;
 class UsersGroupsController extends AbstractController
 {
 
+    private $rules_to_valid = [
+        'name' => 'req|alpha',
+    ];
+
+    use Validation;
     use filter;
     use Helper;
 
@@ -29,7 +36,7 @@ class UsersGroupsController extends AbstractController
     {
         $this->_language->load('usersgroups', 'edit');
         $this->_language->load('usersgroups', 'msgs');
-        $msgs = $this->_language->getDictionary();
+        $this->getLang()->load('validation' , 'errors');
 
         if (isset($this->_params[0])) {
             $usersGroupId = abs($this->filterInt($this->_params[0]));
@@ -40,14 +47,12 @@ class UsersGroupsController extends AbstractController
                 $array_privilege_id = privilegecontrolmodel::getByGroup($usersGroup);
 
 
-                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid , $_POST) == true) {
                     $groupnameBefore = $usersGroup->getGroupName();
                     $groupnameAfter = $_POST['name'];
                     $usersGroup->setGroupName($groupnameAfter);
 
-
-                    if ($usersGroup->check_input_empty() === true) {
-                        try {
+                     try {
                             if (isset($_POST['privilege']) && !empty($_POST['privilege'])) {
                                 $privilegeIdToBeDeleted = array_diff($array_privilege_id, $_POST['privilege']);
                                 $privilegeIdToBecreated = array_diff($_POST['privilege'], $array_privilege_id);
@@ -62,18 +67,17 @@ class UsersGroupsController extends AbstractController
                                     $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
                                     $privilegecontrol->save();
                                 }
-                                $msg_success = str_replace(array('name', 'other'), array($groupnameBefore, $groupnameAfter), $msgs['msg_success_edit']);
-                                $this->_msg->addMsg($msg_success , Messenger::Msg_success);
+                                $msg = $this->getLang()->feed_msg('msg_success_edit' , [$groupnameBefore , $groupnameAfter]);
+                                $this->_msg->addMsg($msg, Messenger::Msg_success);
 
                             } else {
-                                $this->_msg->addMsg('there\'s no privilege' , Messenger::Msg_success);
-                                throw new PDOException('there\'s no privilege' );
+                                $this->getmsg()->addMsg('there\'s no privilege', Messenger::Msg_success);
+                                throw new PDOException('there\'s no privilege');
                             }
 
                         } catch (PDOException $e) {
-                            $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
+                            $this->getmsg()->addMsg($this->getLang()->get('msg_error_add'), Messenger::Msg_error);
                         }
-                    }
                     $this->redirect('/usersgroups');
                 }
 
@@ -96,14 +100,12 @@ class UsersGroupsController extends AbstractController
     public function addAction()
     {
         $this->_language->load('usersgroups', 'add');
-        $this->_language->load('usersgroups' , 'msgs' );
-        $msgs = $this->_language->getDictionary();
+        $this->_language->load('usersgroups', 'msgs');
+        $this->getLang()->load('validation' , 'errors');
 
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid , $_POST) == true) {
             $new_users_group = new UsersGroupsModel($_POST['name']);
 
-            if ($new_users_group->check_input_empty() === true) {
                 try {
                     if (isset($_POST['privilege']) && !empty($_POST['privilege'])) {
                         $new_users_group->save();
@@ -112,17 +114,16 @@ class UsersGroupsController extends AbstractController
                             $privilegecontrol->save();
                         }
                         $user_group_name = $new_users_group->getGroupName();
-                        $msg_success = str_replace('name', $user_group_name, $msgs['msg_success_add']);
-                        $this->_msg->addMsg($msg_success , Messenger::Msg_success);
+
+                        $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_success_add' , [$user_group_name]) , Messenger::Msg_success );
                     } else {
                         throw new PDOException('there\'s no privilege');
                     }
 
                 } catch (PDOException $e) {
-                    $this->_msg->addMsg($msgs['msg_error_add'] , Messenger::Msg_error);
+                    $this->_msg->addMsg($this->getLang()->get('msg_error_add'), Messenger::Msg_error);
 
                 }
-            }
             $this->redirect('/usersgroups');
         }
 
@@ -151,10 +152,10 @@ class UsersGroupsController extends AbstractController
                     $usersGroupName = $usersGroup->getGroupName();
                     if ($usersGroup->delete()) {
                         $msg_success = str_replace('name', $usersGroupName, $msg['msg_success_delete']);
-                        $this->_msg->addMsg($msg_success , Messenger::Msg_success);
+                        $this->_msg->addMsg($msg_success, Messenger::Msg_success);
                     }
                 } catch (PDOException $e) {
-                    $this->_msg->addMsg($msg['msg_error_add'] , Messenger::Msg_error);
+                    $this->_msg->addMsg($msg['msg_error_add'], Messenger::Msg_error);
                 }
                 $this->redirect('/usersgroups');
 

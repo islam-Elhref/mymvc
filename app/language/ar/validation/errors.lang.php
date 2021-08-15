@@ -2,6 +2,7 @@
 
 
 $_['msg_error_req'] = '%s يجب ان يحتوي علي قيمة';
+$_['msg_error_url_privilege'] = '%s يجب ان يكتب  مثل  clients/';
 
 $_['msg_error_num'] = '%s يجب ان يكون رقماً';
 $_['msg_error_int'] = '%s يجب ان يكون عدد صحيح';

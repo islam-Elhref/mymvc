@@ -23,19 +23,8 @@ class privilegesmodel extends AbstractModel
 
     public function __construct(string $privilege_name , string $privilege_url)
     {
-
-        if (!preg_match('|/.+|' , $privilege_url)){
-            $lang = $_SESSION['lang'];
-            if ($lang === 'ar') {
-                $this->message[] = 'يجب كتابة الرابط الخاص بالصلاحيه مثل  clients/';
-            } else {
-                $this->message[] = 'Please Write a Valid Privilege Url Like /clients';
-            }
-        }
-
         $this->privilege_name = $this->filterString($privilege_name);
         $this->privilege_url = $this->filterString($privilege_url);
-
     }
 
 

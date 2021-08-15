@@ -20,12 +20,13 @@ trait Validation
         'num' => '/^[0-9]+(?:\.[0-9]+)?$/',
         'int' => '/^[0-9]+$/',
         'float' => '/^[0-9]+\.[0-9]+$/',
-        'alpha' => '/^[a-zA-Z\p{Arabic}]+$/u',
+        'alpha' => '/^[a-zA-Z\p{Arabic} ]+$/u',
         'alphaEn' => '/^[a-zA-Z]+$/u',
         'alphanum' => '/^[a-zA-Z\p{Arabic}0-9]+$/u',
         'alphanumEn' => '/^[a-zA-Z0-9]+$/u',
         'vdate' => '/^[1-2][0-9][0-9][0-9]-(?:(?:0[1-9])|(?:1[0-2]))-(?:(?:0[1-9])|(?:1[0-9])|(?:2[0-9])|(?:3[0-1]))/',
-        'vemail' => '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i'
+        'vemail' => '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i',
+        'url_privilege' => '/^\/[a-z]+[\/]?[a-z]*$/',
     ];
 
     public function req($value)
@@ -194,6 +195,10 @@ trait Validation
         function url($value)
         {
             return (bool)filter_var($value, FILTER_VALIDATE_URL);
+        }
+        function url_privilege($value)
+        {
+            return (bool)preg_match($this->_regexpatterns['url_privilege'], $value);
         }
 
 

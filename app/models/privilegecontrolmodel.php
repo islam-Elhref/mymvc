@@ -66,6 +66,7 @@ public static function getByGroup(UsersGroupsModel $group){
         foreach ($user_groups_privileges as $groups_privilege) {
             $array_privilege_id[] = $groups_privilege->getPrivilegeId();
         }
+
         return $array_privilege_id;
     }
 
