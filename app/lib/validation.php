@@ -22,7 +22,7 @@ trait Validation
         'float' => '/^[0-9]+\.[0-9]+$/',
         'alpha' => '/^[a-zA-Z\p{Arabic} ]+$/u',
         'alphaEn' => '/^[a-zA-Z]+$/u',
-        'alphanum' => '/^[a-zA-Z\p{Arabic}0-9]+$/u',
+        'alphanum' => '/^[a-zA-Z\p{Arabic}0-9 ]+$/u',
         'alphanumEn' => '/^[a-zA-Z0-9]+$/u',
         'vdate' => '/^[1-2][0-9][0-9][0-9]-(?:(?:0[1-9])|(?:1[0-2]))-(?:(?:0[1-9])|(?:1[0-9])|(?:2[0-9])|(?:3[0-1]))/',
         'vemail' => '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i',
@@ -213,7 +213,9 @@ trait Validation
                 $value = isset($inputs[$input]) ? $inputs[$input] : null;
 
                 foreach ($rules as $rule) {
+
                     if (preg_match('/^\w+$/', $rule)) {
+
                         if ($this->{$rule}($value) == false) {
                             $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
                             $error[] = 'error';

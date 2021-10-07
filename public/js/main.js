@@ -74,6 +74,40 @@ $(document).ready(function(){
     })
 })
 
+$(document).ready(function(){
+    $('.needs-validation .supplierExist').change(function () {
+        var input = this
+        var inputname = $(this).attr('name');
+        //  استخدمت الاايلمينت بالطريقه دي علشان مكنوش راضيين يتكتبوا جوه الداتا بتاعة الاجاكس
+        elements = {};
+        elements[inputname] = $(this).val(); // الانبوت نيم ده متغير جايبه من اتربيوت النيم من اتشتيمل وباعته هو والفاليو بتاعته للبي اتش بي
+        elements['input'] = inputname; // استخدمت انبوت نيم كا ثابت علشان اي كان الانبوت اللي هيتبعت يكون ثابت سواء كان يوسر نيم او ايميل انا هستخدم $post[input]
+
+        $.ajax({
+            url: "http://mymvc.com/suppliers/supplierexist",
+            method: "POST",
+            data: elements
+        }).done(function( msg ) {
+
+            var old_value = $(input).siblings('.invalid-feedback').text(); // old value from text بجوار الانبوت المستخدم
+            var checkExist_value = $(input).siblings('.invalid-feedback').attr('data-temp') // قيمة الاتربيوت الموجوده في الداتا تيمب وهيا المراد وضعها عندما يكون اليوسر او الايميل موجودين من قبل ونستدعيها من ملفات اللغه
+
+                console.log(msg)
+            if (msg == 1 ){ // عند ارسال الريكويست لل بي اتش بي يتم الرد عليا اما ب 1 لو موجود او 0 لو مش موجود
+                input.setCustomValidity("Invalid field.") // i use input not this because this refere to ajax xml so i make variable equl to this before ajax
+                $(input).siblings('.invalid-feedback').attr('data-old' , old_value ) // $(inut) equl to $(this) becuse i save this in var input before ajax
+                $(input).siblings('.invalid-feedback').text(checkExist_value)
+            }else{
+                input.setCustomValidity("") // if setcustomevalidity has param = '' then input valid if there is value then is invalid
+                var data_old = $(input).siblings('.invalid-feedback').attr('data-old');
+                $(input).siblings('.invalid-feedback').text(data_old)
+            }
+
+        });
+
+    })
+})
+
 $('#open_nav').click(function () {
     var nav = $('.navbar');
     var view = $('.view');

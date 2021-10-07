@@ -69,15 +69,20 @@ class FrontController
         if (!method_exists($controller, $actionName)) {
             $this->_action = 'notfound';
             $actionName = $this::NOT_FOUND_ACTION;
+            $this->_controller = 'notfound';
         }
+
+
+        // for if some one open link direct
+        if (($this->_controller == 'accessdenied' && $this->_action == 'default' && !isset($_SERVER['HTTP_REFERER']))) {
+            $this->redirect('/');
+        }
+
 // لو الصفحه المراده غير موجوده في الاراي الخاصه بالاكونت ولو انا مفعل هذه الخاصيه من الكونفيج
         if ((!$this->auth->hasAccess($this->_controller, $this->_action)) && Access_Privileges === true ) {
             $this->redirect('/accessdenied/default');
         }
-// for if some one open link direct
-        if (($this->_controller == 'accessdenied' && $this->_action == 'default' && !isset($_SERVER['HTTP_REFERER']))) {
-            $this->redirect('/');
-        }
+
 
         $controller->setController($this->_controller);
         $controller->setAction($this->_action);

@@ -1,10 +1,10 @@
 <?php
 
-
 namespace MYMVC\CONTROLLERS;
 
-
+use MYMVC\LIB\filter;
 use MYMVC\LIB\FrontController;
+use MYMVC\LIB\Helper;
 use MYMVC\LIB\Language;
 use MYMVC\LIB\Messenger;
 use MYMVC\LIB\MySession;
@@ -15,6 +15,8 @@ use MYMVC\LIB\Validation;
 class AbstractController
 {
     use Validation;
+    use filter;
+    use Helper;
 
     private $_controller;
     private $_action;
@@ -77,6 +79,7 @@ class AbstractController
     {
            return $this->registry->$opject;
     }
+
 
 
     public function view()

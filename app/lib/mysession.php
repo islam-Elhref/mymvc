@@ -119,6 +119,7 @@ class MySession extends SessionHandler
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
             $session_id = session_id();
             if (!hash_equals($this->fingerPrint, sha1($userAgent . $this->PrintKey . $session_id))) {
+                var_dump($this->fingerPrint , sha1($userAgent . $this->PrintKey . $session_id) ); exit();
                 $this->kill();
             }
         }

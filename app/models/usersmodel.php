@@ -211,6 +211,7 @@ class UsersModel extends AbstractModel
         if (isset($session->u)) {
             $session->u->removePassword();
             if ($user_with_out_Pass == $session->u) {
+
             } else {
                 $session->u = $user_with_out_Pass;
             }
