@@ -31,7 +31,36 @@ trait Validation
 
     public function req($value)
     {
+        if (is_array($value)) {
+            if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
+                return false;
+            }
+        }
         return !empty($value) || $value != '';
+    }
+
+    public function image_ext($value)
+    {
+        if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
+            return true;
+        } else {
+            $ext = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (in_array($value['type'], $ext)) {
+                return true;
+            }
+        }
+    }
+
+    public function image_size($value){
+        if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
+            return true;
+        } else {
+            if ($value['size'] > 5242880 ) {
+                return false ;
+            }else{
+                return true;
+            }
+        }
     }
 
     public function num($value)
@@ -162,90 +191,96 @@ trait Validation
 
     public function vdate($date)
     {
-            return (bool)preg_match($this->_regexpatterns['vdate'], $date);
+        return (bool)preg_match($this->_regexpatterns['vdate'], $date);
     }
-        public function myvdate($date)
-        {
-            if ($date != null) {
-                $first_check = date_parse($date);
-                if ($first_check['year'] != false || $first_check['day'] != false || $first_check['month'] != false) {
-                    $arr_date = explode('-', $date);
-                    $year = $first_check['year'];
-                    $month = (strlen($first_check['month']) < 2) ? 0 . $first_check['month'] : $first_check['month'];
-                    $day = (strlen($first_check['day']) < 2) ? 0 . $first_check['day'] : $first_check['day'];
-                    $first_valid = checkdate($month, $day, $year);
-                    if ($first_valid) {
-                        $tempDate = $year . '-' . $month . '-' . $day;
-                        return $this->vdate($tempDate);
-                    }
+
+    public function myvdate($date)
+    {
+        if ($date != null) {
+            $first_check = date_parse($date);
+            if ($first_check['year'] != false || $first_check['day'] != false || $first_check['month'] != false) {
+                $arr_date = explode('-', $date);
+                $year = $first_check['year'];
+                $month = (strlen($first_check['month']) < 2) ? 0 . $first_check['month'] : $first_check['month'];
+                $day = (strlen($first_check['day']) < 2) ? 0 . $first_check['day'] : $first_check['day'];
+                $first_valid = checkdate($month, $day, $year);
+                if ($first_valid) {
+                    $tempDate = $year . '-' . $month . '-' . $day;
+                    return $this->vdate($tempDate);
                 }
-                return false;
-
             }
-            return true;
+            return false;
+
         }
+        return true;
+    }
 
-        public
-        function vemail($value)
-        {
-            return (bool)preg_match($this->_regexpatterns['vemail'], $value);
-        }
+    public
+    function vemail($value)
+    {
+        return (bool)preg_match($this->_regexpatterns['vemail'], $value);
+    }
 
-        public
-        function url($value)
-        {
-            return (bool)filter_var($value, FILTER_VALIDATE_URL);
-        }
-        function url_privilege($value)
-        {
-            return (bool)preg_match($this->_regexpatterns['url_privilege'], $value);
-        }
+    public
+    function url($value)
+    {
+        return (bool)filter_var($value, FILTER_VALIDATE_URL);
+    }
+
+    function url_privilege($value)
+    {
+        return (bool)preg_match($this->_regexpatterns['url_privilege'], $value);
+    }
 
 
-        public
-        function is_valid($rules_to_valid, $inputs)
-        {
-            $error = [];
-            foreach ($rules_to_valid as $input => $rules) {
+    public
+    function is_valid($rules_to_valid, $inputs)
+    {
+        $error = [];
+        foreach ($rules_to_valid as $input => $rules) {
 
-                $rules = explode('|', $rules);
+            $rules = explode('|', $rules);
 
+            if (empty($_FILES[$input])) {
                 $value = isset($inputs[$input]) ? $inputs[$input] : null;
-
-                foreach ($rules as $rule) {
-
-                    if (preg_match('/^\w+$/', $rule)) {
-
-                        if ($this->{$rule}($value) == false) {
-                            $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
-                            $error[] = 'error';
-                            break;
-                        }
-                    } elseif (preg_match('/^(\w+)\((\d+|\w+)\)$/', $rule, $m)) {
-                        $rule = $m[1];
-                        $other_value = $rule == 'eqinput' ? $inputs[$m[2]] : $m[2];
-                        $label = $rule == 'eqinput' ? $this->_language->get("Text_label_$m[2]") : $m[2];
-
-                        if ($this->{$rule}($value, $other_value) == false) {
-                            $this->_msg->addMsg($this->_language->feed_msg('msg_error_' . $rule, ["Text_label_$input", $label]), Messenger::Msg_error);
-                            $error[] = 'error';
-                            break;
-                        }
-                    } elseif (preg_match('/^(\w+)\((\d+)\,(\d+)\)$/', $rule, $m)) {
-                        $rule = $m[1];
-                        if ($this->{$rule}($value, $m[2], $m[3]) == false) {
-                            $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input", $m[2], $m[3]]), Messenger::Msg_error);
-                            $error[] = 'error';
-                            break;
-                        }
-                    }
-
-                }
+            } else {
+                $value = isset($_FILES[$input]) ? $_FILES[$input] : null;
             }
 
-            return empty($error) ? true : false;
+            foreach ($rules as $rule) {
 
+                if (preg_match('/^\w+$/', $rule)) {
+
+                    if ($this->{$rule}($value) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input"]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
+                    }
+                } elseif (preg_match('/^(\w+)\((\d+|\w+)\)$/', $rule, $m)) {
+                    $rule = $m[1];
+                    $other_value = $rule == 'eqinput' ? $inputs[$m[2]] : $m[2];
+                    $label = $rule == 'eqinput' ? $this->_language->get("Text_label_$m[2]") : $m[2];
+
+                    if ($this->{$rule}($value, $other_value) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg('msg_error_' . $rule, ["Text_label_$input", $label]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
+                    }
+                } elseif (preg_match('/^(\w+)\((\d+)\,(\d+)\)$/', $rule, $m)) {
+                    $rule = $m[1];
+                    if ($this->{$rule}($value, $m[2], $m[3]) == false) {
+                        $this->_msg->addMsg($this->_language->feed_msg("msg_error_$rule", ["Text_label_$input", $m[2], $m[3]]), Messenger::Msg_error);
+                        $error[] = 'error';
+                        break;
+                    }
+                }
+
+            }
         }
 
+        return empty($error) ? true : false;
 
     }
+
+
+}

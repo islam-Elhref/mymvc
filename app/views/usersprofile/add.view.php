@@ -9,7 +9,7 @@ $this->GetMessage();
     <legend class="scheduler-border"> <?= isset($legend) ? $legend : '' ?> </legend>
 
     <div class="form">
-        <form method="post" enctype="application/x-www-form-urlencoded" class="needs-validation" novalidate>
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
 
             <div class="row row_reverse">
 
@@ -36,7 +36,7 @@ $this->GetMessage();
 
                 <div class="form-group col-md-4 flex-column"> <!-- image -->
                     <label class="active" for="image"><?= isset($Text_label_image) ? $Text_label_image : '' ?></label>
-                    <input type="file" class="form-control " id="image" name="image" maxlength="50">
+                    <input type="file" class="form-control " id="image" name="image" required>
                 </div>
 
                 <div class="form-group col-md-4 flex-column"> <!-- dob -->

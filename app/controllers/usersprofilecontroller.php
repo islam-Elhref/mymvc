@@ -22,8 +22,8 @@ class usersprofileController extends AbstractController
         'firstname' => 'req|alpha|sbetween(3,10)',
         'lastname' => 'req|alpha|sbetween(3,10)',
         'address' => '',
-        'image' => '',
-        'dob' => 'myvdate'
+        'image' => 'req|image_ext|image_size',
+        'dob' => 'myvdate',
     ];
 
 
@@ -45,20 +45,20 @@ class usersprofileController extends AbstractController
 
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid, $_POST) == true) {
-                    try {
+                        try {
+                            $usersprofile = new UsersprofileModel($userid, $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_FILES['image'], $_POST['dob']);
+//                        $usersprofile->save(false);
+//                        $user->setStatus(1);
+//                        $user->setLastLogin(date('Y-m-d h:i:s'));
+//                        $user->save();
+//                        $user->user_save_in_session_wzout_pass($user, $this->getsession());
+//                        $this->_msg->addMsg($this->_language->feed_msg('msg_success_user_profile_add', [$user->getUsername()]), Messenger::Msg_success);
+//                        $this->redirect('/');
 
-                        $usersprofile = new UsersprofileModel($userid, $_POST['firstname'], $_POST['lastname'], $_POST['address'], $_POST['image'], $_POST['dob']);
-                        $usersprofile->save(false);
-                        $user->setStatus(1);
-                        $user->setLastLogin(date('Y-m-d h:i:s'));
-                        $user->save();
-                        $user->user_save_in_session_wzout_pass($user, $this->getsession());
-                        $this->_msg->addMsg($this->_language->feed_msg('msg_success_user_profile_add', [$user->getUsername()]), Messenger::Msg_success);
-                        $this->redirect('/');
+                        } catch (PDOException $e) {
+                            $this->_msg->addMsg($this->_language->feed_msg('msg_error', [$e->getMessage()]), Messenger::Msg_error);
+                        }
 
-                    } catch (PDOException $e) {
-                        $this->_msg->addMsg($this->_language->feed_msg('msg_error', [$e->getMessage()]), Messenger::Msg_error);
-                    }
                 }
                 $this->view();
 

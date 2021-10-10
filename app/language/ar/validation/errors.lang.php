@@ -2,6 +2,8 @@
 
 
 $_['msg_error_req'] = '%s يجب ان يحتوي علي قيمة';
+$_['msg_error_image_ext'] = '%s يجب ان تكون صوره من هذه الإمتدادات [jpeg , png , jpg ] فقط';
+$_['msg_error_image_size'] = '%s يجب ان تكون اقل من 2 ميجا';
 $_['msg_error_url_privilege'] = '%s يجب ان يكتب  مثل  clients/';
 
 $_['msg_error_num'] = '%s يجب ان يكون رقماً';
