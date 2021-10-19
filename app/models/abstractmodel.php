@@ -5,9 +5,9 @@ namespace MYMVC\MODELS;
 
 use Exception;
 use MYMVC\LIB\Database\DatabaseHandler;
-use \pdo;
+use PDO;
 use PDOException;
-use \PDOStatement;
+use PDOStatement;
 
 class AbstractModel
 {
@@ -121,7 +121,6 @@ class AbstractModel
 
     private function create()
     {
-
         $sql = 'insert into ' . static::$tableName . ' set ' . self::sqlParam();
         $stmt = DatabaseHandler::factory()->prepare($sql);
         $this->bindParams($stmt);

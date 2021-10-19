@@ -32,7 +32,6 @@ class PdoDatabaseHandler extends DatabaseHandler
                 )
             );
         } catch (PDOException $e) {
-
         }
     }
 

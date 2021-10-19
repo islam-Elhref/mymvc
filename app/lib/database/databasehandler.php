@@ -16,8 +16,8 @@ abstract class DatabaseHandler
     public static function factory()
     {
         $driver = DATABASE_CONN_DRIVER;
-        if ($driver == self::DATABASE_DRIVER_POD) {
-            return PDODatabaseHandler::getInstance();
+        if (1 == self::DATABASE_DRIVER_POD) {
+            return PdoDatabaseHandler::getInstance();
         } elseif ($driver == self::DATABASE_DRIVER_MYSQLI) {
             return MySQLiDatabaseHandler::getInstance();
         }

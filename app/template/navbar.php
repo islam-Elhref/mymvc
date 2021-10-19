@@ -1,7 +1,7 @@
 <div class="navbar">
 
     <div class="navbar-info">
-        <img src="/img/usersImage/<?= $this->getuser()->getProfile()->getImage() ?>" alt="image profile">
+        <img src="/img/usersImage/<?= $this->getuser()->getProfile()->getImage() ?>" alt="">
         <h3><?= $this->getuser()->getProfile()->getMixName() ?></h3>
         <p><?= $this->getuser()->getGroupName() ?></p>
     </div>

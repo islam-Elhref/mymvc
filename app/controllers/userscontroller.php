@@ -48,7 +48,7 @@ class usersController extends AbstractController
                 $user->save();
                 $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
             } catch (PDOException $e) {
-                $this->_msg->addMsg($this->_language->feed_msg('msg_error', [$e->getMessage()]), Messenger::Msg_error);
+                $this->_msg->addMsg($this->_language->feed_msg('msg_error_edit', [$e->getMessage()]), Messenger::Msg_error);
             }
             $this->redirect('/users');
         }

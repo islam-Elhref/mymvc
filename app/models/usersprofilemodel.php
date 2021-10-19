@@ -31,12 +31,20 @@ class UsersprofileModel extends AbstractModel
         $this->firstname = $this->filterString($firstname);
         $this->lastname = $this->filterString($lastname);
         $this->address = isset($address) && $address != '' ?$this->filterString($address) : '';
-        $this->uploadImage($image);
+        $this->image = $image;
         $this->dob = isset($dob) && $dob != '' ? $dob : '';
     }
 
     public function uploadImage($image){
-        $this->image = $image;
+        $avtar_name = rand(0 , 1000000) . '_' . $image['name'] ;
+        $file = 'img\usersImage\\' . $avtar_name ;
+        if (file_exists($file)){
+            $this->uploadImage($image);
+        }else{
+            move_uploaded_file($image   ['tmp_name'] , $file ) ;
+            $this->image = $avtar_name;
+        }
+
     }
 
     public function setUserId($user_id)
