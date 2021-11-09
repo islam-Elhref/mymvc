@@ -103,7 +103,7 @@ class purchasescontroller extends AbstractController
                 'JOIN products ON products.product_id = purchases_orders.product_id');
 
                 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rule_for_validation, $_POST)) {
-
+                    var_dump($_POST);
                 }
 
                 $this->view();
