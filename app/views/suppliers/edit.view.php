@@ -2,79 +2,54 @@
     <legend class="scheduler-border"> <?= isset($legend) ? $legend : '' ?> </legend>
 
     <div class="form">
-        <form method="post" enctype="application/x-www-form-urlencoded" class="needs-validation"   novalidate>
+        <form method="post" enctype="application/x-www-form-urlencoded" class="needs-validation" novalidate>
 
             <div class="row row_reverse">
 
-                <div class="form-group col-md-4 flex-column"> <!-- username -->
-                    <label for="Username" <?= $this->floatlabel('Username' , $userActive ) ?> > <?= isset($Text_label_Username) ? $Text_label_Username : '' ?></label>
-                    <input type="text" class="form-control box" id="Username" required name="Username" minlength="6" maxlength="20"
-                    value="<?=  $this->showvalue('Username' , $userActive ) ?>" >
+                <div class="form-group col-md-6 flex-column"> <!-- name -->
+                    <label for="name" <?= $this->floatlabel('name' , $supplier) ?> ><?= isset($Text_label_name) ? $Text_label_name : '' ?></label>
+                    <input type="text" class="form-control box supplierExist" id="name" required name="name"
+                           minlength="4" maxlength="40""
+                           value="<?= $this->showvalue('name' , $supplier) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_username) ? $invalid_msg_username : '' ?></div>
-                </div>
+                    <div class="invalid-feedback"
+                         data-temp="<?= isset($invalid_msg_suppliername_exist) ? $invalid_msg_suppliername_exist : '' ?>"
+                    ><?= isset($invalid_msg_name) ? $invalid_msg_name : '' ?></div>
+                </div> <!--supplier name-->
 
-                <div class="form-group col-md-4 flex-column">  <!-- password -->
-                    <label for="password" <?= $this->floatlabel('Password') ?> ><?= isset($Text_label_Password) ? $Text_label_Password : '' ?></label>
-                    <input type="password" class="form-control box" id="password"  name="Password" minlength="6" maxlength="20"
-                           value="" autocomplete="new-password">
+                <div class="form-group col-md-6 flex-column"> <!-- email -->
+                    <label for="email" <?= $this->floatlabel('email' , $supplier) ?> ><?= isset($Text_label_email) ? $Text_label_email : '' ?></label>
+                    <input type="email" class="form-control box supplierExist" id="email" required name="email"
+                           minlength="4" maxlength="40"
+                           value="<?= $this->showvalue('email' , $supplier) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_password) ? $invalid_msg_password : '' ?></div>
-                </div>
+                    <div class="invalid-feedback"
+                         data-temp="<?= isset($invalid_msg_supplier_emailexist) ? $invalid_msg_supplier_emailexist : '' ?>"
+                    ><?= isset($invalid_msg_email) ? $invalid_msg_email : '' ?></div>
+                </div> <!--supplier email-->
 
-                <div class="form-group col-md-4 flex-column">  <!-- password -->
-                    <label for="cpassword" <?= $this->floatlabel('Password' ) ?> ><?= isset($Text_label_CPassword) ? $Text_label_CPassword : '' ?></label>
-                    <input type="password" class="form-control box" id="CPassword"  name="CPassword" minlength="6" maxlength="20"
-                        value=""  autocomplete="new-password">
-                    <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_password) ? $invalid_msg_password : '' ?></div>
-                </div>
-            </div>
+            </div> <!-- name and email -->
 
             <div class="row row_reverse">
 
-
-                <div class="form-group col-md-4 flex-column"> <!-- email -->
-                    <label for="email" <?= $this->floatlabel('Email' , $userActive ) ?> ><?= isset($Text_label_Email) ? $Text_label_Email : '' ?></label>
-                    <input type="email" class="form-control box" id="email" required name="Email"
-                           value="<?=  $this->showvalue('Email' , $userActive ) ?>">
+                <div class="form-group col-md-6 flex-column">
+                    <label for="phone" <?= $this->floatlabel('phone' , $supplier) ?> ><?= isset($Text_label_phone) ? $Text_label_phone : '' ?></label>
+                    <input type="tel" class="form-control box checkExist" id="phone" required name="phone"
+                           minlength="11" maxlength="11" pattern="^01[0-9]{9}$"
+                    value="<?= $this->showvalue('phone' , $supplier) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_email) ? $invalid_msg_email : '' ?></div>
-                </div>
-                <div class="form-group col-md-4 flex-column"> <!-- email -->
-                    <label for="cemail" <?= $this->floatlabel('Email' , $userActive ) ?> ><?= isset($Text_label_CEmail) ? $Text_label_CEmail : '' ?></label>
-                    <input type="email" class="form-control box" id="CEmail" required name="CEmail"
-                           value="<?=  $this->showvalue('CEmail' , $userActive ) ?>">
+                    <div class="invalid-feedback"><?= isset($invalid_msg_phone) ? $invalid_msg_phone : '' ?> </div>
+                </div> <!-- phone -->
+                <div class="form-group col-md-6 flex-column">
+                    <label for="address" <?= $this->floatlabel('address' , $supplier) ?> ><?= isset($Text_label_address) ? $Text_label_address : '' ?></label>
+                    <input type="text" class="form-control box checkExist" id="address" required name="address"
+                           minlength="4" maxlength="50"
+                           value="<?= $this->showvalue('address' , $supplier) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_email) ? $invalid_msg_email : '' ?></div>
-                </div>
+                    <div class="invalid-feedback"><?= isset($invalid_msg_address) ? $invalid_msg_address : '' ?> </div>
+                </div> <!-- address -->
 
-                <div class="form-group col-md-4 flex-column"> <!-- phone -->
-                    <label for="phone" <?= $this->floatlabel('Phone' , $userActive ) ?> ><?= isset($Text_label_Phone) ? $Text_label_Phone : '' ?></label>
-                    <input type="tel" class="form-control box" id="phone" name="Phone"
-                           value="<?=  $this->showvalue('Phone' , $userActive ) ?>" >
-                    <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_phone) ? $invalid_msg_phone : '' ?></div>
-                </div>
-            </div>`
-            <div class="form-group flex-column"> <!-- Group Name -->
-                <select name="group_id" id="group_id" class="custom-select" required >
-                    <option label="<?= isset($Text_label_group_id) ? $Text_label_group_id : '' ?>" disabled selected value=""></option>
-                    <?php
-                    if (isset($groups) && !empty($groups)) {
-                        foreach ($groups as $group) {
-                            ?>
-                            <option <?= $this->showvalue('GroupId' , $userActive ) == $group->getGroupId() ? 'selected' : '' ?> value="<?= $group->getGroupId() ?>"> <?= $group->getGroupName() ?> </option>
-                            <?php
-                        }
-                    }
-                    ?>
-
-                </select>
-                <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                <div class="invalid-feedback"><?= isset($invalid_msg_group) ? $invalid_msg_group : '' ?></div>
-            </div>
-
+            </div> <!-- phone and address -->
 
             <hr>
 

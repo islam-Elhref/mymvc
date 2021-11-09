@@ -159,5 +159,12 @@ class MySession extends SessionHandler
         return false ;
     }
 
+    /**
+     * @return UsersModel;
+     */
+    public function getuser (){
+        return isset($this->u) ? $this->u : false ;
+    }
+
 }
 

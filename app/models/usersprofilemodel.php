@@ -35,18 +35,6 @@ class UsersprofileModel extends AbstractModel
         $this->dob = isset($dob) && $dob != '' ? $dob : '';
     }
 
-    public function uploadImage($image){
-        $avtar_name = rand(0 , 1000000) . '_' . $image['name'] ;
-        $file = 'img\usersImage\\' . $avtar_name ;
-        if (file_exists($file)){
-            $this->uploadImage($image);
-        }else{
-            move_uploaded_file($image   ['tmp_name'] , $file ) ;
-            $this->image = $avtar_name;
-        }
-
-    }
-
     public function setUserId($user_id)
     {
         $this->user_id = $user_id;
@@ -89,7 +77,7 @@ class UsersprofileModel extends AbstractModel
      */
     public function getImage()
     {
-        return $this->image;
+        return IMAGE_profile_UPLOAD . $this->image;
     }
 
     /**
@@ -104,5 +92,13 @@ class UsersprofileModel extends AbstractModel
         return sprintf("%s %s", $this->firstname , $this->lastname);
     }
 
+    public function deleteuserprofile($id){
+        if ($id != null || $id != ''){
+            $userprofileexist = self::getByPK($id);
+            if (!empty($userprofileexist)){
+                $userprofileexist->delete();
+            }
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ namespace MYMVC\CONTROLLERS;
 
 
 use http\Header;
+use MongoDB\Driver\Exception\Exception;
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
@@ -23,7 +24,7 @@ class usersController extends AbstractController
         'CPassword' => "req|sbetween(6,20)|eqinput(Password)",
         'Email' => 'req|vemail',
         'CEmail' => 'req|vemail|eqinput(Email)',
-        'Phone' => 'int',
+        'Phone' => 'phone',
         'group_id' => 'req|int'
     ];
     private $lang;
@@ -48,7 +49,7 @@ class usersController extends AbstractController
                 $user->save();
                 $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
             } catch (PDOException $e) {
-                $this->_msg->addMsg($this->_language->feed_msg('msg_error_edit', [$e->getMessage()]), Messenger::Msg_error);
+                $this->_msg->addMsg($this->getLang()->get('msg_error_edit'), Messenger::Msg_error);
             }
             $this->redirect('/users');
         }
@@ -62,7 +63,7 @@ class usersController extends AbstractController
         $id = isset($this->_params[0]) ? $this->filterInt($this->_params[0]) : '';
         $user = UsersModel::getByPK($id);
         $olduser = clone $user;
-        if ($user != false  && isset($_SERVER['HTTP_REFERER']) && $user->getUserId() != $this->getsession()->u->getUserId() ) {
+        if ($user != false && isset($_SERVER['HTTP_REFERER']) && $user->getUserId() != $this->getsession()->u->getUserId()) {
             $this->_language->load('users', 'edit'); // language edit
             $this->_language->load('users', 'label'); // language label input
             $this->_language->load('users', 'msgs'); // language for msgs success and faild
@@ -86,7 +87,7 @@ class usersController extends AbstractController
                     }
 
                 } catch (PDOException $e) {
-                    $this->_msg->addMsg($this->_language->feed_msg('msg_error_edit', [$e->getMessage()]), Messenger::Msg_error);
+                    $this->_msg->addMsg($this->getLang()->get('msg_error_edit'), Messenger::Msg_error);
                 }
                 $this->redirect('/users');
             }
@@ -133,10 +134,10 @@ class usersController extends AbstractController
             if (!empty($user) && $user->getUserId() != $this->getsession()->u->getUserId()) {
                 try {
                     $text_msg = '';
-                    if ($user->getStatus() == 1 || $user->getStatus() == 3){
+                    if ($user->getStatus() == 1 || $user->getStatus() == 3) {
                         $user->setStatus(2);
                         $text_msg = 'msg_success_block';
-                    }elseif ($user->getStatus() == 2){
+                    } elseif ($user->getStatus() == 2) {
                         $user->setStatus(3);
                         $text_msg = 'msg_success_unblock';
                     }
@@ -163,10 +164,20 @@ class usersController extends AbstractController
         if (isset($_POST[$_POST['input']])) {
             header('content-type: text/plain');
             $user = UsersModel::getone(["$_POST[input]" => $this->filterString($_POST[$_POST['input']])]);
-            if (is_object($user) && !empty($user)) {
-                echo 1;
-            } else {
-                echo 0;
+
+
+            if (isset($_SERVER['HTTP_REFERER'])) {
+                $url = explode('/', trim(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), '/'), 3);
+
+                if (is_object($user) && !empty($user)) {
+                    if (isset($url[2]) && $url[2] == $user->getUserId() ){
+                        echo 0;
+                    }else{
+                        echo 1;
+                    }
+                } else {
+                    echo 0;
+                }
             }
         }
 

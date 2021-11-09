@@ -20,12 +20,12 @@
                 <td><?= $supplier->getAddress() ?></td>
                 <td style="text-align: center">
                     <a class="btn btn-outline-light btn-sm" href="\suppliers\edit\<?= $supplier->getSuppliersId() ?>"> <i
-                                class="fa fa-supplier-edit"></i> <?= isset($Text_edit) ? $Text_edit : '' ?></a>
+                                class="fa fa-edit"></i> <?= isset($Text_edit) ? $Text_edit : '' ?></a>
                     &nbsp;
                     <a class="btn btn-outline-danger btn-sm delete"
                        title="<?= isset($text_delete_title) ? $text_delete_title : '' ?>"
                        href="\suppliers\delete\<?= $supplier->getSuppliersId() ?>">
-                        <i class="fa fa-supplier-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?>
+                        <i class="fa fa-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?>
                     </a>
                 </td>
             </tr>

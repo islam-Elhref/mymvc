@@ -9,13 +9,6 @@ use VARIANT;
 trait Validation
 {
 
-// req
-// num
-//int
-// float
-//alpha
-//alphanum
-
     private $_regexpatterns = [
         'num' => '/^[0-9]+(?:\.[0-9]+)?$/',
         'int' => '/^[0-9]+$/',
@@ -27,11 +20,12 @@ trait Validation
         'vdate' => '/^[1-2][0-9][0-9][0-9]-(?:(?:0[1-9])|(?:1[0-2]))-(?:(?:0[1-9])|(?:1[0-9])|(?:2[0-9])|(?:3[0-1]))/',
         'vemail' => '/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i',
         'url_privilege' => '/^\/[a-z]+[\/]?[a-z]*$/',
+        'phone' => '/^01[0-9]{9}$/',
     ];
 
     public function req($value)
     {
-        if (is_array($value)) {
+        if (is_array($value) && isset($value['name'])) {
             if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
                 return false;
             }
@@ -41,26 +35,42 @@ trait Validation
 
     public function image_ext($value)
     {
+
+            if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
+                return true;
+            } else {
+                $image = new UploadFile($value);
+
+                if ($image->isallowedtype()) {
+                    return true;
+                } else {
+                    $this->_msg->addMsg($this->_language->feed_msg("msg_error_image_ext_array", [$image->printAllow_extentions()]), Messenger::Msg_error);
+                    return false;
+                }
+            }
+    }
+
+    public function image_size($value)
+    {
         if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
             return true;
         } else {
-            $ext = ['image/jpeg', 'image/jpg', 'image/png'];
-            if (in_array($value['type'], $ext)) {
+            $image = new UploadFile($value);
+            if ($image->isSizeAcceptable()) {
                 return true;
+            } else {
+                $this->_msg->addMsg($this->_language->feed_msg("msg_error_image_max_size", [$image->printmaxFileSize()]), Messenger::Msg_error);
+                return false;
             }
         }
     }
 
-    public function image_size($value){
-        if ($value['name'] == '' && $value['type'] == '' && $value['tmp_name'] == '') {
-            return true;
-        } else {
-            if ($value['size'] > 5242880 ) {
-                return false ;
-            }else{
-                return true;
-            }
+    public function phone($value)
+    {
+        if ($value != null) {
+            return (bool)preg_match($this->_regexpatterns['phone'], $value);
         }
+        return true;
     }
 
     public function num($value)
@@ -73,8 +83,15 @@ trait Validation
 
     public function int($value)
     {
+
         if ($value != null) {
-            return (bool)preg_match($this->_regexpatterns['int'], $value);
+            if (is_array($value)){
+                foreach ($value as $val){
+                    return (bool)preg_match($this->_regexpatterns['int'], $val);
+                }
+            }else{
+                return (bool)preg_match($this->_regexpatterns['int'], $value);
+            }
         }
         return true;
     }

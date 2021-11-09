@@ -1,6 +1,8 @@
 $('#mytable').dataTable({
+    "lengthMenu": [ 5, 10, 25, 50 ],
     "autoWidth": false,
-    responsive: true,
+    "responsive": true,
+    "stateSave": true ,
     "language": {
         "emptyTable":     "لا توجد بيانات متاحه في الجدول",
         "info":           "عرض _START_ الي _END_  إجمالي _TOTAL_  من المدخلات",

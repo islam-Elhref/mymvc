@@ -8,10 +8,10 @@
         // Loop over them and prevent submission
         var validation = Array.prototype.filter.call(forms, function (form) {
             form.addEventListener('submit', function (event) {
-                if(!$("input[type=checkbox]:checked").length){
-                    $("input[type=checkbox]").prop('required','required')
-                }else{
-                    $("input[type=checkbox]:invalid").prop('required','')
+                if (!$("input[type=checkbox]:checked").length) {
+                    $("input[type=checkbox]").prop('required', 'required')
+                } else {
+                    $("input[type=checkbox]:invalid").prop('required', '')
                 }
                 if (form.checkValidity() === false) {
                     event.preventDefault();
@@ -23,14 +23,14 @@
     }, false);
 })();
 
-$( function() {
-    $( "#datepicker" ).datepicker({
+$(function () {
+    $("#datepicker").datepicker({
         dateFormat: "yy-mm-dd",
         changeYear: true,
         changeMonth: true,
         yearRange: "1950: "
     });
-} );
+});
 
 $(document).ready(function () {
 
@@ -40,73 +40,52 @@ $(document).ready(function () {
 
 })
 
-$(document).ready(function(){
+function checkusersexist(url, me, jme) {
+    var input = me
+    var inputname = jme.attr('name');
+    //  استخدمت الاايلمينت بالطريقه دي علشان مكنوش راضيين يتكتبوا جوه الداتا بتاعة الاجاكس
+    elements = {};
+    elements[inputname] = jme.val(); // الانبوت نيم ده متغير جايبه من اتربيوت النيم من اتشتيمل وباعته هو والفاليو بتاعته للبي اتش بي
+    elements['input'] = inputname; // استخدمت انبوت نيم كا ثابت علشان اي كان الانبوت اللي هيتبعت يكون ثابت سواء كان يوسر نيم او ايميل انا هستخدم $post[input]
+    input.setCustomValidity("Invalid field.")
+
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: elements
+    }).done(function (msg) {
+        var old_value = $(input).siblings('.invalid-feedback').text(); // old value from text بجوار الانبوت المستخدم
+        var checkExist_value = $(input).siblings('.invalid-feedback').attr('data-temp') // قيمة الاتربيوت الموجوده في الداتا تيمب وهيا المراد وضعها عندما يكون اليوسر او الايميل موجودين من قبل ونستدعيها من ملفات اللغه
+        console.log(elements)
+
+        if (msg == 1) { // عند ارسال الريكويست لل بي اتش بي يتم الرد عليا اما ب 1 لو موجود او 0 لو مش موجود
+            input.setCustomValidity("Invalid field.") // i use input not this because this refere to ajax xml so i make variable equl to this before ajax
+            $(input).siblings('.invalid-feedback').attr('data-old', old_value) // $(inut) equl to $(this) becuse i save this in var input before ajax
+            $(input).siblings('.invalid-feedback').text(checkExist_value)
+        } else {
+
+            input.setCustomValidity("") // if setcustomevalidity has param = '' then input valid if there is value then is invalid
+            var data_old = $(input).siblings('.invalid-feedback').attr('data-old');
+            $(input).siblings('.invalid-feedback').text(data_old)
+        }
+
+    });
+
+}
+
+// check if exists
+$(document).ready(function () {
+
     $('.needs-validation .checkExist').change(function () {
-        var input = this
-        var inputname = $(this).attr('name');
-        //  استخدمت الاايلمينت بالطريقه دي علشان مكنوش راضيين يتكتبوا جوه الداتا بتاعة الاجاكس
-        elements = {};
-        elements[inputname] = $(this).val(); // الانبوت نيم ده متغير جايبه من اتربيوت النيم من اتشتيمل وباعته هو والفاليو بتاعته للبي اتش بي
-        elements['input'] = inputname; // استخدمت انبوت نيم كا ثابت علشان اي كان الانبوت اللي هيتبعت يكون ثابت سواء كان يوسر نيم او ايميل انا هستخدم $post[input]
-
-        $.ajax({
-            url: "http://mymvc.com/users/userexist",
-            method: "POST",
-            data: elements
-        }).done(function( msg ) {
-
-            var old_value = $(input).siblings('.invalid-feedback').text(); // old value from text بجوار الانبوت المستخدم
-            var checkExist_value = $(input).siblings('.invalid-feedback').attr('data-temp') // قيمة الاتربيوت الموجوده في الداتا تيمب وهيا المراد وضعها عندما يكون اليوسر او الايميل موجودين من قبل ونستدعيها من ملفات اللغه
-
-            if (msg == 1 ){ // عند ارسال الريكويست لل بي اتش بي يتم الرد عليا اما ب 1 لو موجود او 0 لو مش موجود
-
-                input.setCustomValidity("Invalid field.") // i use input not this because this refere to ajax xml so i make variable equl to this before ajax
-                $(input).siblings('.invalid-feedback').attr('data-old' , old_value ) // $(inut) equl to $(this) becuse i save this in var input before ajax
-                $(input).siblings('.invalid-feedback').text(checkExist_value)
-            }else{
-                input.setCustomValidity("") // if setcustomevalidity has param = '' then input valid if there is value then is invalid
-                var data_old = $(input).siblings('.invalid-feedback').attr('data-old');
-                $(input).siblings('.invalid-feedback').text(data_old)
-            }
-
-        });
-
+        checkusersexist('http://mymvc.com/users/userexist', this, $(this))
     })
+
+    // $('.needs-validation .supplierExist').change(function () {
+    //     checkusersexist('http://mymvc.com/suppliers/supplierexist' , this , $(this))
+    // })
 })
+// check if exists
 
-$(document).ready(function(){
-    $('.needs-validation .supplierExist').change(function () {
-        var input = this
-        var inputname = $(this).attr('name');
-        //  استخدمت الاايلمينت بالطريقه دي علشان مكنوش راضيين يتكتبوا جوه الداتا بتاعة الاجاكس
-        elements = {};
-        elements[inputname] = $(this).val(); // الانبوت نيم ده متغير جايبه من اتربيوت النيم من اتشتيمل وباعته هو والفاليو بتاعته للبي اتش بي
-        elements['input'] = inputname; // استخدمت انبوت نيم كا ثابت علشان اي كان الانبوت اللي هيتبعت يكون ثابت سواء كان يوسر نيم او ايميل انا هستخدم $post[input]
-
-        $.ajax({
-            url: "http://mymvc.com/suppliers/supplierexist",
-            method: "POST",
-            data: elements
-        }).done(function( msg ) {
-
-            var old_value = $(input).siblings('.invalid-feedback').text(); // old value from text بجوار الانبوت المستخدم
-            var checkExist_value = $(input).siblings('.invalid-feedback').attr('data-temp') // قيمة الاتربيوت الموجوده في الداتا تيمب وهيا المراد وضعها عندما يكون اليوسر او الايميل موجودين من قبل ونستدعيها من ملفات اللغه
-
-                console.log(msg)
-            if (msg == 1 ){ // عند ارسال الريكويست لل بي اتش بي يتم الرد عليا اما ب 1 لو موجود او 0 لو مش موجود
-                input.setCustomValidity("Invalid field.") // i use input not this because this refere to ajax xml so i make variable equl to this before ajax
-                $(input).siblings('.invalid-feedback').attr('data-old' , old_value ) // $(inut) equl to $(this) becuse i save this in var input before ajax
-                $(input).siblings('.invalid-feedback').text(checkExist_value)
-            }else{
-                input.setCustomValidity("") // if setcustomevalidity has param = '' then input valid if there is value then is invalid
-                var data_old = $(input).siblings('.invalid-feedback').attr('data-old');
-                $(input).siblings('.invalid-feedback').text(data_old)
-            }
-
-        });
-
-    })
-})
 
 $('#open_nav').click(function () {
     var nav = $('.navbar');
@@ -156,7 +135,7 @@ $('.delete').click(function (event) {
     var msg = $(this).attr('title')
     var href = $(this).attr('href')
     var textDelete = $(this).text().trim();
-    var textCancel = textDelete=='Delete' ? 'Cancel' : 'إلغاء' ;
+    var textCancel = textDelete == 'Delete' ? 'Cancel' : 'إلغاء';
     event.preventDefault();
     $.confirm({
         title: msg + ' ' + name + ' ?',
@@ -239,6 +218,62 @@ $('.links').children('li').click(function () {
 
 
 
+$(document).ready(function () {
+    var arrayid=[];
+    var option = [];
+
+    $('.product_delete').each(function () {
+        var id = $(this).val();
+        option[id]= $('#product').find('option[value='+id+']').removeAttr("hidden")
+        arrayid.push(id);
+        option[id].remove()
+        console.log(option)
+    })
 
 
+    $('#addproductorder').on('click' ,function (event) {
+
+        if (!event.detail || event.detail == 1){ // for prevent the speed click علشان ميظهرش الناتج لو حد داس بسرعه علي الزر
+            event.preventDefault();
+        this.disabled=true;
+        var select = $(this).siblings('#product').find('select');
+        const id = select.val();
+        option[id]= select.find('option[value='+id+']')
+
+        if (arrayid.indexOf(id) < 0 && id != null ){
+
+            $.ajax({
+                url: 'http://mymvc.com/products/getproduct',
+                method: "POST",
+                data: {
+                    product_id_add: id
+                }
+            }).done(function (msg) {
+                if (msg != ''){
+                    arrayid.push(id);
+                    option[id].remove()
+                    $('.complete_form').append(msg)
+                    event.stopPropagation();
+                }
+
+            });
+        }
+        this.disabled=false;
+        return false ;
+        }
+    })
+
+    $('.complete_form').on('click','.closeproduct',function (e) {
+        e.preventDefault();
+        var id = $(this).parent('.product_plus').attr('data-id');
+        $(this).parent('.product_plus').remove();
+        arrayid.splice(arrayid.indexOf(id), 1);
+        var select = $('#addproductorder').siblings('#product').find('select');
+        console.log(option[id])
+        select.append(option[id]);
+    })
+
+    window.print();
+
+})
 

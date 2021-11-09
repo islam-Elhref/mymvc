@@ -1,7 +1,7 @@
 <div class="navbar">
 
     <div class="navbar-info">
-        <img src="/img/usersImage/<?= $this->getuser()->getProfile()->getImage() ?>" alt="">
+        <img src="<?=   $this->getuser()->getProfile()->getImage() ?>" alt="">
         <h3><?= $this->getuser()->getProfile()->getMixName() ?></h3>
         <p><?= $this->getuser()->getGroupName() ?></p>
     </div>
@@ -68,8 +68,8 @@
 
             <ul class="list-unstyled  submenu" id="store"> <!-- expenses submenu  -->
 
-                <li class="<?= $this->checkurl('/products_categories')== true ? 'subactive' : '' ?>">
-                    <a href="/products_categories" title="<?= isset($Text_product_categories) ? $Text_product_categories : '' ?>"  data-toggletool="tooltip" data-placement="right">
+                <li class="<?= $this->checkurl('/productscategory')== true ? 'subactive' : '' ?>">
+                    <a href="/productscategory" title="<?= isset($Text_product_categories) ? $Text_product_categories : '' ?>"  data-toggletool="tooltip" data-placement="right">
                         <i class="fa  fa-money-bill"></i>
                         <span> <?= isset($Text_product_categories) ? $Text_product_categories : '' ?> </span>
                     </a>

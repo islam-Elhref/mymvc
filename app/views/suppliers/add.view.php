@@ -8,30 +8,32 @@
 
                 <div class="form-group col-md-6 flex-column"> <!-- name -->
                     <label for="name"><?= isset($Text_label_name) ? $Text_label_name : '' ?></label>
-                    <input type="text" class="form-control box checkExist" id="name" required name="name"
-                           minlength="4" maxlength="40" title="<?= $title_name ?>"
+                    <input type="text" class="form-control box supplierExist" id="name" required name="name"
+                           minlength="4" maxlength="40""
                            value="<?= isset($_POST['name']) ? $_POST['name'] : '' ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_name) ? $invalid_msg_name : '' ?> </div>
+                    <div class="invalid-feedback"
+                         data-temp="<?= isset($invalid_msg_suppliername_exist) ? $invalid_msg_suppliername_exist : '' ?>"
+                    ><?= isset($invalid_msg_name) ? $invalid_msg_name : '' ?></div>
                 </div>
                 <div class="form-group col-md-6 flex-column"> <!-- email -->
-                    <label for="name"><?= isset($Text_label_email) ? $Text_label_email : '' ?></label>
+                    <label for="email"><?= isset($Text_label_email) ? $Text_label_email : '' ?></label>
                     <input type="email" class="form-control box supplierExist" id="email" required name="email"
-                           minlength="4" maxlength="40"
+                           maxlength="40"
                            value="<?= isset($_POST['email']) ? $_POST['email'] : '' ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"
-                         data-temp="<?= isset($invalid_msg_supplierExist) ? $invalid_msg_supplierExist : '' ?>"
+                         data-temp="<?= isset($invalid_msg_supplier_emailexist) ? $invalid_msg_supplier_emailexist : '' ?>"
                     ><?= isset($invalid_msg_email) ? $invalid_msg_email : '' ?></div>
                 </div>
-
+             
             </div> <!-- name and email -->
-            <div class="row row_reverse">
+            <div class="row row_reverse" >
 
                 <div class="form-group col-md-6 flex-column"> <!-- phone -->
                     <label for="name"><?= isset($Text_label_phone) ? $Text_label_phone : '' ?></label>
                     <input type="tel" class="form-control box checkExist" id="phone" required name="phone"
-                           minlength="4" maxlength="15" "
+                           minlength="11" maxlength="11" pattern="^01[0-9]{9}$"
                            value="<?= isset($_POST['phone']) ? $_POST['phone'] : '' ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"><?= isset($invalid_msg_phone) ? $invalid_msg_phone : '' ?> </div>

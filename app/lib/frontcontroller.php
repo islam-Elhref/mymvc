@@ -12,6 +12,9 @@ class FrontController
     private $_controller;
     private $_action;
     private $template;
+    /**
+     * @var Registry
+     */
     private $registry;
     /**
      * @var Authantcation
@@ -40,37 +43,42 @@ class FrontController
 
     public function dispatch()
     {
-
         $Class_controller = 'MYMVC\CONTROLLERS\\' . ucfirst($this->_controller) . 'Controller';
         $actionName = lcfirst($this->_action) . 'Action';
 
+//        check if the user authorized to access the application but he can change language
         if (!$this->auth->is_authantcate() && $this->_controller != 'language') {
             $Class_controller = 'MYMVC\CONTROLLERS\\' . 'AuthController';
             $this->_controller = 'auth';
             $this->_action = 'login';
             $actionName = lcfirst($this->_action) . 'Action';
         } else {
-
+//            check if user statue == 3 must go to userproifle/add
             if ($this->auth->is_authantcate() == 3) {
-
                 if (($this->_controller != 'usersprofile' && $this->_action != 'add') && ($this->_controller != 'auth' && $this->_action != 'logout')) {
                     $this->redirect('/usersprofile/add');
                 }
+            }
+
+            if (($this->_controller == 'auth' && $this->_action == 'login')) {
+                $this->redirect('/');
             }
 
         }
 
         if (!class_exists($Class_controller)) {
             $this->_controller = 'notfound';
+        }
+
+        if (!method_exists($Class_controller, $actionName)) {
+
+            $this->_action = 'notfound';
+            $actionName = $this::NOT_FOUND_ACTION;
+            $this->_controller = 'notfound';
             $Class_controller = self::NOT_FOUND_CONTROLLER;
         }
         $controller = new $Class_controller();
 
-        if (!method_exists($controller, $actionName)) {
-            $this->_action = 'notfound';
-            $actionName = $this::NOT_FOUND_ACTION;
-            $this->_controller = 'notfound';
-        }
 
 
         // for if some one open link direct

@@ -89,6 +89,7 @@ p {
     margin-bottom: 1rem
 }
 
+
 abbr[title], abbr[data-original-title] {
     text-decoration: underline dotted;
     cursor: help;
@@ -101,17 +102,18 @@ address {
     font-style: normal;
     line-height: inherit
 }
-.dr_english{
+
+.dr_english {
     direction: ltr;
 }
-.dr_arabic{
+
+.dr_arabic {
     direction: rtl;
 }
 
-.row_reverse{
+.row_reverse {
     flex-direction: row-reverse;
 }
-
 
 
 ol, ul, dl {
@@ -282,9 +284,7 @@ textarea {
 }
 
 
-
-
-.tooltip{
+.tooltip {
     left: -105px !important;
     width: 100px !important;
 }
@@ -798,17 +798,17 @@ pre code {
     border: 0
 }
 
-table.dataTable>thead>tr>th:not(.sorting_disabled), table.dataTable>thead>tr>td:not(.sorting_disabled) {
+table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thead > tr > td:not(.sorting_disabled) {
     padding-right: 30px;
     text-align: right;
 }
 
-table.dataTable>thead .sorting:before, table.dataTable>thead .sorting_asc:before, table.dataTable>thead .sorting_desc:before, table.dataTable>thead .sorting_asc_disabled:before, table.dataTable>thead .sorting_desc_disabled:before {
+table.dataTable > thead .sorting:before, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_desc_disabled:before {
     right: unset;
     left: 1em;
 }
 
-table.dataTable>thead .sorting:after, table.dataTable>thead .sorting_asc:after, table.dataTable>thead .sorting_desc:after, table.dataTable>thead .sorting_asc_disabled:after, table.dataTable>thead .sorting_desc_disabled:after {
+table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:after {
     right: unset;
     left: 0.5em;
     content: "\2193";
@@ -1093,7 +1093,7 @@ textarea.form-control {
     box-shadow: 0 0 0 .2rem rgba(40, 167, 69, 0.25)
 }
 
-.invalid-feedback , .invalid-checkExist {
+.invalid-feedback, .invalid-checkExist {
     display: none;
     width: 100%;
     margin-top: .25rem;
@@ -1117,8 +1117,7 @@ textarea.form-control {
 }
 
 
-
-.was-validated :invalid ~ .invalid-feedback , .was-validated :invalid ~ .invalid-tooltip, .is-invalid ~ .invalid-feedback , .is-invalid ~ .invalid-checkExist, .is-invalid ~ .invalid-tooltip {
+.was-validated :invalid ~ .invalid-feedback, .was-validated :invalid ~ .invalid-tooltip, .is-invalid ~ .invalid-feedback, .is-invalid ~ .invalid-checkExist, .is-invalid ~ .invalid-tooltip {
     display: block
 }
 
@@ -1157,7 +1156,7 @@ textarea.form-control {
     color: #dc3545
 }
 
-.was-validated .form-check-input:invalid ~ .invalid-feedback , .was-validated .form-check-input:invalid ~ .invalid-checkExist, .was-validated .form-check-input:invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback , .form-check-input.is-invalid ~ .invalid-checkExist, .form-check-input.is-invalid ~ .invalid-tooltip {
+.was-validated .form-check-input:invalid ~ .invalid-feedback, .was-validated .form-check-input:invalid ~ .invalid-checkExist, .was-validated .form-check-input:invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback, .form-check-input.is-invalid ~ .invalid-checkExist, .form-check-input.is-invalid ~ .invalid-tooltip {
     display: block
 }
 
@@ -2651,7 +2650,8 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 .custom-file-label::after {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
+    right: auto;
     bottom: 0;
     z-index: 3;
     display: block;
@@ -2659,9 +2659,9 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
     padding: .375rem .75rem;
     line-height: 1.5;
     color: #495057;
-    content: "Browse";
+    content: "اختار الصوره";
     background-color: #e9ecef;
-    border-left: inherit;
+    border-right: inherit;
     border-radius: 0 .25rem .25rem 0
 }
 
@@ -6488,7 +6488,12 @@ a.bg-dark:hover, a.bg-dark:focus, button.bg-dark:hover, button.bg-dark:focus {
 }
 
 .w-25 {
-    width: 25% !important
+    width: 25% !important;
+    height: 8em !important;
+}
+
+.w-25 img{
+    height: 100% !important;
 }
 
 .w-50 {
@@ -8741,7 +8746,7 @@ h1 span {
     display: inline-flex;
 }
 
-.notification{
+.notification {
     display: inline-block;
     font-size: 0.8em;
 }
@@ -8777,11 +8782,12 @@ h1 span {
     color: #1979a9;
 }
 
-.user_info .btn,.navbar_btn{
+.user_info .btn, .navbar_btn {
     transition-duration: 0.5s;
-    transition-property: transform , color;
+    transition-property: transform, color;
 }
-.user_info .btn:hover,.navbar_btn:hover{
+
+.user_info .btn:hover, .navbar_btn:hover {
     color: #1979a9;
 
 }
@@ -8833,6 +8839,8 @@ h1 span {
     height: 100px;
     border-radius: 50%;
     margin-bottom: 10px;
+    object-fit: cover;
+    image-rendering: pixelated;
 }
 
 .navbar .navbar-info h3 {
@@ -8852,20 +8860,18 @@ h1 span {
     scrollbar-width: none;
 }
 
-.navbar::-webkit-scrollbar{
+.navbar::-webkit-scrollbar {
     display: none;
 }
 
-.navbar.open .links a i{
+.navbar.open .links a i {
     float: right;
     padding-top: 4px;
 }
-.navbar.open .links{
+
+.navbar.open .links {
     text-align: right;
 }
-
-
-
 
 
 .navbar .links a {
@@ -8918,11 +8924,11 @@ h1 span {
     padding-top: 4px;
     margin-left: 5px;
 }
+
 .navbar.open .links a {
     width: 100%;
     font-size: initial;
 }
-
 
 
 .navbar .links li a:hover {
@@ -8940,35 +8946,38 @@ h1 span {
 }
 
 
-.links > li ul.submenu{
-   display: none;
+.links > li ul.submenu {
+    display: none;
 }
-.links > li.active ul.submenu{
+
+.links > li.active ul.submenu {
     display: block;
 }
 
 
-.links > li ul.submenu > li{
+.links > li ul.submenu > li {
     padding-right: 20px;
 }
-.links > li ul.submenu li.subactive{
+
+.links > li ul.submenu li.subactive {
     background: #0c4967;
 }
 
-.links > li ul.submenu li a i ,.navbar.open .links > li ul.submenu li a i{
+.links > li ul.submenu li a i, .navbar.open .links > li ul.submenu li a i {
     font-size: 1em !important;
     height: fit-content;
     padding-top: 7px;
     color: #3498db;
 }
 
-.links > li.active ul a{
+.links > li.active ul a {
 
 }
 
-.links > li.active ul a{
+.links > li.active ul a {
     border-top: none;
 }
+
 /* navbar*/
 
 
@@ -8991,18 +9000,18 @@ h1 span {
     margin-right: 300px;
 }
 
-.text_error{
+.text_error {
     font-size: 80px;
 }
 
-#message{
+#message {
     text-align: right;
     direction: rtl;
 }
 
 /*table */
 
-.btn_add{
+.btn_add {
     float: left;
     margin-top: 15px;
 }
@@ -9011,22 +9020,22 @@ h1 span {
     padding: 6px;
 }
 
-#mytable_wrapper{
+#mytable_wrapper {
     direction: rtl;
     text-align: right;
 }
 
-    #mytable_wrapper .dataTables_length{
+#mytable_wrapper .dataTables_length {
     text-align: right;
 }
-#mytable_wrapper .dataTables_filter{
+
+#mytable_wrapper .dataTables_filter {
     text-align: left;
 }
-#mytable_wrapper .dataTables_info{
+
+#mytable_wrapper .dataTables_info {
     text-align: right;
 }
-
-
 
 
 .table th, .table td {
@@ -9051,11 +9060,11 @@ h1 span {
 
 /* form and input  */
 
-input{
+input {
     text-align: right !important;
 }
 
-button[type = submit ] , input [type = submit ]{
+button[type = submit ], input [type = submit ] {
     float: right;
 }
 
@@ -9088,12 +9097,29 @@ button[type = submit ] , input [type = submit ]{
     transition: top 0.2s ease-in-out;
 }
 
-.form-group.col-4 label{
+.form-group.col-4 label {
     right: 14px;
 }
+
 .form-group label.active {
     top: -25px;
     font-size: 13px;
+}
+
+.form-group label.floated {
+    top: -25px;
+    font-size: 13px;
+}
+
+.form-group label.image {
+    top: 0px !important;
+    font-size: 1rem;
+    padding: 0.375rem 0.75rem;
+    text-align: right;
+}
+
+.imagefile {
+    padding: 4px !important;
 }
 
 .form-group .box {
@@ -9119,26 +9145,30 @@ button[type = submit ] , input [type = submit ]{
     background-position: left calc(0.375em + .1875rem) center;
 }
 
-.invalid-feedback , .valid-feedback , .invalid-checkExist {
+.invalid-feedback, .valid-feedback, .invalid-checkExist {
     text-align: right;
     direction: rtl;
 }
-button[ type = submit ]{
-    float: left!important;
+
+button[ type = submit ] {
+    float: left !important;
     cursor: pointer;
 }
+
 /* form and input  */
 
 /*fieldset and legend*/
 
-fieldset{
+fieldset {
     position: relative;
     margin-top: 20px;
     padding: 30px 20px 15px;
     border: 1px solid #ced4da;
 }
 
-legend{
+
+
+legend {
     display: inline-block;
     width: unset;
     position: absolute;
@@ -9162,22 +9192,24 @@ legend{
 
 /* checkbtn */
 
-.checkbtn{
+.checkbtn {
     overflow: hidden;
     line-height: 1.4;
 }
-.checkbtn .form-check{
+
+.checkbtn .form-check {
     float: right;
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
 }
-.checkbtn .form-check-label{
+
+.checkbtn .form-check-label {
     width: 100%;
     text-align: right;
 }
 
-.checkbtn .form-check:hover input{
+.checkbtn .form-check:hover input {
     box-shadow: inset 0px 0px 3px #000;
 }
 
@@ -9191,13 +9223,13 @@ legend{
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    border: 1px solid rgba(0,0,0,.25);
+    border: 1px solid rgba(0, 0, 0, .25);
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
-    transition: background-color .15s ease-in-out,background-position .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: background-color .15s ease-in-out, background-position .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .form-check-input:checked {
@@ -9215,7 +9247,7 @@ legend{
     border-radius: .25em;
 }
 
-.checkbtn .form-check .form-check-input{
+.checkbtn .form-check .form-check-input {
     margin-top: 0.29rem;
     margin-left: 6px;
     padding: 0;
@@ -9224,5 +9256,31 @@ legend{
 
 /* checkbtn */
 
+.complete_form{
+    overflow: hidden;
+    width: 100%;
+    background: #ccc;
+}
+.product_plus{
+    justify-content: space-around;
+}
 
+.closeproduct{
 
+    display: flex;
+    align-items: center;
+}
+
+/*@media print {*/
+/*    .form{*/
+/*        background-color: white;*/
+/*        height: 100%;*/
+/*        width: 100%;*/
+/*        position: fixed;*/
+/*        top: 0;*/
+/*        left: 0;*/
+/*        margin: 0;*/
+/*        padding: 15px;*/
+/*        font-size: 14px;*/
+/*    }*/
+/*}*/

@@ -18,7 +18,6 @@ class AuthController extends AbstractController
 
     public function loginAction()
     {
-        if (!isset($this->getsession()->u) && !isset($this->getsession()->profile)) {
             $view = array_intersect([':view' => 'view'], $this->_template->getTemplate());
             $header_resources = str_replace(['main_ar', 'main_en'], ['login_ar', 'login_en'], $this->_template->getHeader_resources());
             $this->_template->changeTemplate($view);
@@ -86,9 +85,6 @@ class AuthController extends AbstractController
 
             }
             $this->view();
-        } else {
-            $this->redirect('/');
-        }
     }
 
     public function logoutAction()

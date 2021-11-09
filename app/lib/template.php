@@ -20,8 +20,9 @@ class Template
     /**
      * @return UsersModel
      */
-    public function getuser(){
-      return $this->_sessions->u;
+    public function getuser()
+    {
+        return $this->_sessions->u;
     }
 
     public function showvalue($fieldname, $object = null)
@@ -41,21 +42,43 @@ class Template
     public function floatlabel($fieldname, $object = null)
     {
         $input = "get$fieldname";
-        if ( ( isset($_POST[$fieldname]) && !empty($_POST[$fieldname]) ) || ( $object != null &&  $object->$input() != '' ) ) {
+        if ((isset($_POST[$fieldname]) && !empty($_POST[$fieldname])) || ($object != null && $object->$input() != '')) {
             return 'class="active"';
         } else {
             return '';
         }
     }
 
-   public function checkedbtn($fieldname , $object = null)
+    public function checkedbtn($fieldname, $object = null)
     {
         $input = "$fieldname";
-        if ( ( isset($_POST[$fieldname]) && !empty($_POST[$fieldname]) ) || ( $object != null &&  $object->$input() != '' ) ) {
+        if ((isset($_POST[$fieldname]) && !empty($_POST[$fieldname])) || ($object != null && $object->$input() != '')) {
             return 'checked';
         } else {
             return '';
         }
+    }
+
+    public function selectedoptions($fieldname, $value, $object = null)
+    {
+        if (is_array($object)) {
+            $input = "get$fieldname";
+
+            foreach ($object as $obj) {
+                if (($obj != null && $obj->$input() != '' && $obj->$input() == $value)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            $input = "get$fieldname";
+            if ((isset($_POST[$fieldname]) && !empty($_POST[$fieldname]) && $_POST[$fieldname] == $value) || ($object != null && $object->$input() != '' && $object->$input() == $value)) {
+                return 'selected';
+            } else {
+                return '';
+            }
+        }
+
     }
 
     public function in_old($array, $value)
@@ -112,7 +135,8 @@ class Template
         return $this->template['template'];
     }
 
-    public function changeTemplate($newTemplate){
+    public function changeTemplate($newTemplate)
+    {
         $this->template['template'] = $newTemplate;
     }
 
@@ -124,7 +148,8 @@ class Template
         return $this->template['header_resources'];
     }
 
-    public function changeHeaderResources($newHeader){
+    public function changeHeaderResources($newHeader)
+    {
         $this->template['header_resources'] = $newHeader;
     }
 
@@ -166,7 +191,7 @@ class Template
 
     private function template_block($view)
     {
-        extract($this->data , EXTR_REFS);
+        extract($this->data, EXTR_REFS);
         foreach ($this->template['template'] as $key => $path) {
             if ($key == ':view') {
                 require_once $view;

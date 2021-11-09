@@ -2,8 +2,11 @@
 
 
 $_['msg_error_req'] = '%s يجب ان يحتوي علي قيمة';
-$_['msg_error_image_ext'] = '%s يجب ان تكون صوره من هذه الإمتدادات [jpeg , png , jpg ] فقط';
-$_['msg_error_image_size'] = '%s يجب ان تكون اقل من 2 ميجا';
+$_['msg_error_phone'] = '%s يجب ان يكون رقم هاتف محمول مصري مثال ( 01050566637 )';
+$_['msg_error_image_ext'] = ' امتداد %s غير مدعوم';
+$_['msg_error_image_ext_array'] = 'الملفات المدعومه للرفع %s';
+$_['msg_error_image_size'] = '%s حجم الملف قد تعدي الحد الأقصي';
+$_['msg_error_image_max_size'] = '%s الحد الأقصي للملف المراد تحميله هو';
 $_['msg_error_url_privilege'] = '%s يجب ان يكتب  مثل  clients/';
 
 $_['msg_error_num'] = '%s يجب ان يكون رقماً';

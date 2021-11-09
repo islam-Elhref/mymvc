@@ -87,7 +87,7 @@ class AbstractController
         $file_view = VIEWS_PATH . $this->_controller . DS . $this->_action . '.view.php';
 
         if ($this->_action == FrontController::NOT_FOUND_ACTION || !file_exists($file_view) ) {
-            $file_view = VIEWS_PATH . 'notfound' . DS . 'default.view.php';
+            $this->redirect('/notfound');
         }
 
         $this->_language->load('template','default');

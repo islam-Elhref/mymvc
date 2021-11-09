@@ -197,12 +197,13 @@ class UsersModel extends AbstractModel
 
     public function user_save_in_session_wzout_pass(UsersModel $user, MySession $session)
     {
-        $user_with_out_Pass = $user;
-        $user_with_out_Pass->removePassword();
+        $user_with_out_Pass = $user;  // save user in variable ;
+        $user_with_out_Pass->removePassword(); // remove password from session
 
         if (isset($session->profile)) {
             unset($session->profile);
         }
+
         $profile = UsersprofileModel::getByPK($user->getUserId());
         $user_with_out_Pass->setProfile($profile); // add profile
         $privileges = privilegecontrolmodel::getAll('SELECT * FROM `privilege_control` JOIN users_privilege on privilege_control.privilege_id = users_privilege.privilege_id WHERE `group_id` = ' . $user->getGroupId());

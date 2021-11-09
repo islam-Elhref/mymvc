@@ -85,7 +85,7 @@ class AbstractModel
     {
         if (!empty($PK) && trim($PK) != '') {
 
-            $sql = 'select * from ' . static::$tableName . ' where ' . static::$primaryKey . "=:" . static::$primaryKey;
+            $sql = 'select * from ' . static::$tableName . ' where ' . static::$primaryKey . "=:".static::$primaryKey;
             $stmt = DatabaseHandler::factory()->prepare($sql);
 
             if (method_exists(get_called_class(), '__construct')) {
@@ -97,6 +97,7 @@ class AbstractModel
             $stmt->bindValue(':' . static::$primaryKey, $PK);
             $stmt->execute();
             $result = $stmt->fetch();
+
             if (is_a($result, get_called_class()) && !empty($result)) {
                 return $result;
             } else {
@@ -104,6 +105,7 @@ class AbstractModel
             }
 
         }
+        return false;
     }
 
 
@@ -134,12 +136,12 @@ class AbstractModel
     public function save($checkPrimaryKey = true)
     {
         if ($checkPrimaryKey == false ){
-            $this->create();
+            return $this->create();
         }else{
             if ($this->{static::$primaryKey} == null) {
-                $this->create();
+               return $this->create();
             } else {
-                $this->update();
+                return $this->update();
             }
         }
 
@@ -173,6 +175,10 @@ class AbstractModel
         }
     }
 
+    /**
+     * @param array $array
+     * @return static
+     */
     public static function getone(array $array)
     {
         $whereCond = [];
@@ -200,7 +206,7 @@ class AbstractModel
         $result = $stmt->fetch();
 
         if (is_a($result, get_called_class()) && !empty($result)) {
-            return $result;
+            return $result;;
         } else {
             return false;
         }
@@ -253,6 +259,64 @@ class AbstractModel
 
         if (is_a($result, get_called_class()) && !empty($result)) {
             return $result;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getmore(array $array , $join = '')
+    {
+        $whereCond = [];
+
+        $column = array_keys($array);
+        $values = array_values($array);
+
+        for ($i = 0, $ii = count($column); $i < $ii; $i++) {
+            $whereCond[] = $column[$i] . '=' . ":" . $column[$i] . "";
+        }
+
+        $whereCond = implode(' And ', $whereCond);
+
+        $sql = 'SELECT * FROM ' . static::$tableName . ' ' . $join . ' where ' . $whereCond;
+
+
+        $stmt = DatabaseHandler::factory()->prepare($sql);
+
+        for ($i = 0, $ii = count($column); $i < $ii; $i++) {
+            $stmt->bindValue(":{$column[$i]}", $values[$i]);
+        }
+
+        if (method_exists(get_called_class(), '__construct')) {
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, get_called_class(), static::$table_schema);
+        } else {
+            $stmt->setFetchMode(pdo::FETCH_CLASS, get_called_class());
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        if (!empty($result)) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getbySQL($sql)
+    {
+
+        $stmt = DatabaseHandler::factory()->prepare($sql);
+
+        if (method_exists(get_called_class(), '__construct')) {
+            $stmt->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, get_called_class(), static::$table_schema);
+        } else {
+            $stmt->setFetchMode(pdo::FETCH_CLASS, get_called_class());
+        }
+        $stmt->execute();
+
+        $result = $stmt->fetch();
+
+        if (is_a($result, get_called_class()) && !empty($result)) {
+            return new \ArrayIterator($result);
         } else {
             return false;
         }

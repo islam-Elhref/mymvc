@@ -2,6 +2,8 @@
 namespace MYMVC\MODELS;
 
 use MYMVC\LIB\filter;
+use MYMVC\LIB\Messenger;
+use MYMVC\LIB\Language;
 
 class suppliersmodel extends AbstractModel{
     use filter;
@@ -67,6 +69,23 @@ class suppliersmodel extends AbstractModel{
     {
         return $this->address;
     }
+
+    public function check_exist(){
+        $email_supplier = suppliersmodel::getone(['email' => $this->email]);
+        $namesupplier = suppliersmodel::getone(['name' => $this->name]);
+
+        $msg = [] ;
+        if (!empty($email_supplier) && is_object($email_supplier) && $email_supplier->getSuppliersId() != $this->getSuppliersId() ){
+            $msg[] ='msg_error_email_exist' ;
+        }
+        if (!empty($namesupplier) && is_object($namesupplier) && $namesupplier->getSuppliersId() != $this->getSuppliersId() ){
+            $msg[] ='msg_error_name_exist' ;
+        }
+
+        return !empty($msg) && is_array($msg) ? $msg : false ;
+
+    }
+
 
 
 

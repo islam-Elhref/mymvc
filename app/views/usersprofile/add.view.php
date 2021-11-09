@@ -16,7 +16,7 @@ $this->GetMessage();
                 <div class="form-group col-md-6 flex-column"> <!-- firstname -->
                     <label for="firstname"><?= isset($Text_label_firstname) ? $Text_label_firstname : '' ?></label>
                     <input type="text" class="form-control box " id="firstname" required name="firstname"
-                           minlength="3" maxlength="10" pattern="[a-zA-Z\p{Arabic}]+" title="<?= $title_firstname ?>">
+                           minlength="3" maxlength="10" pattern="[a-zA-Zءأ-ي]+" title="<?= $title_firstname ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"><?= isset($invalid_msg_firstname) ? $invalid_msg_firstname : '' ?></div>
                 </div>
@@ -24,7 +24,7 @@ $this->GetMessage();
                 <div class="form-group col-md-6 flex-column"> <!-- lastname -->
                     <label for="lastname"><?= isset($Text_label_lastname) ? $Text_label_lastname : '' ?></label>
                     <input type="text" class="form-control box " id="lastname" required name="lastname"
-                           minlength="3" maxlength="10" pattern="[a-zA-Z\p{Arabic}]+" title="<?= $title_lastname ?>">
+                           minlength="3" maxlength="10" pattern="[a-zA-Zءأ-ي]+" title="<?= $title_lastname ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"><?= isset($invalid_msg_lastname) ? $invalid_msg_lastname : '' ?></div>
                 </div>
@@ -36,7 +36,7 @@ $this->GetMessage();
 
                 <div class="form-group col-md-4 flex-column"> <!-- image -->
                     <label class="active" for="image"><?= isset($Text_label_image) ? $Text_label_image : '' ?></label>
-                    <input type="file" class="form-control " id="image" name="image" required>
+                    <input type="file" class="form-control " id="image" name="image" required accept="image/*" >
                 </div>
 
                 <div class="form-group col-md-4 flex-column"> <!-- dob -->

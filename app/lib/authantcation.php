@@ -10,6 +10,9 @@ class Authantcation
 {
     use Helper;
 
+    /**
+     * @var MySession
+     */
     private $session;
     private static $_instance;
     private $default_routes = [
@@ -19,6 +22,9 @@ class Authantcation
         '/language/default',
         '/accessdenied/default',
         '/notfound/notfound',
+        '/suppliers/supplierexist',
+        '/clients/supplierexist',
+        '/users/userexist',
     ];
 
     private function __construct($session)
@@ -44,6 +50,7 @@ class Authantcation
 
     private function checkcookie()
     {
+
         if (isset($_COOKIE['remember']) && $_COOKIE['remember'] != '') {
             $array = unserialize($_COOKIE['remember']);
             $username = $array['username'];
@@ -61,7 +68,7 @@ class Authantcation
                             $olduser->user_save_in_session_wzout_pass($olduser, $this->session);
                             $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
                             $this->redirect($link);
-                        }elseif ($olduser->getStatus() == 3){
+                        } elseif ($olduser->getStatus() == 3) {
                             $this->session->profile = $olduser->getUserId();
                         }
 
@@ -76,13 +83,11 @@ class Authantcation
     public function is_authantcate()
     {
 
-
         if (isset($this->session->u) && $this->session->u != '') {
             if ($this->session->checkUserTime()) {
                 $user = UsersModel::getuser(['user_id' => $this->session->u->getUserId()]);
                 $user->user_save_in_session_wzout_pass($user, $this->session);
             } //check user after 5 min
-
             if ($this->session->u->getStatus() == 1) { // if status = 1 return 1 if not kill session and kill cookie remember
                 return 1;
             } else {
@@ -93,27 +98,31 @@ class Authantcation
                 }
 
                 $this->redirect('/');
-                return false;
+
+                return false ;
             }
         } else {
             $this->checkcookie();
-            if (isset($this->session->profile)) { // if there session profile return 3
+            if (isset($this->session->profile) | ($this->session->getuser() != false && $this->session->getuser()->setStatus() == 3 )  ) { // if there session profile return 3
                 return 3;
             }
         }
         return false;
     }
 
-    public function hasAccess($controler , $action){
-       $url = strtolower('/'.$controler.'/'.$action ) ;
-       if (isset($this->session->u) && $this->session->u != '' ){
-            $route_privileges = array_merge($this->default_routes , $this->session->u->getPrivileges());
-            if (in_array($url , $route_privileges)){
+    public function hasAccess($controler, $action)
+    {
+        $url = strtolower('/' . $controler . '/' . $action);
+        if (isset($this->session->u) && $this->session->u != '') {
+            $route_privileges = array_merge($this->default_routes, $this->session->u->getPrivileges());
+            if (in_array($url, $route_privileges)) {
                 return true;
+            }else{
+                return false;
             }
-       }else{
-           return true;
-       }
+        } else {
+            return true;
+        }
     }
 
 

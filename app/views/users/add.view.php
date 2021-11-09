@@ -8,8 +8,7 @@
 
                 <div class="form-group col-md-4 flex-column"> <!-- username -->
                     <label for="Username"><?= isset($Text_label_Username) ? $Text_label_Username : '' ?></label>
-                    <input type="text" class="form-control box checkExist" id="Username" required name="Username"
-                           minlength="6" maxlength="20" pattern="[a-zA-Z0-9]+" title="<?= $title_Username ?>"
+                    <input type="text" class="form-control box checkExist" id="Username" required name="Username" minlength="4" maxlength="20" "
                            value="<?= isset($_POST['Username']) ? $_POST['Username'] : '' ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"
@@ -61,7 +60,7 @@
                 <div class="form-group col-md-4 flex-column"> <!-- phone -->
                     <label for="phone" class="active"><?= isset($Text_label_Phone) ? $Text_label_Phone : '' ?></label>
                     <input type="tel" class="form-control box" id="phone" name="Phone"
-                           value="<?= isset($_POST['Phone']) ? $_POST['Phone'] : '' ?>">
+                           value="<?= isset($_POST['Phone']) ? $_POST['Phone'] : '' ?>" minlength="11" maxlength="11" pattern="^01[0-9]{9}$" >
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"><?= isset($invalid_msg_phone) ? $invalid_msg_phone : '' ?></div>
                 </div>

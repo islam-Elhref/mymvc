@@ -12,7 +12,7 @@ return [
     'header_resources' =>[
         'bootstrap' => '/css/bootstrap.css',
         'foawsome' => '/css/all.css',
-        'googleIcon' => 'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'googleIcon' => '/css/googleicon.css',
         'datatables' => '/css/datatables.min.css',
         'datepicker' => '/css/jquery-ui.css',
         'confirm' => '/css/jquery-confirm.min.css',
@@ -22,7 +22,7 @@ return [
 
     'footer_resources' =>[
         'jquery' => '/js/vendor/jquery-1.12.0.min.js',
-        'popper' => 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js',
+        'popper' => '/js/vendor/popper.min.js',
         'bootstrap' => '/js/vendor/bootstrap.min.js',
         'datatables' => '/js/en/datatables_en.min.js',
         'bootstrap4' => '/js/vendor/dataTables.bootstrap4.min.js',
