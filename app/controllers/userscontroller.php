@@ -9,6 +9,7 @@ use MongoDB\Driver\Exception\Exception;
 use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
+use MYMVC\MODELS\notificationmodel;
 use MYMVC\MODELS\UsersGroupsModel;
 use MYMVC\MODELS\UsersModel;
 use PDOException;
@@ -47,6 +48,11 @@ class usersController extends AbstractController
             $user = new UsersModel($_POST['Username'], UsersModel::cryptPassword($_POST['Password']), $_POST['Email'], $_POST['Phone'], $_POST['group_id']);
             try {
                 $user->save();
+
+                $notification = new notificationmodel('notif_user_title' , 'notif_user_content_add' , 'notif_type_0' ,
+                    $this->getsession()->getuser()->getUserId() , '/users/edit/'.$user->getUserId() , $user->getUsername());
+                $notification->save();
+
                 $this->_msg->addMsg($this->_language->feed_msg('msg_success_add', [$user->getUsername()]), Messenger::Msg_success);
             } catch (PDOException $e) {
                 $this->_msg->addMsg($this->getLang()->get('msg_error_edit'), Messenger::Msg_error);
@@ -61,9 +67,9 @@ class usersController extends AbstractController
     public function editAction()
     {
         $id = isset($this->_params[0]) ? $this->filterInt($this->_params[0]) : '';
-        $user = UsersModel::getByPK($id);
-        $olduser = clone $user;
+        $user = UsersModel::getByPK($id , ' join users_group on users_group.group_id = users.group_id ');
         if ($user != false && isset($_SERVER['HTTP_REFERER']) && $user->getUserId() != $this->getsession()->u->getUserId()) {
+        $olduser = clone $user;
             $this->_language->load('users', 'edit'); // language edit
             $this->_language->load('users', 'label'); // language label input
             $this->_language->load('users', 'msgs'); // language for msgs success and faild
@@ -80,6 +86,17 @@ class usersController extends AbstractController
                 $user_edit->setUserId($user->getUserId());
                 try {
                     $user_edit->save();
+                    if($user_edit != $olduser){
+                        $olduser->removePassword();
+                        $olduser->statue_name = $this->getLang()->get('user_statue_'.$olduser->getStatus());
+                        $olduser->removestatues();
+                        $opject_old = serialize($olduser);
+                        $notification = new notificationmodel('notif_user_title' , 'notif_user_content_edit' , 'notif_type_1' ,
+                            $this->getsession()->getuser()->getUserId() , '/users/edit/'.$olduser->getUserId() , $user_edit->getUsername());
+                        $notification->setObject($opject_old);
+                        $notification->save();
+                    }
+
                     if ($olduser->getUsername() == $_POST['Username']) {
                         $this->_msg->addMsg($this->_language->feed_msg('msg_success_edit', [$user->getUsername()]), Messenger::Msg_success);
                     } else {
@@ -101,16 +118,68 @@ class usersController extends AbstractController
         }
     }
 
+    public function changepassAction()
+    {
+        $id = $this->getsession()->getuser()->getUserId();
+        $user = UsersModel::getByPK($id);
+
+        $this->rules_to_valid = [
+            'Email' => 'req|vemail',
+            'CEmail' => 'req|vemail|eqinput(Email)',
+            'Phone' => 'phone',
+        ];
+
+            $this->_language->load('users', 'edit'); // language edit
+            $this->_language->load('users', 'label'); // language label input
+            $this->_language->load('users', 'msgs'); // language for msgs success and faild
+            $this->_language->load('validation', 'errors'); // langauge for validation error in same page
+
+            $this->rules_to_valid['Password'] = 'sbetween(6,20)'; //change rule for Password make it not required
+            $this->rules_to_valid['CPassword'] = 'sbetween(6,20)|eqinput(Password)'; //change rule for Password make it not required
+
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid, $_POST) == true) {
+
+                $password = $_POST['Password'] == '' ? $user->getPassword() : UsersModel::cryptPassword($_POST['Password']);
+                $user_edit = $user->edit_action_construct($user->getUsername(), $password, $_POST['Email'], $_POST['Phone'], $user->getGroupId());
+                $user_edit->setUserId($user->getUserId());
+                try {
+                    $user_edit->save();
+                    $this->_msg->addMsg($this->_language->feed_msg('msg_success_myuser_edit', [$user->getUsername()]), Messenger::Msg_success);
+
+
+                } catch (PDOException $e) {
+                    $this->_msg->addMsg($this->getLang()->get('msg_error_edit'), Messenger::Msg_error);
+                }
+                $this->redirect('/users/changepass');
+            }
+
+
+            $this->_data['userActive'] = $user;
+            $this->view();
+
+    }
+
     public function deleteAction()
     {
         if (isset($this->_params[0]) && is_numeric($this->_params[0]) && isset($_SERVER['HTTP_REFERER'])) {
             $user_id = $this->filterInt($this->_params[0]);
-            $user = UsersModel::getByPK($user_id);
+            $user = UsersModel::getByPK($user_id , ' join users_group on users_group.group_id = users.group_id ');
             $this->getLang()->load('users', 'msgs');
 
             if (!empty($user) && $user->getUserId() != $this->getsession()->u->getUserId()) {
                 try {
                     $user->delete();
+
+                    $user->removePassword();
+                    $user->statue_name = $this->getLang()->get('user_statue_'.$user->getStatus());
+                    $user->removestatues();
+                    $opject_old = serialize($user);
+                    $notification = new notificationmodel('notif_user_title' , 'notif_user_content_delete' , 'notif_type_2' ,
+                        $this->getsession()->getuser()->getUserId() , '/users/edit/'.$user->getUserId() , $user->getUsername());
+                    $notification->setObject($opject_old);
+                    $notification->save();
+
                     $msg = $this->getLang()->feed_msg('msg_success_delete', [$user->getUsername()]);
                     $this->getmsg()->addMsg($msg, Messenger::Msg_success);
                 } catch (PDOException $e) {
@@ -128,7 +197,7 @@ class usersController extends AbstractController
     {
         if (isset($this->_params[0]) && is_numeric($this->_params[0]) && isset($_SERVER['HTTP_REFERER'])) {
             $user_id = $this->filterInt($this->_params[0]);
-            $user = UsersModel::getByPK($user_id);
+            $user = UsersModel::getByPK($user_id , ' join users_group on users_group.group_id = users.group_id ' );
             $this->getLang()->load('users', 'msgs');
 
             if (!empty($user) && $user->getUserId() != $this->getsession()->u->getUserId()) {
@@ -142,6 +211,17 @@ class usersController extends AbstractController
                         $text_msg = 'msg_success_unblock';
                     }
                     $user->save();
+
+                        $user->removePassword();
+                        $user->statue_name = $this->getLang()->get('user_statue_'.$user->getStatus());
+                        $user->removestatues();
+                        $opject_old = serialize($user);
+                        $notification = new notificationmodel('notif_user_title' , 'notif_user_content_edit' , 'notif_type_1' ,
+                            $this->getsession()->getuser()->getUserId() , '/users/edit/'.$user->getUserId() , $user->getUsername());
+                        $notification->setObject($opject_old);
+                        $notification->save();
+
+
                     $msg = $this->getLang()->feed_msg($text_msg, [$user->getUsername()]);
                     $this->getmsg()->addMsg($msg, Messenger::Msg_success);
                 } catch (PDOException $e) {

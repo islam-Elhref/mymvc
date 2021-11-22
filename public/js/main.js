@@ -56,7 +56,6 @@ function checkusersexist(url, me, jme) {
     }).done(function (msg) {
         var old_value = $(input).siblings('.invalid-feedback').text(); // old value from text بجوار الانبوت المستخدم
         var checkExist_value = $(input).siblings('.invalid-feedback').attr('data-temp') // قيمة الاتربيوت الموجوده في الداتا تيمب وهيا المراد وضعها عندما يكون اليوسر او الايميل موجودين من قبل ونستدعيها من ملفات اللغه
-        console.log(elements)
 
         if (msg == 1) { // عند ارسال الريكويست لل بي اتش بي يتم الرد عليا اما ب 1 لو موجود او 0 لو مش موجود
             input.setCustomValidity("Invalid field.") // i use input not this because this refere to ajax xml so i make variable equl to this before ajax
@@ -72,6 +71,7 @@ function checkusersexist(url, me, jme) {
     });
 
 }
+
 
 // check if exists
 $(document).ready(function () {
@@ -227,7 +227,6 @@ $(document).ready(function () {
         option[id]= $('#product').find('option[value='+id+']').removeAttr("hidden")
         arrayid.push(id);
         option[id].remove()
-        console.log(option)
     })
 
 
@@ -273,7 +272,113 @@ $(document).ready(function () {
         select.append(option[id]);
     })
 
-    window.print();
+    function forbank_check(){
+        var reciept_type = $('#reciept_type').val();
+        if (reciept_type == 2){
+            $('#receipt_bank').find('input').removeAttr('disabled')
+            $('#receipt_bank').find('input').attr('required' , 'required')
+        }else{
+            $('#receipt_bank').find('input').attr('disabled' , 'disabled')
+            $('#receipt_bank').find('input').removeAttr('required')
+        }
+    }
+    forbank_check();
+    $('#reciept_type').on('change' , forbank_check)
+
+
+
+    function bill_id_check(){
+        urlcheck = '';
+        if($('#reciept_type').hasClass('sales')){
+            urlcheck = '/receiptssales/get_price'
+        }else{
+            urlcheck = '/receiptspurchases/get_price';
+        }
+
+        var reciept_type = $('#bill_id').val();
+        var url = window.location.origin + urlcheck
+        $.ajax({
+            url: url ,
+            method: "POST",
+            data: {
+                bill_id: reciept_type
+            }
+        }).done(function (msg) {
+            if (msg != ''){
+                $('#bill_price').val(msg)
+                $('#receipt_price').attr('max' , msg)
+            }else{
+                $('#bill_price').val('')
+                $('#receipt_price').removeAttr('max')
+            }
+
+        });
+    }
+    bill_id_check()
+    $('#bill_id').on('change' , bill_id_check )
+
+    $('.icon').on('click',function () {
+       var bill_price =  parseInt($('#bill_price').val())
+        $('#receipt_price').val(bill_price).siblings('label').addClass('active')
+    })
 
 })
 
+var value_count ;
+var value_empty ;
+
+$('.complete_form').on('change' , '.product_count_add.sales' ,function () {
+    var count_in_store = parseInt($(this).parent().siblings('.allow_count').find('p').text().trim());
+
+    if (value_count == undefined && value_empty == undefined){
+        var value_count = $(this).siblings('.invalid-feedback').attr('data-temp');
+        var value_empty = $(this).siblings('.invalid-feedback').attr('data-old');
+    }
+
+    if ( count_in_store < parseInt($(this).val().trim()) ){
+        this.setCustomValidity("Invalid field.")
+        $(this).siblings('.invalid-feedback').text(value_count)
+
+    } else {
+        this.setCustomValidity("")
+        $(this).siblings('.invalid-feedback').text(value_empty)
+
+    }
+
+} )
+
+$('.complete_form').on('change' , '.product_count_add.buy' ,function () {
+    var count_in_store = parseInt($(this).parent().siblings('.allow_count').find('p').text().trim());
+
+    if (value_count == undefined && value_empty == undefined){
+        var value_count = $(this).siblings('.invalid-feedback').attr('data-temp');
+        var value_empty = $(this).siblings('.invalid-feedback').attr('data-old');
+    }
+
+    if ( count_in_store > parseInt($(this).val().trim()) ){
+        this.setCustomValidity("Invalid field.")
+        $(this).siblings('.invalid-feedback').text(value_count)
+
+    } else {
+        this.setCustomValidity("")
+        $(this).siblings('.invalid-feedback').text(value_empty)
+
+    }
+
+} )
+
+$(document).ready(function () {
+    $('.finalorderprice').each(function () {
+        if ($(this).text() == $(this).siblings('.receipt_price').text() ){
+            $(this).addClass('finish_price')
+        }
+    })
+})
+
+$(document).ready(function () {
+    Notification.requestPermission()
+    new Notification('hi' , {
+        icon: 'adsd',
+        body: 'sadasdqwda'
+    })
+})

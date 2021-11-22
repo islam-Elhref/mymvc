@@ -16,6 +16,7 @@ return [
         'datatables' => '/css/datatables.min.css',
         'datepicker' => '/css/jquery-ui.css',
         'confirm' => '/css/jquery-confirm.min.css',
+        'main' => '/css/main.css',
         'main_ar' => '/css/main_ar.css',
         'main_en' => '/css/main_en.css',
     ],

@@ -6,6 +6,8 @@ use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
 use MYMVC\LIB\Validation;
+use MYMVC\MODELS\AbstractModel;
+use MYMVC\MODELS\notificationmodel;
 use MYMVC\MODELS\privilegecontrolmodel;
 use MYMVC\MODELS\privilegesmodel;
 use MYMVC\MODELS\UsersGroupsModel;
@@ -41,11 +43,13 @@ class UsersGroupsController extends AbstractController
         if (isset($this->_params[0])) {
             $usersGroupId = abs($this->filterInt($this->_params[0]));
             $usersGroup = UsersGroupsModel::getByPK($usersGroupId);
+            $old_usersgroup = clone $usersGroup ;
             if ($usersGroup != false) {
 
                 // this for get privilege_id old to do check if this privilege_id is exist before ;
                 $array_privilege_id = privilegecontrolmodel::getByGroup($usersGroup);
-
+                $array_privilege_name = privilegecontrolmodel::getnameByGroup($usersGroup);
+                ksort($array_privilege_name);
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit']) && $this->is_valid($this->rules_to_valid , $_POST) == true) {
                     $groupnameBefore = $usersGroup->getGroupName();
@@ -67,6 +71,22 @@ class UsersGroupsController extends AbstractController
                                     $privilegecontrol = new privilegecontrolmodel($usersGroup->getGroupId(), $privilegeid);
                                     $privilegecontrol->save();
                                 }
+                                $array_privilege_after = privilegecontrolmodel::getByGroup($usersGroup);
+
+
+                                if( ( $array_privilege_id != $array_privilege_after ) || ( $old_usersgroup !=  $usersGroup ) ) {
+                                    $group = $old_usersgroup->foreach_object() ;
+                                    foreach ($array_privilege_name as $key => $value){
+                                        $group[$key] = $value ;
+                                    }
+                                    $opject_old = serialize($group);
+                                    $notification = new notificationmodel('notif_usersgroups_title', 'notif_usersgroups_content_edit', 'notif_type_1',
+                                        $this->getsession()->getuser()->getUserId(), '/usersgroups/edit/' . $usersGroup->getGroupId(), $usersGroup->getGroupName());
+                                    $notification->setObject($opject_old);
+                                    $notification->save();
+                                }
+
+
                                 $msg = $this->getLang()->feed_msg('msg_success_edit' , [$groupnameBefore , $groupnameAfter]);
                                 $this->_msg->addMsg($msg, Messenger::Msg_success);
 
@@ -113,6 +133,11 @@ class UsersGroupsController extends AbstractController
                             $privilegecontrol = new privilegecontrolmodel($new_users_group->getGroupId(), $privilegeid);
                             $privilegecontrol->save();
                         }
+
+                        $notification = new notificationmodel('notif_usersgroups_title' , 'notif_usersgroups_content_add' , 'notif_type_0' ,
+                            $this->getsession()->getuser()->getUserId() , '/usersgroups/edit/'.$new_users_group->getGroupId() , $new_users_group->getGroupName());
+                        $notification->save();
+
                         $user_group_name = $new_users_group->getGroupName();
 
                         $this->getmsg()->addMsg($this->getLang()->feed_msg('msg_success_add' , [$user_group_name]) , Messenger::Msg_success );
@@ -150,7 +175,23 @@ class UsersGroupsController extends AbstractController
                 $msg = $this->_language->getDictionary();
                 try {
                     $usersGroupName = $usersGroup->getGroupName();
+                    $group = $usersGroup->foreach_object() ;
+                    $array_privilege_name = privilegecontrolmodel::getnameByGroup($usersGroup);
                     if ($usersGroup->delete()) {
+
+
+                        ksort($array_privilege_name);
+                        foreach ($array_privilege_name as $key => $value){
+                            $group[$key] = $value ;
+                        }
+
+                        $opject_old = serialize($group);
+                        $notification = new notificationmodel('notif_usersgroups_title', 'notif_usersgroups_content_delete', 'notif_type_2',
+                            $this->getsession()->getuser()->getUserId(), '', $usersGroup->getGroupName());
+                        $notification->setObject($opject_old);
+                        $notification->save();
+
+
                         $msg_success = str_replace('name', $usersGroupName, $msg['msg_success_delete']);
                         $this->_msg->addMsg($msg_success, Messenger::Msg_success);
                     }

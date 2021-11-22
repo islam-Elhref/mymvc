@@ -3,15 +3,15 @@ $this->GetMessage();
 echo "</br>";
 ?>
 
-<div class="container h-100">
-    <div class="d-flex justify-content-center h-100">
+<div class="container h-100 ">
+    <div class="d-flex justify-content-center h-100 login ">
         <div class="user_card">
             <div class="d-flex justify-content-center">
                 <div class="brand_logo_container">
                     <img src="/img/login/pinterest-circle-logo-png-transparent.png" class="brand_logo" alt="Logo">
                 </div>
             </div>
-            <div class="d-flex justify-content-center form_container">
+            <div class="d-flex justify-content-center form_container ">
                 <form class="login_form" method="POST" action="" enctype="application/x-www-form-urlencoded">
                     <div class="input-group mb-3">
                         <div class="input-group-append">

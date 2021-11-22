@@ -25,9 +25,9 @@ $_['Text_suppliers'] = 'الموردين' ;
 $_['Text_products'] = 'المنتجات' ;
 $_['Text_product_categories'] = 'اصنــاف المنتجــات' ;
 
-$_['Text_expenses'] = 'المصروفات' ;
-$_['Text_expenses_daily_list'] = 'المصروفات اليومية' ;
-$_['Text_expenses_categories'] = 'انواع المصروفات' ;
+$_['Text_Receipts'] = 'الإيصالات' ;
+$_['Text_Receipts_purchases'] = 'ايصالات المشتريات' ;
+$_['Text_Receipts_sales'] = 'ايصالات المبيعات' ;
 
 $_['Text_transactions'] = 'المعاملات' ;
 $_['Text_transactions_purchases'] = 'المشتريات' ;

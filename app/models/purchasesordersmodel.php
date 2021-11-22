@@ -29,6 +29,15 @@ class purchasesordersModel extends AbstractModel{
     }
 
 
+    public function getorder_id()
+    {
+        return $this->order_id;
+    }
+    public function setorder_id($order_id)
+    {
+        $this->order_id = $order_id;
+    }
+
     public function getpurchases_bill_id()
     {
         return $this->purchases_bill_id;
@@ -44,6 +53,29 @@ class purchasesordersModel extends AbstractModel{
     public function getorder_price()
     {
         return $this->order_price;
+    }
+
+    public function getproductallowcount($id){
+        if (isset($id) && $id != '' && is_numeric($id) ){
+            $product = Productmodel::getAllproduct($id)[0];
+            return $product->count;
+        }
+    }
+
+    public static function getALLPurchasesOrders($bill_id)
+    {
+        $sql = 'SELECT * , 
+                                (
+                                ( SELECT IFNULL( (SELECT SUM( purchases_orders.order_quantity )FROM purchases_orders WHERE purchases_orders.product_id = p1.product_id )
+                                 , 0 ) ) - 
+                                ( SELECT IFNULL( (SELECT SUM( sales_orders.order_quantity )FROM sales_orders WHERE sales_orders.product_id = p1.product_id )
+                                 , 0 ) )
+                                ) AS count
+                                FROM purchases_orders p1 
+JOIN products ON products.product_id = p1.product_id
+JOIN products_categories ON products_categories.category_id = products.category_id WHERE purchases_bill_id = '.$bill_id;
+
+        return parent::getAll($sql);
     }
 
     public function deleteproduct($id){

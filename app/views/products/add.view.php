@@ -6,7 +6,7 @@
 
             <div class="row dr_arabic">
 
-                <div class="form-group col-md-4 flex-column"> <!-- product_name -->
+                <div class="form-group col-md-12 flex-column"> <!-- product_name -->
                     <label for="product_name" <?= $this->floatlabel('product_name') ?> ><?= isset($Text_label_product_name) ? $Text_label_product_name : '' ?></label>
                     <input type="text" class="form-control box" id="product_name" required name="product_name"
                            maxlength="30"
@@ -15,7 +15,7 @@
                     <div class="invalid-feedback"><?= isset($invalid_msg_product_name) ? $invalid_msg_product_name : '' ?> </div>
                 </div>
 
-                <div class="form-group flex-column col-md-4"> <!-- Group Name -->
+                <div class="form-group flex-column col-md-3"> <!-- Group Name -->
                     <select name="category_id" id="category_id" class="custom-select" required>
                         <option label="<?= isset($Text_label_category_id) ? $Text_label_category_id : '' ?>" disabled
                                 selected
@@ -35,7 +35,7 @@
                     <div class="invalid-feedback"><?= isset($invalid_msg_category_id) ? $invalid_msg_category_id : '' ?></div>
                 </div>
 
-                <div class="form-group flex-column col-md-4"> <!-- units -->
+                <div class="form-group flex-column col-md-3"> <!-- units -->
                     <select name="unit" id="unit" class="custom-select" required>
                         <option label="<?= isset($Text_label_unit) ? $Text_label_unit : '' ?>" disabled selected value="" ></option>
                         <option label="<?= isset($msg_unit_1) ? $msg_unit_1 : '' ?>" <?= $this->selectedoptions('unit', 1) ?>  value="1"></option>
@@ -47,7 +47,7 @@
                     <div class="invalid-feedback"><?= isset($invalid_msg_unit) ? $invalid_msg_unit : '' ?></div>
                 </div>
 
-                <div class="form-group col-md-4 flex-column"> <!-- BuyPrice -->
+                <div class="form-group col-md-3 flex-column"> <!-- BuyPrice -->
                     <label for="BuyPrice" <?= $this->floatlabel('BuyPrice') ?> ><?= isset($Text_label_BuyPrice) ? $Text_label_BuyPrice : '' ?></label>
                     <input type="number" class="form-control box" id="BuyPrice" required name="BuyPrice" step="0.5"
                            value="<?= $this->showvalue('BuyPrice') ?>">
@@ -55,20 +55,12 @@
                     <div class="invalid-feedback"><?= isset($invalid_msg_BuyPrice) ? $invalid_msg_BuyPrice : '' ?> </div>
                 </div>
 
-                <div class="form-group col-md-4 flex-column"> <!-- SellPrice -->
+                <div class="form-group col-md-3 flex-column"> <!-- SellPrice -->
                     <label for="SellPrice" <?= $this->floatlabel('SellPrice') ?> ><?= isset($Text_label_SellPrice) ? $Text_label_SellPrice : '' ?></label>
                     <input type="number" class="form-control box" id="SellPrice" required name="SellPrice" step="0.5"
                            value="<?= $this->showvalue('SellPrice') ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
                     <div class="invalid-feedback"><?= isset($invalid_msg_SellPrice) ? $invalid_msg_SellPrice : '' ?> </div>
-                </div>
-
-                <div class="form-group col-md-4 flex-column"> <!-- quantity -->
-                    <label for="quantity" <?= $this->floatlabel('quantity') ?> ><?= isset($Text_label_quantity) ? $Text_label_quantity : '' ?></label>
-                    <input type="number" class="form-control box" id="quantity" required name="quantity" step="0.5"
-                           value="<?= $this->showvalue('quantity') ?>">
-                    <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
-                    <div class="invalid-feedback"><?= isset($invalid_msg_quantity) ? $invalid_msg_quantity : '' ?> </div>
                 </div>
 
 

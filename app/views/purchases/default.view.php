@@ -17,7 +17,7 @@
     <?php if (isset($purchases) && !empty($purchases)) {
         foreach ($purchases as $purchase) {
             ?>
-            <tr>
+            <tr id="<?= $purchase->getbill_id() ?>">
                 <td class="use_title"><?= $purchase->getbill_id() ?></td>
                 <td ><?= $purchase->getsuppliername() ?></td>
                 <td ><?= $purchase->getcountproduct() ?></td>
@@ -25,7 +25,7 @@
                 <td ><?= ${'Text_payment_type_' . $purchase->getpayment_type()} ?></td>
                 <td ><?= $purchase->getcreated() ?></td>
                 <td ><?= $purchase->username ?></td>
-                <td ><?= ${'Text_payment_status_' . $purchase->getpayment_status()} ?></td>
+                <td class="statue_<?= $purchase->getpayment_status() ?>"><?= ${'Text_payment_status_' . $purchase->getpayment_status()} ?></td>
 
 
                 <td style="text-align: center">
@@ -36,6 +36,12 @@
                        title="<?= isset($text_delete_title) ? $text_delete_title : '' ?>"
                        href="\purchases\delete\<?= $purchase->getbill_id() ?>">
                         <i class="fa fa-times"></i> <?= isset($Text_delete) ? $Text_delete : '' ?>
+                    </a>
+
+                    <a class="btn btn-outline-success btn-sm delete"
+                       title="<?= isset($text_print_title) ? $text_print_title : '' ?>"
+                       href="\purchases\print\<?= $purchase->getbill_id() ?>" >
+                        <i class="fa fa-print"></i> <?= isset($Text_print) ? $Text_print : '' ?>
                     </a>
                 </td>
             </tr>

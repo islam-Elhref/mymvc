@@ -6,6 +6,7 @@ use MYMVC\LIB\filter;
 use MYMVC\LIB\Helper;
 use MYMVC\LIB\Messenger;
 use MYMVC\LIB\Validation;
+use MYMVC\MODELS\notificationmodel;
 use MYMVC\MODELS\privilegesmodel;
 use PDOException;
 
@@ -49,6 +50,15 @@ class PrivilegesController extends AbstractController
                         try {
                            $privilegeName =  $privilege_edit->getPrivilegeName();
                             $privilege_edit->save();
+
+                            if($privilege_edit != $privilege) {
+                                $opject_old = serialize($privilege);
+                                $notification = new notificationmodel('notif_privilege_title', 'notif_privilege_content_edit', 'notif_type_1',
+                                    $this->getsession()->getuser()->getUserId(), '/privileges/edit/' . $privilege->getPrivilegeId(), $privilege_edit->getPrivilegeName());
+                                $notification->setObject($opject_old);
+                                $notification->save();
+                            }
+
                             $this->_msg->addMsg($this->getLang()->feed_msg('msg_success_edit',[$privilegeName]) , Messenger::Msg_success);
                         } catch (PDOException $e) {
                             $this->_msg->addMsg( $this->getLang()->get('msg_error_add') , Messenger::Msg_error);
@@ -79,6 +89,11 @@ class PrivilegesController extends AbstractController
 
                 try {
                     $new_privilege->save();
+
+                    $notification = new notificationmodel('notif_privilege_title' , 'notif_privilege_content_add' , 'notif_type_0' ,
+                        $this->getsession()->getuser()->getUserId() , '/privileges/edit/'.$new_privilege->getPrivilegeId() , $new_privilege->getPrivilegeName());
+                    $notification->save();
+
                     $privilegeName = $new_privilege->getPrivilegeName();
                     $this->_msg->addMsg($this->getLang()->feed_msg('msg_success_add' , [$privilegeName] ) , Messenger::Msg_success);
                     $this->redirect('/privileges');
@@ -108,7 +123,15 @@ class PrivilegesController extends AbstractController
             if (!empty($privilege) && is_a($privilege, $this->called_class)) {
 
                 try {
+                    $opject_old = serialize($privilege);
                     $privilege->delete();
+
+
+                    $notification = new notificationmodel('notif_privilege_title' , 'notif_privilege_content_delete' , 'notif_type_2' ,
+                        $this->getsession()->getuser()->getUserId() , '' , $privilege->getPrivilegeName());
+                    $notification->setObject($opject_old);
+                    $notification->save();
+
                     $privilegeName = $privilege->getPrivilegeName();
                     $this->_msg->addMsg($this->getLang()->feed_msg('msg_success_delete',[$privilegeName]) , Messenger::Msg_success);
 

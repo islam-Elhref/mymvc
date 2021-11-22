@@ -20,7 +20,7 @@
                 <td ><?= $product->getCategoryName() ?></td>
                 <td ><?= $product->getBuyPrice() ?></td>
                 <td ><?= $product->getSellPrice() ?></td>
-                <td ><?= $product->getQuantity() ?></td>
+                <td ><?= $product->count ?></td>
                 <td ><?= isset(${'msg_unit_'.$product->getunit()}) ? ${'msg_unit_'.$product->getunit()} : ''?></td>
 
 

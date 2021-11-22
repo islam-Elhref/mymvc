@@ -37,22 +37,22 @@
         </li> <!-- transactions link parent -->
 
         <li class="parent_link" > <!-- expenses link parent -->
-            <a href="#expenses" title="<?= isset($Text_expenses) ? $Text_expenses : '' ?>" data-toggletool="tooltip" data-placement="right"  >
+            <a href="#expenses" title="<?= isset($Text_Receipts) ? $Text_Receipts : '' ?>" data-toggletool="tooltip" data-placement="right"  >
                 <i class="fas fa-money-check-alt "></i>
-                <span> <?= isset($Text_expenses) ? $Text_expenses : '' ?> </span>
+                <span> <?= isset($Text_Receipts) ? $Text_Receipts : '' ?> </span>
             </a>
 
-            <ul class="list-unstyled  submenu" id="expenses"> <!-- expenses submenu  -->
-                <li class="<?= $this->checkurl('/expenses_categories')== true ? 'subactive' : '' ?>">
-                    <a href="/expenses_categories" title="<?= isset($Text_expenses_categories) ? $Text_expenses_categories : '' ?>" data-toggletool="tooltip" data-placement="right"  >
+            <ul class="list-unstyled  submenu" id="receiptspurchases"> <!-- expenses submenu  -->
+                <li class="<?= $this->checkurl('/receiptspurchases')== true ? 'subactive' : '' ?>">
+                    <a href="/receiptspurchases" title="<?= isset($Text_Receipts_purchases) ? $Text_Receipts_purchases : '' ?>" data-toggletool="tooltip" data-placement="right"  >
                         <i class="fa  fa-money-bill"></i>
-                        <span> <?= isset($Text_expenses_categories) ? $Text_expenses_categories : '' ?> </span>
+                        <span> <?= isset($Text_Receipts_purchases) ? $Text_Receipts_purchases : '' ?> </span>
                     </a>
                 </li>
-                <li class="<?= $this->checkurl('/daily_expensses')== true ? 'subactive' : '' ?>">
-                    <a href="/daily_expensses"  title="<?= isset($Text_expenses_daily_list) ? $Text_expenses_daily_list : '' ?>" data-toggletool="tooltip" data-placement="right" >
+                <li class="<?= $this->checkurl('/receiptssales')== true ? 'subactive' : '' ?>">
+                    <a href="/receiptssales"  title="<?= isset($Text_Receipts_sales) ? $Text_Receipts_sales : '' ?>" data-toggletool="tooltip" data-placement="right" >
                         <i class="fas fa-cart-arrow-down "></i>
-                        <span> <?= isset($Text_expenses_daily_list) ? $Text_expenses_daily_list : '' ?> </span>
+                        <span> <?= isset($Text_Receipts_sales) ? $Text_Receipts_sales : '' ?> </span>
                     </a>
                 </li>
             </ul>
@@ -130,7 +130,7 @@
         </li>
 
         <li class="parent_link <?= $this->checkurl('/reports')== true ? 'active' : '' ?> " >
-            <a href="/reports" title="<?= isset($Text_reports) ? $Text_reports : '' ?>" data-toggletool="tooltip" data-placement="right">
+            <a href="/notification" title="<?= isset($Text_reports) ? $Text_reports : '' ?>" data-toggletool="tooltip" data-placement="right">
                 <i class="fas fa-book fa-fw fa-fw"></i>
                 <span> <?= isset($Text_reports) ? $Text_reports : '' ?> </span>
             </a>

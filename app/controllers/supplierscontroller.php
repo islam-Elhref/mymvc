@@ -3,6 +3,7 @@
 namespace MYMVC\CONTROLLERS;
 
 use MYMVC\LIB\Messenger;
+use MYMVC\MODELS\notificationmodel;
 use MYMVC\MODELS\suppliersmodel;
 
 class supplierscontroller extends AbstractController
@@ -38,6 +39,11 @@ class supplierscontroller extends AbstractController
             $supplier = new suppliersmodel($_POST['name'], $_POST['phone'], $_POST['email'], $_POST['address']);
             try {
                 $supplier->save();
+
+                $notification = new notificationmodel('notif_supplier_title' , 'notif_supplier_content_add' , 'notif_type_0' ,
+                    $this->getsession()->getuser()->getUserId() , '/suppliers/edit/'.$supplier->getSuppliersId() , $supplier->getName());
+                $notification->save();
+
                 $msg = $this->getLang()->feed_msg('msg_success_add', [$_POST['name']]);
                 $this->getmsg()->addMsg($msg, Messenger::Msg_success);
                 $this->redirect('/suppliers');
@@ -75,6 +81,14 @@ class supplierscontroller extends AbstractController
                 $supplier->setSuppliersId($this->filterInt($supplier_id));
                 try {
                     $supplier->save();
+
+                    if($supplier != $oldsupplier) {
+                        $opject_old = serialize($oldsupplier);
+                        $notification = new notificationmodel('notif_supplier_title', 'notif_supplier_content_edit', 'notif_type_1',
+                            $this->getsession()->getuser()->getUserId(), '/suppliers/edit/' . $supplier->getSuppliersId(), $supplier->getName());
+                        $notification->setObject($opject_old);
+                        $notification->save();
+                    }
                     if ($oldsupplier->getName() != $supplier->getName()) {
                         $msg = $this->getLang()->feed_msg('msg_success_edit_name', [$oldsupplier->getName(), $supplier->getName()]);
                     } else {
@@ -111,7 +125,14 @@ class supplierscontroller extends AbstractController
             $supplier = suppliersmodel::getByPK($supplier_id);
             if (!empty($supplier)) {
                 try {
+                    $opject_old = serialize($supplier);
                     $supplier->delete();
+
+                    $notification = new notificationmodel('notif_supplier_title' , 'notif_supplier_content_delete' , 'notif_type_2' ,
+                        $this->getsession()->getuser()->getUserId() , '' , $supplier->getName());
+                    $notification->setObject($opject_old);
+                    $notification->save();
+
                     $msg = $this->getLang()->feed_msg('msg_success_delete', [$supplier->getName()]);
                     $this->getmsg()->addMsg($msg, Messenger::Msg_success);
 

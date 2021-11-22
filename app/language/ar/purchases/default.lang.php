@@ -5,6 +5,7 @@ $_['Text_header'] = 'المشتريات';
 //table header
 $_['Text_edit'] = 'تعديل';
 $_['Text_delete'] = 'حذف';
+$_['Text_print'] = 'طباعة';
 $_['text_add_new_user'] = 'اضافة فاتوره مشتريات جديد' ;
 
 
@@ -21,6 +22,7 @@ $_['text_table_created'] = 'بتاريخ';
 
 $_['text_table_control'] = 'التحكم';
 $_['text_delete_title'] = 'هل تود حذف فاتوره المشتريات ';
+$_['text_print_title'] = 'هل تود طباعة فاتوره المشتريات ';
 
 
 

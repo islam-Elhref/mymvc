@@ -51,9 +51,8 @@ class UploadFile
         return $string . ']';
     }
 
-    public function printfullfilename($folder_who_want_in)
+    public function printfullfilename()
     {
-        $this->checknamefileexist($folder_who_want_in);
         return $this->fullFilename;
     }
 
@@ -110,7 +109,6 @@ class UploadFile
 
     public function checkfile($folder_who_want_in)
     {
-
         if ($this->error != 0) {
             throw new \PDOException('sorry file not upload successfully');
         } elseif (!$this->checknamefileexist($folder_who_want_in)) {

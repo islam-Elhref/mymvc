@@ -8,7 +8,7 @@
 
                 <div class="form-group col-md-6 flex-column"> <!-- name -->
                     <label for="name" <?= $this->floatlabel('name' , $client) ?> ><?= isset($Text_label_name) ? $Text_label_name : '' ?></label>
-                    <input type="text" class="form-control box clientExist" id="name" required name="name"
+                    <input type="text" class="form-control box " id="name" required name="name"
                            minlength="4" maxlength="40""
                            value="<?= $this->showvalue('name' , $client) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
@@ -19,7 +19,7 @@
 
                 <div class="form-group col-md-6 flex-column"> <!-- email -->
                     <label for="email" <?= $this->floatlabel('email' , $client) ?> ><?= isset($Text_label_email) ? $Text_label_email : '' ?></label>
-                    <input type="email" class="form-control box clientExist" id="email" required name="email"
+                    <input type="email" class="form-control box " id="email" required name="email"
                            maxlength="40"
                            value="<?= $this->showvalue('email' , $client) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
@@ -34,7 +34,7 @@
 
                 <div class="form-group col-md-6 flex-column">
                     <label for="phone" <?= $this->floatlabel('phone' , $client) ?> ><?= isset($Text_label_phone) ? $Text_label_phone : '' ?></label>
-                    <input type="tel" class="form-control box checkExist" id="phone" required name="phone"
+                    <input type="tel" class="form-control box" id="phone" required name="phone"
                            minlength="11" maxlength="11" pattern="^01[0-9]{9}$"
                     value="<?= $this->showvalue('phone' , $client) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
@@ -42,7 +42,7 @@
                 </div> <!-- phone -->
                 <div class="form-group col-md-6 flex-column">
                     <label for="address" <?= $this->floatlabel('address' , $client) ?> ><?= isset($Text_label_address) ? $Text_label_address : '' ?></label>
-                    <input type="text" class="form-control box checkExist" id="address" required name="address"
+                    <input type="text" class="form-control box" id="address" required name="address"
                            minlength="4" maxlength="50"
                            value="<?= $this->showvalue('address' , $client) ?>">
                     <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>

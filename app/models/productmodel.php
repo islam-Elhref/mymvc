@@ -11,32 +11,29 @@ class Productmodel extends AbstractModel{
     protected static $tableName = 'products' ;
     protected static $primaryKey = 'product_id';
 
-    protected $product_id  , $category_id , $category_name , $product_name , $BuyPrice , $SellPrice , $quantity , $unit ;
+    protected $product_id  , $category_id , $category_name , $product_name , $BuyPrice , $SellPrice  , $unit ;
 
     protected static $table_schema = [
         'category_id'  => self::DATA_TYPE_int ,
         'product_name'  => self::DATA_TYPE_STR ,
         'BuyPrice'  => self::DATA_TYPE_float ,
         'SellPrice'  => self::DATA_TYPE_float ,
-        'quantity'  => self::DATA_TYPE_int ,
         'unit'  => self::DATA_TYPE_int ,
     ];
 
-    public function __construct( $category_id , $product_name , $BuyPrice , $SellPrice , $quantity , $unit )
+    public function __construct( $category_id , $product_name , $BuyPrice , $SellPrice  , $unit )
     {
         $this->category_id = $this->filterInt($category_id);
         $this->product_name = $this->filterString($product_name);
         $this->BuyPrice = $this->filterFloat($BuyPrice);
         $this->SellPrice = $this->filterFloat($SellPrice);
-        $this->quantity = $this->filterInt($quantity);
         $this->unit = $this->filterInt($unit);
     }
-    public function setobject ($category_id , $product_name , $BuyPrice , $SellPrice , $quantity , $unit){
+    public function setobject ($category_id , $product_name , $BuyPrice , $SellPrice  , $unit){
         $this->category_id = $this->filterInt($category_id);
         $this->product_name = $this->filterString($product_name);
         $this->BuyPrice = $this->filterFloat($BuyPrice);
         $this->SellPrice = $this->filterFloat($SellPrice);
-        $this->quantity = $this->filterInt($quantity);
         $this->unit = $this->filterInt($unit);
     }
 
@@ -63,11 +60,7 @@ class Productmodel extends AbstractModel{
     {
         return $this->category_id;
     }
-
-    public function getquantity()
-    {
-        return $this->quantity;
-    }
+    
 
     public function getBuyPrice()
     {
@@ -84,9 +77,25 @@ class Productmodel extends AbstractModel{
         return $this->unit;
     }
 
-    public static function getAllproduct()
+    public static function getAllproduct($one_id = false)
     {
-        return parent::getAll('SELECT p.* , pc.category_name FROM '. self::$tableName.' p JOIN products_categories pc ON pc.category_id = p.category_id');
+        $product_id = '';
+        $where = '';
+        if ($one_id != false && is_numeric($one_id)){
+            $product_id = $one_id ;
+            $where = 'WHERE P.product_id = '.$product_id;
+        }else{
+            $product_id = 'P.product_id' ;
+        }
+
+        return parent::getAll('SELECT p.* , pc.category_name , 
+                                (
+                                ( SELECT IFNULL( (SELECT SUM( purchases_orders.order_quantity )FROM purchases_orders WHERE purchases_orders.product_id = '.$product_id.')
+                                 , 0 ) ) - 
+                                ( SELECT IFNULL( (SELECT SUM( sales_orders.order_quantity )FROM sales_orders WHERE sales_orders.product_id = '.$product_id.' )
+                                 , 0 ) )
+                                ) AS count
+                                FROM products p JOIN products_categories pc ON pc.category_id = p.category_id ' .$where);
     }
 
     public function deleteproduct($id){
@@ -106,6 +115,7 @@ class Productmodel extends AbstractModel{
             }
         }
     }
+
 
 
 }

@@ -14,10 +14,10 @@ trait Helper
         exit();
     }
 
-    public function redirect_back(){
+    public function redirect_back()
+    {
         $link = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/';
         $this->redirect($link);
     }
-
 
 }

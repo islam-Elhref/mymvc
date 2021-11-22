@@ -81,11 +81,16 @@ class AbstractModel
      * @param array $array
      * @return $this | false
      */
-    public static function getByPK($PK)
+    public static function getByPK($PK , $join = '')
     {
         if (!empty($PK) && trim($PK) != '') {
 
-            $sql = 'select * from ' . static::$tableName . ' where ' . static::$primaryKey . "=:".static::$primaryKey;
+            $sql_join = '' ;
+            if ($join != ''){
+                $sql_join = ' ' . $join . ' ';
+            }
+
+            $sql = 'select * from ' . static::$tableName . $sql_join .  ' where ' . static::$primaryKey . "=:".static::$primaryKey;
             $stmt = DatabaseHandler::factory()->prepare($sql);
 
             if (method_exists(get_called_class(), '__construct')) {
@@ -312,14 +317,22 @@ class AbstractModel
             $stmt->setFetchMode(pdo::FETCH_CLASS, get_called_class());
         }
         $stmt->execute();
-
         $result = $stmt->fetch();
 
         if (is_a($result, get_called_class()) && !empty($result)) {
-            return new \ArrayIterator($result);
+            return $result;
         } else {
             return false;
         }
+    }
+
+
+    public function foreach_object(){
+        $array = [] ;
+        foreach ($this as $key => $value){
+            $array[$key] =  $value  ;
+        }
+        return $array;
     }
 
 }

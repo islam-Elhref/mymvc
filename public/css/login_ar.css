@@ -95,3 +95,20 @@ html {
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
     background-color: #c0392b !important;
 }
+
+
+.login{
+    transition: all 0.5s ease-in-out;
+    animation: rotate 0.5s linear ;
+}
+
+@keyframes rotate {
+    0% {
+        transform: scale(0.5);
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: scale(1);
+        transform: rotateY(360deg);
+    }
+}

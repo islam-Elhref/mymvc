@@ -147,6 +147,11 @@ class UsersModel extends AbstractModel
         unset($this->password);
     }
 
+    public function removestatues()
+    {
+        unset($this->status);
+    }
+
     public function getSubscriptionDate()
     {
         return $this->subscription_date;
@@ -221,5 +226,6 @@ class UsersModel extends AbstractModel
         }
 
     }
+
 
 }

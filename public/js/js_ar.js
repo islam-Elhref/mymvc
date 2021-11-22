@@ -2,6 +2,7 @@ $('#mytable').dataTable({
     "lengthMenu": [ 5, 10, 25, 50 ],
     "autoWidth": false,
     "responsive": true,
+    "scrollX" : true ,
     "stateSave": true ,
     "language": {
         "emptyTable":     "لا توجد بيانات متاحه في الجدول",

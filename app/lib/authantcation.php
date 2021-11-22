@@ -19,12 +19,17 @@ class Authantcation
         '/index/default',
         '/auth/logout',
         '/auth/login',
+        '/users/changepass',
+        '/usersprofile/edit',
         '/language/default',
+        '/notification/default',
         '/accessdenied/default',
         '/notfound/notfound',
         '/suppliers/supplierexist',
         '/clients/supplierexist',
         '/users/userexist',
+        '/receiptspurchases/get_price',
+        '/receiptssales/get_price',
     ];
 
     private function __construct($session)

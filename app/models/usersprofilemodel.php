@@ -25,13 +25,12 @@ class UsersprofileModel extends AbstractModel
         'dob'           => self::DATA_TYPE_STR,
     ];
 
-    public function __construct($user_id ,$firstname, $lastname, $address, $image, $dob )
+    public function __construct($user_id ,$firstname, $lastname, $address, $dob )
     {
         $this->user_id = $this->filterInt($user_id);
         $this->firstname = $this->filterString($firstname);
         $this->lastname = $this->filterString($lastname);
         $this->address = isset($address) && $address != '' ?$this->filterString($address) : '';
-        $this->image = $image;
         $this->dob = isset($dob) && $dob != '' ? $dob : '';
     }
 
@@ -77,7 +76,15 @@ class UsersprofileModel extends AbstractModel
      */
     public function getImage()
     {
-        return IMAGE_profile_UPLOAD . $this->image;
+        return '/'.IMAGE_profile_UPLOAD . $this->image;
+    }
+    public function getImagetext()
+    {
+        return  $this->image;
+    }
+    public function setImage($image)
+    {
+        $this->image = $image ;
     }
 
     /**

@@ -59,18 +59,32 @@ class privilegecontrolmodel extends AbstractModel
     }
 
 
-public static function getByGroup(UsersGroupsModel $group){
-    $user_groups_privileges = privilegecontrolmodel::getWhere(['group_id' => $group->getGroupId()]);
-    $array_privilege_id = [];
-    if ($user_groups_privileges !== false) {
-        foreach ($user_groups_privileges as $groups_privilege) {
-            $array_privilege_id[] = $groups_privilege->getPrivilegeId();
+    public static function getByGroup(UsersGroupsModel $group){
+        $user_groups_privileges = privilegecontrolmodel::getWhere(['group_id' => $group->getGroupId()]);
+        $array_privilege_id = [];
+        if ($user_groups_privileges !== false) {
+            foreach ($user_groups_privileges as $groups_privilege) {
+                $array_privilege_id[] = $groups_privilege->getPrivilegeId();
+            }
+
+            return $array_privilege_id;
         }
 
-        return $array_privilege_id;
     }
 
-}
+
+    public static function getnameByGroup(UsersGroupsModel $group){
+        $user_groups_privileges = privilegecontrolmodel::getmore(['group_id' => $group->getGroupId()] , 'JOIN users_privilege ON privilege_control.privilege_id =  users_privilege.privilege_id') ;
+        $array_privilege_id = [];
+        if ($user_groups_privileges !== false) {
+            foreach ($user_groups_privileges as $groups_privilege) {
+                $array_privilege_id[$groups_privilege->getPrivilegeId()] = $groups_privilege->privilege_name;
+            }
+
+            return $array_privilege_id;
+        }
+
+    }
 
 
 }

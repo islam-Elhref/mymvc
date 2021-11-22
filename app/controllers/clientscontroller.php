@@ -4,6 +4,7 @@ namespace MYMVC\CONTROLLERS;
 
 use MYMVC\LIB\Messenger;
 use MYMVC\MODELS\clientsmodel;
+use MYMVC\MODELS\notificationmodel;
 
 class clientscontroller extends AbstractController
 {
@@ -38,6 +39,11 @@ class clientscontroller extends AbstractController
             $client = new clientsmodel($_POST['name'], $_POST['phone'], $_POST['email'], $_POST['address']);
             try {
                 $client->save();
+
+                $notification = new notificationmodel('notif_client_title' , 'notif_client_content_add' , 'notif_type_0' ,
+                    $this->getsession()->getuser()->getUserId() , '/clients/edit/'.$client->getclientsId() , $client->getName());
+                $notification->save();
+
                 $msg = $this->getLang()->feed_msg('msg_success_add', [$_POST['name']]);
                 $this->getmsg()->addMsg($msg, Messenger::Msg_success);
                 $this->redirect('/clients');
@@ -78,6 +84,15 @@ class clientscontroller extends AbstractController
                         throw new \PDOException('there is dublcate value');
                     }else{
                         $client->save();
+
+                        if($client != $oldclient) {
+                            $opject_old = serialize($oldclient);
+                            $notification = new notificationmodel('notif_client_title', 'notif_client_content_edit', 'notif_type_1',
+                                $this->getsession()->getuser()->getUserId(), '/clients/edit/' . $client->getclientsId(), $client->getName());
+                            $notification->setObject($opject_old);
+                            $notification->save();
+                        }
+
                         if ($oldclient->getName() != $client->getName()) {
                             $msg = $this->getLang()->feed_msg('msg_success_edit_name', [$oldclient->getName(), $client->getName()]);
                         } else {
@@ -115,7 +130,15 @@ class clientscontroller extends AbstractController
             $client = clientsmodel::getByPK($client_id);
             if (!empty($client)) {
                 try {
+                    $opject_old = serialize($client);
+
                     $client->delete();
+
+                    $notification = new notificationmodel('notif_client_title' , 'notif_client_content_delete' , 'notif_type_2' ,
+                        $this->getsession()->getuser()->getUserId() , '' , $client->getName());
+                    $notification->setObject($opject_old);
+                    $notification->save();
+
                     $msg = $this->getLang()->feed_msg('msg_success_delete', [$client->getName()]);
                     $this->getmsg()->addMsg($msg, Messenger::Msg_success);
 

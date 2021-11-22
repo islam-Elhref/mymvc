@@ -82,9 +82,11 @@
                     <?php
                     if (isset($purchase_orders) && !empty($purchase_orders)) {
                         foreach ($purchase_orders as $purchase_order) {
+                            $count_in_store = $purchase_order->getproductallowcount($purchase_order->getproduct_id()) ;
+                            $min = $purchase_order->getorder_quantity() - $count_in_store ;
                             ?>
                             <div class="row product_plus" data-id='<?= $purchase_order->getproduct_id() ?>'>
-                                <div class="form-group col-md-3"> <!-- payment_type -->
+                                <div class="form-group col-md-2"> <!-- payment_type -->
                                     <label for="payment_type"
                                            class="active" id="product_name"><?= $Text_show_product_name ?></label>
                                     <input type="text" name="product_name_add" class="form-control" required readonly
@@ -92,13 +94,24 @@
                                     <input type="text" name="product_id_add[]" class="form-control" required readonly
                                            hidden value="<?= $purchase_order->getproduct_id() ?>">
                                 </div>
-                                <div class="form-group col-md-3 "> <!-- payment_type -->
+                                <div class="form-group flex-column col-md-3 "> <!-- count_add -->
                                     <label for="payment_type"
                                            class="active" id="product_count"><?= $Text_show_product_quantity ?></label>
-                                    <input type="text" name="product_count_add[]" class="form-control" required
+                                    <input type="number" name="product_count_add[]" class=" product_count_add buy form-control" required min="<?= $min ?>"  autocomplete="off"
                                            value="<?= $purchase_order->getorder_quantity() ?>">
+                                    <div class="valid-feedback"><?= isset($valid_msg) ? $valid_msg : '' ?> </div>
+                                    <div class="invalid-feedback"
+                                         data-temp="<?= isset($invalid_msg_add_count_min) ? $invalid_msg_add_count_min : '' ?>"
+                                         data-old="<?= isset($Text_label_product_count_add) ? $Text_label_product_count_add : '' ?>">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-3 "> <!-- payment_type -->
+
+                                <div class="allow_count col-md-2">
+                                    <label class="active"> <small><?= $Text_count ?></small> </label>
+                                   <p> <?= $min ?> </p>
+                                </div>
+
+                                <div class="form-group col-md-2 "> <!-- price_add -->
                                     <label for="payment_type"
                                            class="active" id="product_price"><?= $Text_show_product_price ?></label>
                                     <input type="text" name="product_price_add[]" class="form-control" required readonly
